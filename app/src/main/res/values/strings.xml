@@ -18,4 +18,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <!-- Nav Bar strings, found in menu/bottom_nav.xml -->
+    <string name="scan">"Scan"</string>
+    <string name="edit_ticket">"Edit Ticket"</string>
+    <string name="select_lot">"Select Lot"</string>
+    <string name="log_out">"Log Out"</string>
+
 </resources>

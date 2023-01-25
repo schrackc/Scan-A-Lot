@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/scan"
+        android:id="@+id/scan"
+        android:icon="@drawable/scan"
+        />
+    <item
+        android:title="@string/edit_ticket"
+        android:id="@+id/edit_ticket"
+        android:icon="@drawable/edit_ticket"
+        />
+    <item
+        android:title="@string/select_lot"
+        android:id="@+id/select_lot"
+        android:icon="@drawable/select_lot"
+        />
+    <item
+        android:title="@string/log_out"
+        android:id="@+id/log_out"
+        android:icon="@drawable/log_out"
+        />
+</menu>
+
