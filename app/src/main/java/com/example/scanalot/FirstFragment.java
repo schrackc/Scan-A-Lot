@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.scanalot.databinding.FragmentFirstBinding;
@@ -35,7 +34,6 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("Console Message", "Go to next page ");
-                Navigation.findNavController(view).navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
     }
