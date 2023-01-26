@@ -129,11 +129,3 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 || super.onSupportNavigateUp();
     }
 }
-
-
-
-
-
-
-
-
