@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-       fragmentTransaction.replace(R.id.nav_host_fragment_content_main,new FirstFragment()).commit();
+      fragmentTransaction.replace(R.id.nav_host_fragment_content_main,new FirstFragment()).commit();
 
         //binding = ActivityMainBinding.inflate(getLayoutInflater());
        // setContentView(binding.getRoot());
