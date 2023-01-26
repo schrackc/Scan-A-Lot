@@ -18,12 +18,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name = "passwordAutofillHint">Password</string>
-    <string name = "usernameAutofillHint">UserName</string>
+    <string name="passwordAutofillHint">Password</string>
+    <string name="usernameAutofillHint">UserName</string>
     <!-- Nav Bar strings, found in menu/bottom_nav.xml -->
     <string name="scan">"Scan"</string>
     <string name="edit_ticket">"Edit Ticket"</string>
     <string name="select_lot">"Select Lot"</string>
     <string name="log_out">"Log Out"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
