@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.scanalot.databinding.FragmentSecondBinding;
@@ -28,6 +30,9 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.nav_host_fragment_content_main,this);
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
