@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -27,12 +28,17 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildFeatures {
+        //this sets all layout/name.xml files to viewBinding = true when built which
+        //generates binding classes for each layout. These classes allow you to easily reference the views
+        //on each layout rather than getting each one through "findViewById"
         viewBinding true
     }
 }
 
 dependencies {
-
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

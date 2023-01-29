@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
@@ -62,13 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         // appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-      /*  binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+
     }
 
 
