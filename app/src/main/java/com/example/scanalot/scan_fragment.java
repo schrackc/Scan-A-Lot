@@ -1,12 +1,19 @@
 package com.example.scanalot;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.scanalot.databinding.FragmentScanFragmentBinding;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +56,15 @@ public class scan_fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentScanFragmentBinding binding = FragmentScanFragmentBinding.inflate(getLayoutInflater());
+        Button outlinedManualButton = binding.outlinedButton;
+        outlinedManualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: make clicking the manual button move to manual citation screen. when the screen is created.
+            }
+        });
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -61,4 +77,6 @@ public class scan_fragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_scan_fragment, container, false);
     }
+
+
 }
