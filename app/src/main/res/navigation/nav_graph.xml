@@ -20,9 +20,13 @@
         android:name="com.example.scanalot.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
-
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_SecondFragment_to_manualEntryActivity"
+            app:destination="@id/manualEntryActivity" />
     </fragment>
+    <activity
+        android:id="@+id/manualEntryActivity"
+        android:name="com.example.scanalot.ManualEntryActivity"
+        android:label="activity_manual_entry"
+        tools:layout="@layout/activity_manual_entry" />
 </navigation>

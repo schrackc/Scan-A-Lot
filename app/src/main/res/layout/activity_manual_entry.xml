@@ -4,25 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="scan_fragment">
-<!--Manual Entry Button Layout-->
+    tools:context=".ManualEntryActivity">
+
     <Button
-        android:id="@+id/outlinedButton"
-        style="?attr/materialButtonOutlinedStyle"
+        android:id="@+id/manualSearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="84dp"
+        android:layout_marginStart="136dp"
         android:layout_marginBottom="72dp"
-        android:elevation="100dp"
         android:gravity="center"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:text="@string/scan_manual_button"
+        android:text="@string/manual_entry_search_button"
         android:textAllCaps="false"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/purple_700" />
-</androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="378dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="444dp"
+        android:spinnerMode="dialog"
+        android:text="@string/state_spinner_name"
+        android:entries="@array/states"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
