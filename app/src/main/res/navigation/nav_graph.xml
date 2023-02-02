@@ -21,12 +21,12 @@
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
         <action
-            android:id="@+id/action_SecondFragment_to_manualEntryActivity"
-            app:destination="@id/manualEntryActivity" />
+            android:id="@+id/action_SecondFragment_to_scan_fragment"
+            app:destination="@id/scan_fragment" />
     </fragment>
-    <activity
-        android:id="@+id/manualEntryActivity"
-        android:name="com.example.scanalot.ManualEntryActivity"
-        android:label="activity_manual_entry"
-        tools:layout="@layout/activity_manual_entry" />
+    <fragment
+        android:id="@+id/scan_fragment"
+        android:name="com.example.scanalot.scan_fragment"
+        android:label="fragment_scan_fragment"
+        tools:layout="@layout/fragment_scan_fragment" />
 </navigation>

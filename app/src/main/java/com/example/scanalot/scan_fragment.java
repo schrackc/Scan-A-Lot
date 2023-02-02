@@ -6,11 +6,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -60,11 +63,23 @@ public class scan_fragment extends Fragment {
         super.onCreate(savedInstanceState);
         FragmentScanFragmentBinding binding = FragmentScanFragmentBinding.inflate(getLayoutInflater());
         Button outlinedManualButton = binding.outlinedButton;
+
+        //spinner code nick
+       // Spinner stateSpinner = getView().findViewById(R.id.spinner);
+       // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.states, android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       // stateSpinner.setAdapter(adapter);
+
+      //  FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         outlinedManualButton.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ManualEntryActivity.class);
-                startActivity(intent);            }
+               // fragmentTransaction.replace(R.id.nav_host_fragment_content_main,new FirstFragment()).commit();
+                // NavHostFragment.findNavController(scan_fragment.this)
+              //  .navigate(R.id.action_SecondFragment_to_scan_fragment);
+                  }
         });
 
         if (getArguments() != null) {

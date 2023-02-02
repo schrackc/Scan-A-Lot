@@ -1,5 +1,6 @@
 package com.example.scanalot;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         switch (item.getItemId()) {
             case R.id.scan:
                 fragment = new scan_fragment();
+
                 break;
             case R.id.edit_ticket:
                 fragment = new edit_ticket_fragment();
