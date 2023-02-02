@@ -28,5 +28,14 @@
         android:id="@+id/scan_fragment"
         android:name="com.example.scanalot.scan_fragment"
         android:label="fragment_scan_fragment"
-        tools:layout="@layout/fragment_scan_fragment" />
+        tools:layout="@layout/fragment_scan_fragment" >
+        <action
+            android:id="@+id/action_scan_fragment_to_manualEntry"
+            app:destination="@id/manualEntry" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualEntry"
+        android:name="com.example.scanalot.manualEntry"
+        android:label="activity_manual_entry"
+        tools:layout="@layout/activity_manual_entry" />
 </navigation>

@@ -65,20 +65,20 @@ public class scan_fragment extends Fragment {
         Button outlinedManualButton = binding.outlinedButton;
 
         //spinner code nick
-       // Spinner stateSpinner = getView().findViewById(R.id.spinner);
-       // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.states, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       // stateSpinner.setAdapter(adapter);
+/*        Spinner stateSpinner = getView().findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.states, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        stateSpinner.setAdapter(adapter);*/
 
-      //  FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         outlinedManualButton.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
             public void onClick(View v) {
-               // fragmentTransaction.replace(R.id.nav_host_fragment_content_main,new FirstFragment()).commit();
-                // NavHostFragment.findNavController(scan_fragment.this)
-              //  .navigate(R.id.action_SecondFragment_to_scan_fragment);
+                fragmentTransaction.replace(R.id.contentmainId,new manualEntry()).commit();
+               // NavHostFragment.findNavController(getParentFragment())
+              // .navigate(R.id.action_scan_fragment_to_manualEntry);
                   }
         });
 
