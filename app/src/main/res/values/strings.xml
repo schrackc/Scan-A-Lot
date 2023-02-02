@@ -29,5 +29,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Scan Page Strings -->
     <string name="scan_manual_button">Manual Entry</string>
+    <!--Manual Entry Strings-->
+    <string name="manual_entry_search_button">Search</string>
+    <string name="state_spinner_name">State</string>
 
 </resources>

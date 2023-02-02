@@ -1,6 +1,7 @@
 package com.example.scanalot;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.example.scanalot.databinding.FragmentScanFragmentBinding;
 
@@ -61,8 +63,8 @@ public class scan_fragment extends Fragment {
         outlinedManualButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: make clicking the manual button move to manual citation screen. when the screen is created.
-            }
+                Intent intent = new Intent(getActivity(), ManualEntryActivity.class);
+                startActivity(intent);            }
         });
 
         if (getArguments() != null) {
