@@ -11,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/rounded_button"
         android:gravity="center"
         android:insetTop="0dp"
         android:insetBottom="0dp"
@@ -24,15 +25,31 @@
         app:strokeColor="@color/purple_700" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/stateSpinner"
         android:layout_width="378dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="444dp"
-        android:spinnerMode="dialog"
+        android:spinnerMode="dropdown"
         android:text="@string/state_spinner_name"
+        android:autofillHints="State"
         android:entries="@array/states"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Widget.AppCompat.Spinner.Underlined" />
+        <!--TODO: make spinner hint. This requires and ArrayAdapter to override getView(). -->
+
+    <EditText
+        android:id="@+id/plateSearch"
+        android:layout_width="377dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="64dp"
+        android:fadeScrollbars="false"
+        android:hint="@string/plate_number"
+        app:layout_constraintBottom_toTopOf="@+id/stateSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="textAutoComplete"
+        tools:ignore="Autofill" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,5 +32,8 @@
     <!--Manual Entry Strings-->
     <string name="manual_entry_search_button">Search</string>
     <string name="state_spinner_name">State</string>
+    <string name="plate_number">Plate Number</string>
+    <!-- Select Lot Strings-->
+    <string name="confirm_lot">Confirm Lot</string>
 
 </resources>

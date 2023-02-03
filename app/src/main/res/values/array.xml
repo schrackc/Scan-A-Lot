@@ -54,4 +54,14 @@
         <item>Wyoming</item>
     </string-array>
 
+
+    <!-- Parking Lot Array for Select Lot -->
+    <string-array name="parkingLots">
+        <item>Lot A</item>
+        <item>Lot B</item>
+        <item>Lot C</item>
+        <item>Lot D</item>
+        <item>Lot E</item>
+    </string-array>
+
 </resources>

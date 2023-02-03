@@ -8,21 +8,21 @@
 <!--Manual Entry Button Layout-->
     <Button
         android:id="@+id/outlinedButton"
-        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="84dp"
-        android:layout_marginBottom="72dp"
-        android:elevation="100dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginBottom="100dp"
         android:gravity="center"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
         android:text="@string/scan_manual_button"
         android:textAllCaps="false"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/purple_700" />
+        style="?attr/materialButtonOutlinedStyle"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <!--This is a button I made that makes the Manual entry have rounded corners.
+    When used with the style tag it disappears entirely-->
+    <!--android:background="@drawable/rounded_outlined_button"-->
