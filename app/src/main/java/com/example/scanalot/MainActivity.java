@@ -32,7 +32,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements  ReplacementFragment {
+
     BottomNavigationView bottomNavigationView;
 
     private AppBarConfiguration appBarConfiguration;
@@ -46,55 +47,46 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main,new FirstFragment()).commit();
-
-
-        bottomNavigationView = findViewById(R.id.bottom_nav);
-        bottomNavigationView.setOnItemSelectedListener(this);
         loadFragment(new scan_fragment());
 
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        //binding = ActivityMainBinding.inflate(getLayoutInflater());
-        // setContentView(binding.getRoot());
+                Fragment fragment = null;
+                switch (item.getItemId()) {
+                    case R.id.scan:
+                        fragment = new scan_fragment();
 
-        // setSupportActionBar(binding.toolbar);
+                        break;
+                    case R.id.edit_ticket:
+                        fragment = new edit_ticket_fragment();
+                        break;
+                    case R.id.select_lot:
+                        fragment = new select_lot_fragment();
+                        break;
+                    case R.id.log_out:
+                        fragment = new log_out_fragment();
+                        break;
+                }
+                if (fragment != null) {
+                    loadFragment(fragment);
+                }
+                return true;
 
-        // NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        // appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+            }
+        });
+
 
 
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
-        switch (item.getItemId()) {
-            case R.id.scan:
-                fragment = new scan_fragment();
-
-                break;
-            case R.id.edit_ticket:
-                fragment = new edit_ticket_fragment();
-                break;
-            case R.id.select_lot:
-                fragment = new select_lot_fragment();
-                break;
-            case R.id.log_out:
-                fragment = new log_out_fragment();
-                break;
-        }
-        if (fragment != null) {
-            loadFragment(fragment);
-        }
-        return true;
-    }
     void loadFragment(Fragment fragment) {
         //to attach fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.relativelayout, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contentmainId, fragment).commit();
     }
 
 
@@ -120,11 +112,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+   @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void replaceParentFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();;
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contentmainId, fragment).commit();
+
     }
 }
 
