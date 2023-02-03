@@ -2,9 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="scan_fragment">
+
+    tools:context="select_lot_fragment">
+
 
     <Spinner
         style="@style/Widget.AppCompat.Spinner.Underlined"
@@ -16,6 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:entries="@array/parkingLots"/>
+
 
     <Button
         android:id="@+id/selectLotButton"
@@ -34,5 +38,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/purple_700" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

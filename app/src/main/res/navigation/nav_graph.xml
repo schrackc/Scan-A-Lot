@@ -3,39 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
-    <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.scanalot.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.scanalot.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-        <action
-            android:id="@+id/action_SecondFragment_to_scan_fragment"
-            app:destination="@id/scan_fragment" />
-    </fragment>
+    app:startDestination="@id/scan_fragment">
     <fragment
         android:id="@+id/scan_fragment"
         android:name="com.example.scanalot.scan_fragment"
         android:label="fragment_scan_fragment"
         tools:layout="@layout/fragment_scan_fragment" >
         <action
-            android:id="@+id/action_scan_fragment_to_manualEntry"
-            app:destination="@id/manualEntry" />
+            android:id="@+id/action_scan_fragment_to_manualEntryFragment"
+            app:destination="@id/manualEntryFragment" />
     </fragment>
     <fragment
-        android:id="@+id/manualEntry"
-        android:name="com.example.scanalot.manualEntry"
+        android:id="@+id/manualEntryFragment"
+        android:name="com.example.scanalot.ManualEntryFragment"
         android:label="activity_manual_entry"
-        tools:layout="@layout/activity_manual_entry" />
+        tools:layout="@layout/activity_manual_entry" >
+        <action
+            android:id="@+id/action_manualEntryFragment2_to_scan_fragment2"
+            app:destination="@id/scan_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/select_lot_fragment"
+        android:name="com.example.scanalot.select_lot_fragment"
+        android:label="fragment_select_lot_fragment"
+        tools:layout="@layout/fragment_select_lot_fragment" />
+    <fragment
+        android:id="@+id/edit_ticket_fragment"
+        android:name="com.example.scanalot.edit_ticket_fragment"
+        android:label="fragment_edit_ticket_fragment"
+        tools:layout="@layout/fragment_edit_ticket_fragment" />
+    <fragment
+        android:id="@+id/log_out_fragment"
+        android:name="com.example.scanalot.log_out_fragment"
+        android:label="fragment_log_out_fragment"
+        tools:layout="@layout/fragment_log_out_fragment" />
 </navigation>

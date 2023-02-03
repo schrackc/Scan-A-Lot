@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:title="@string/scan"
-        android:id="@+id/scan"
+        android:id="@+id/scan_fragment"
         android:icon="@drawable/scan"
         />
     <item
         android:title="@string/edit_ticket"
-        android:id="@+id/edit_ticket"
+        android:id="@+id/edit_ticket_fragment"
         android:icon="@drawable/edit_ticket"
         />
     <item
         android:title="@string/select_lot"
-        android:id="@+id/select_lot"
+        android:id="@+id/select_lot_fragment"
         android:icon="@drawable/select_lot"
         />
     <item
         android:title="@string/log_out"
-        android:id="@+id/log_out"
+        android:id="@+id/log_out_fragment"
         android:icon="@drawable/log_out"
         />
 </menu>

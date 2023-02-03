@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+
             }else
             {
                 Toast.makeText(LoginActivity.this,"Failed To Log In",Toast.LENGTH_LONG).show();

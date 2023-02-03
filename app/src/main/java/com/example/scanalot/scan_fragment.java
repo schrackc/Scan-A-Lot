@@ -6,6 +6,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 
 import android.util.Log;
@@ -38,9 +42,8 @@ FragmentScanFragmentBinding binding;
            @Override
            public void onClick(View view) {
                Log.i("Button Click", "manual button clicked !!!!");
-               ManualEntryFragment manual = new ManualEntryFragment();
-               ReplacementFragment rf = (ReplacementFragment) getActivity();
-               rf.replaceParentFragment(manual);
+               NavDirections navAction = scan_fragmentDirections.actionScanFragmentToManualEntryFragment();
+               Navigation.findNavController(view).navigate(navAction);
            }
        });
 
