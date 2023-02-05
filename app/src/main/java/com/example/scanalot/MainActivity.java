@@ -31,7 +31,7 @@ import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity implements  ReplacementFragment {
 
-    BottomNavigationView bottomNavigationView;
+   public BottomNavigationView bottomNavigationView;
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -48,13 +48,6 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-    }
-
-
-
-    void loadFragment(Fragment fragment) {
-        //to attach fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.contentmainId, fragment).commit();
     }
 
 
