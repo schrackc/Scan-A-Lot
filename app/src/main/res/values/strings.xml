@@ -35,5 +35,12 @@
     <string name="plate_number">Plate Number</string>
     <!-- Select Lot Strings-->
     <string name="confirm_lot">Confirm Lot</string>
+    <!--Edit Ticket Screen Strings-->
+    <string name="edit_ticket_search_button">Search </string>
+    <string name="editTicketSearch">Search</string>
+    <string name="editTicketID">TicketID</string>
+    <!-- Geolocation Fragment -->
+    <string name="geolocationBannerText">Location: </string>
+
 
 </resources>
