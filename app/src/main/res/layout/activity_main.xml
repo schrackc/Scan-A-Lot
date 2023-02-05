@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,29 +33,37 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".Activities.HomeActivity">
 
             <RelativeLayout
+                android:id="@+id/relativelayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/relativelayout"
                 android:layout_marginBottom="65dp"
                 android:padding="5dp">
+                <Button
+                    android:id="@+id/enableCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="618dp"
+                    android:gravity="center"
+                    android:text="@string/start_camera" />
 
             </RelativeLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/bottom_nav"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/bottom_nav"
-                >
+                app:menu="@menu/bottom_nav">
+
             </com.google.android.material.bottomnavigation.BottomNavigationView>
+
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
