@@ -17,6 +17,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="76dp"
+        android:background="@drawable/rounded_button"
         android:text="@string/FillCitationSaveAndPrint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,11 +47,11 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="28dp"
-        android:layout_marginBottom="335dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/FillCitationVehicleColor"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName3"
         app:layout_constraintTop_toBottomOf="@+id/FillCitationSpinner" />
@@ -121,11 +122,11 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="335dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/FillCitationVehicleModel"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName5"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,48 +140,50 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="290dp"
         android:layout_marginEnd="28dp"
-        android:layout_marginBottom="1dp"
         android:background="@android:drawable/editbox_background"
         android:drawablePadding="16dp"
         android:hint="@string/FillCitationAddCitations"
         android:padding="12dp"
         app:drawableEndCompat="@android:drawable/arrow_down_float"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
     <Button
         android:id="@+id/CancelButton"
+
         android:layout_width="172dp"
         android:layout_height="87dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="76dp"
+
         android:text="@string/FillCitationCancelButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine"
+        style="?attr/materialButtonOutlinedStyle"
+        />
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="284dp"
         android:layout_height="67dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="370dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="164dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/FillCitationNotesHint"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
-        app:layout_constraintVertical_bias="0.011" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
