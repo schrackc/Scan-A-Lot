@@ -49,7 +49,11 @@
     <string name="FillCitationSaveAndPrint">Save And Print</string>
     <string name="FillCitationAddCitations">Add Citations</string>
     <string name="FillCitationNotesHint">Notes</string>
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ResultFillCitation">Fill Citation</string>
+    <string name="ScanScreenResultsFromScan">Results From Scan</string>
+    <string name="ScanResultsWrongLot">Pass Expired - Wrong Lot</string>
 
 
 </resources>

@@ -6,20 +6,33 @@
     android:layout_height="match_parent"
     tools:context="scan_fragment">
 <!--Manual Entry Button Layout-->
+
+    <Button
+        android:id="@+id/ResultsScanButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ScanScreenResultsFromScan"
+        app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.475"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/geolocationBanner"
+        app:layout_constraintVertical_bias="0.696" />
+
     <Button
         android:id="@+id/outlinedButton"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="104dp"
         android:layout_marginBottom="100dp"
         android:gravity="center"
         android:text="@string/scan_manual_button"
         android:textAllCaps="false"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        style="?attr/materialButtonOutlinedStyle"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 <!-- Geolocation Banner Layout. Needs Variable for Lot Specific -->
     <TextView
         android:id="@+id/geolocationBanner"
@@ -49,17 +62,6 @@
 
     <!--CameraX Shutter Button-->
 
-
-
-    <Button
-        android:id="@+id/fillCitationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fill Citation Screen"
-        app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/geolocationBanner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

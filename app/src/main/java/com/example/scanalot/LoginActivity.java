@@ -29,13 +29,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
      binding = ActivityLoginBinding.inflate(getLayoutInflater());
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
      setContentView(binding.getRoot());
-
+        setTitle("Scan A Lot");
         Button btn_login = binding.login;
         btn_login.setEnabled(true);
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful())
             {
+
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
 

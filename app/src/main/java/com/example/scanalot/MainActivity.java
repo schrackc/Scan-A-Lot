@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 
 // Bottom Nav Imports
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -56,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
+
+
 
         // CameraX Code ------------------------------------------------------ //
         // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
@@ -95,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
     }
     // Method for creating new Intent class to start activity.
     private void enableCamera(){
-        Intent intent = new Intent(this, cameraActivity.class);
-        startActivity(intent);
+        NavDirections navAction = scan_fragmentDirections.actionScanFragmentToCameraActivity();
+        Navigation.findNavController(this,R.id.nav_host_fragment_content_main).navigate(navAction);
     }
 
 
