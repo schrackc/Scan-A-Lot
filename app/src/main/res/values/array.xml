@@ -64,4 +64,12 @@
         <item>Lot E</item>
     </string-array>
 
+    <!--Violation List For Fill Citation Page-->
+    <string-array name="citationList">
+        <item>Wrong Lot</item>
+        <item>No Parking Pass Displayed</item>
+        <item>No Parking Pass Registered</item>
+        <item>Illegal Parking</item>
+    </string-array>
+
 </resources>

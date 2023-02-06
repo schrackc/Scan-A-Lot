@@ -31,6 +31,7 @@
         android:textSize="20sp"
         android:gravity="center"
         android:background="@color/purple_100"/>
+
 <!--CameraX Preview-->
 
     <!-- Taking this button out because manual shutter clutters screen-->
@@ -47,6 +48,18 @@
 
 
     <!--CameraX Shutter Button-->
+
+
+
+    <Button
+        android:id="@+id/fillCitationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fill Citation Screen"
+        app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/geolocationBanner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

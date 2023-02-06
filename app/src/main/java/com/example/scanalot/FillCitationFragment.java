@@ -1,64 +1,124 @@
 package com.example.scanalot;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FillCitationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.scanalot.databinding.FragmentFillCitationBinding;
+import com.example.scanalot.databinding.FragmentScanFragmentBinding;
+
+import java.util.ArrayList;
+
+
 public class FillCitationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    FragmentFillCitationBinding binding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public FillCitationFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FillCitationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FillCitationFragment newInstance(String param1, String param2) {
-        FillCitationFragment fragment = new FillCitationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    TextView textView;
+    Button cancelButton;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view,savedInstanceState);
+
+        textView = binding.textView;
+        cancelButton = binding.CancelButton;
+cancelButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        NavDirections navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToScanFragment();
+        Navigation.findNavController(view).navigate(navAction);
     }
+});
+
+
+    textView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            // set title
+            builder.setTitle("Select Violations");
+
+            // set dialog non cancelable
+            builder.setCancelable(false);
+            String[] citations = new String[]{"Violation A","Violation B","Violation C"};
+            boolean[] checkboxes = new boolean[citations.length];
+            ArrayList<Integer> langList = new ArrayList<>();
+            builder.setMultiChoiceItems(citations, checkboxes, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                    if(b)
+                    {
+                        langList.add(i);
+                    }else
+                    {
+                        langList.remove(Integer.valueOf(i));
+                    }
+                }
+            });
+
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // Initialize string builder
+                    StringBuilder stringBuilder = new StringBuilder();
+                    // use for loop
+                    for (int j = 0; j < langList.size(); j++) {
+                        // concat array value
+                        stringBuilder.append(citations[langList.get(j)]);
+                        // check condition
+                        if (j != langList.size() - 1) {
+                            // When j value  not equal
+                            // to lang list size - 1
+                            // add comma
+                            stringBuilder.append(", ");
+                        }
+                    }
+                    // set text on textView
+                    textView.setText(stringBuilder.toString());
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // dismiss dialog
+                    dialogInterface.dismiss();
+                }
+            });
+        builder.show();
+        }
+    });
+
+
+
+    }
+
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fill_citation, container, false);
+        binding = FragmentFillCitationBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 }

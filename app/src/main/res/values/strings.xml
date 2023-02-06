@@ -41,6 +41,14 @@
     <string name="editTicketID">TicketID</string>
     <!-- Geolocation Fragment -->
     <string name="geolocationBannerText">Location: </string>
+    <string name="FillCitationOfficerID">Officer ID</string>
+    <string name="FillCitationPlateNumber">Plate Number</string>
+    <string name="FillCitationVehicleColor">Vehicle Color</string>
+    <string name="FillCitationVehicleModel">Vehicle Model</string>
+    <string name="FillCitationCancelButton">Cancel</string>
+    <string name="FillCitationSaveAndPrint">Save And Print</string>
+    <string name="FillCitationAddCitations">Add Citations</string>
+    <string name="FillCitationNotesHint">Notes</string>
 
 
 

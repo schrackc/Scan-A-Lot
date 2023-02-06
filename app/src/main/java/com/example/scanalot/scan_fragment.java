@@ -37,6 +37,7 @@ FragmentScanFragmentBinding binding;
         super.onViewCreated(view,savedInstanceState);
 
         Button outlinedManualButton = binding.outlinedButton;
+        Button fillCitation = binding.fillCitationButton;
        Log.i("onCreate","scan fragment created");
        outlinedManualButton.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -46,6 +47,16 @@ FragmentScanFragmentBinding binding;
                Navigation.findNavController(view).navigate(navAction);
            }
        });
+
+
+        fillCitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Button Click", "fill citation button clicked !!!!");
+                NavDirections navAction = scan_fragmentDirections.actionScanFragmentToFillCitationFragment22();
+                Navigation.findNavController(view).navigate(navAction);
+            }
+        });
 
     }
 
