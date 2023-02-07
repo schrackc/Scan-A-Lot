@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="scan_fragment">
+<!--Manual Entry Button Layout-->
+
+    <Button
+        android:id="@+id/ResultsScanButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ScanScreenResultsFromScan"
+        app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.475"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/geolocationBanner"
+        app:layout_constraintVertical_bias="0.696" />
+
+    <Button
+        android:id="@+id/outlinedButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:text="@string/scan_manual_button"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+<!-- Geolocation Banner Layout. Needs Variable for Lot Specific -->
+    <TextView
+        android:id="@+id/geolocationBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/geolocationBannerText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/purple_100"/>
+
+<!--CameraX Preview-->
+
+    <!-- Taking this button out because manual shutter clutters screen-->
+<!--    <Button-->
+<!--        android:id="@+id/scanCaptureButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="140dp"-->
+<!--        android:background="@drawable/rounded_button"-->
+<!--        android:elevation="2dp"-->
+<!--        android:text="@string/take_photo"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+
+    <!--CameraX Shutter Button-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--This is a button I made that makes the Manual entry have rounded corners.
+    When used with the style tag it disappears entirely-->
+    <!--android:background="@drawable/rounded_outlined_button"-->

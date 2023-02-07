@@ -18,12 +18,42 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name = "passwordAutofillHint">Password</string>
-    <string name = "usernameAutofillHint">UserName</string>
+    <string name="passwordAutofillHint">Password</string>
+    <string name="usernameAutofillHint">UserName</string>
     <!-- Nav Bar strings, found in menu/bottom_nav.xml -->
     <string name="scan">"Scan"</string>
     <string name="edit_ticket">"Edit Ticket"</string>
     <string name="select_lot">"Select Lot"</string>
     <string name="log_out">"Log Out"</string>
+    <!-- Scan Page Strings -->
+    <string name="scan_manual_button">Manual Entry</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="start_camera">Start Camera</string>
+    <!--Manual Entry Strings-->
+    <string name="manual_entry_search_button">Search</string>
+    <string name="state_spinner_name">State</string>
+    <string name="plate_number">Plate Number</string>
+    <!-- Select Lot Strings-->
+    <string name="confirm_lot">Confirm Lot</string>
+    <!--Edit Ticket Screen Strings-->
+    <string name="edit_ticket_search_button">Search </string>
+    <string name="editTicketSearch">Search</string>
+    <string name="editTicketID">TicketID</string>
+    <!-- Geolocation Fragment -->
+    <string name="geolocationBannerText">Location: </string>
+    <string name="FillCitationOfficerID">Officer ID</string>
+    <string name="FillCitationPlateNumber">Plate Number</string>
+    <string name="FillCitationVehicleColor">Vehicle Color</string>
+    <string name="FillCitationVehicleModel">Vehicle Model</string>
+    <string name="FillCitationCancelButton">Cancel</string>
+    <string name="FillCitationSaveAndPrint">Save And Print</string>
+    <string name="FillCitationAddCitations">Add Citations</string>
+    <string name="FillCitationNotesHint">Notes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ResultFillCitation">Fill Citation</string>
+    <string name="ScanScreenResultsFromScan">Results From Scan</string>
+    <string name="ScanResultsWrongLot">Pass Expired - Wrong Lot</string>
+
 
 </resources>
