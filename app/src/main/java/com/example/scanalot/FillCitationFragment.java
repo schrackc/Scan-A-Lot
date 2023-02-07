@@ -30,16 +30,30 @@ public class FillCitationFragment extends Fragment {
 
     TextView textView;
     Button cancelButton;
+    Button savePrint;
+    NavDirections navAction;
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
         textView = binding.textView;
         cancelButton = binding.CancelButton;
-cancelButton.setOnClickListener(new View.OnClickListener() {
+        savePrint = binding.resultFillCitationButton;
+
+        savePrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
+                Navigation.findNavController(view).navigate(navAction);
+            }
+        });
+
+
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
-        NavDirections navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToScanFragment();
+         navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToScanFragment();
         Navigation.findNavController(view).navigate(navAction);
     }
 });

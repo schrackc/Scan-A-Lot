@@ -54,6 +54,18 @@
     <string name="ResultFillCitation">Fill Citation</string>
     <string name="ScanScreenResultsFromScan">Results From Scan</string>
     <string name="ScanResultsWrongLot">Pass Expired - Wrong Lot</string>
+    <string name="PrintPreviewTicketID">Ticket ID:</string>
+    <string name="PrintPreviewViolationTime">Violation Time:</string>
+    <string name="PrintPreviewTicketInfo">Ticket Information</string>
+    <string name="PrintPreviewReportingOfficer">Reporting Officer:</string>
+    <string name="PrintPreviewCitationLocation">Citation Location:</string>
+    <string name="PrintPreviewViolationType">Violation Type:</string>
+    <string name="PrintPreviewFineAmount">Fine Amount:</string>
+    <string name="PrintPreviewVehicleInfo">Vehicle Information</string>
+    <string name="PrintPreviewLicensePlate">License Plate:</string>
+    <string name="PrintPreviewVehicleOwner">Vehicle Owner:</string>
+    <string name="PrintPreviewVehicleModel">Vehicle Model:</string>
+    <string name="PrintPreviewVehicleColor">Vehicle Color:</string>
 
 
 </resources>
