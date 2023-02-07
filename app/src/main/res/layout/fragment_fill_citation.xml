@@ -11,8 +11,8 @@
 
     <Button
         android:id="@+id/resultFillCitationButton"
-        android:layout_width="172dp"
-        android:layout_height="87dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="25dp"
@@ -153,8 +153,8 @@
     <Button
         android:id="@+id/CancelButton"
 
-        android:layout_width="172dp"
-        android:layout_height="87dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"

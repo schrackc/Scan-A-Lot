@@ -41,10 +41,6 @@ public class cameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
         previewView = findViewById(R.id.previewView);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-
-       // The following is for handling screen orientation. We may decide to delete it.
-       //textView = findViewById(R.id.orientation);
-
         cameraProviderFuture.addListener(new Runnable() {
             @Override
             public void run() {
@@ -59,7 +55,6 @@ public class cameraActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));//listener
     }// end onCreate()
 
-
     //bindImageAnalysis() method used above. Listens for changes in camera rotation.
     private void bindImageAnalysis(@NonNull ProcessCameraProvider cameraProvider) {
         ImageAnalysis imageAnalysis =
@@ -71,15 +66,7 @@ public class cameraActivity extends AppCompatActivity {
                 image.close();
             }
         });
-//        OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
-//            @Override
-//            public void onOrientationChanged(int orientation) {
-//                textView.setText(Integer.toString(orientation));
-//            }
-//        };
-//        orientationEventListener.enable();
         Preview preview = new Preview.Builder().build();
-        //preview.setSurfaceProvider(previewView.getSurfaceProvider());
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         preview.setSurfaceProvider(previewView.getSurfaceProvider());

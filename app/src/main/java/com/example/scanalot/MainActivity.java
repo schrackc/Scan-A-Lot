@@ -1,6 +1,5 @@
 package com.example.scanalot;
 
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
-
 public class MainActivity extends AppCompatActivity implements  ReplacementFragment {
     // CameraX code ------------------------------------------------ //
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
@@ -60,10 +58,6 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-
-
-
-
         // CameraX Code ------------------------------------------------------ //
         // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
         // I the following makes it so that the camera comes up with the nav bar. It can also use a button to appear.
@@ -79,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
                 }
             }
         });
-
-        // End of CameraX -------------------------------------------------- //
 
     }// end of onCreate()
 
@@ -105,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         NavDirections navAction = scan_fragmentDirections.actionScanFragmentToCameraActivity();
         Navigation.findNavController(this,R.id.nav_host_fragment_content_main).navigate(navAction);
     }
-
-
+    // End of CameraX -------------------------------------------------- //
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
-
 
    @Override
     public boolean onSupportNavigateUp() {
@@ -129,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.contentmainId, fragment).commit();
-
     }
 }
 

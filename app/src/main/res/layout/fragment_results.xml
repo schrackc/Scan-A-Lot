@@ -39,8 +39,8 @@
 
     <Button
         android:id="@+id/resultFillCitationButton"
-        android:layout_width="172dp"
-        android:layout_height="87dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="140dp"
         android:background="@drawable/rounded_button"
         android:text="@string/ResultFillCitation"
