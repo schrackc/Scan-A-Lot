@@ -31,11 +31,11 @@ import com.example.scanalot.databinding.FragmentScanFragmentBinding;
 
 public class scan_fragment extends Fragment {
 FragmentScanFragmentBinding binding;
+NavDirections navAction;
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
-
         Button outlinedManualButton = binding.outlinedButton;
         Button resultScanButton = binding.ResultsScanButton;
        Log.i("onCreate","scan fragment created");
@@ -43,17 +43,15 @@ FragmentScanFragmentBinding binding;
            @Override
            public void onClick(View view) {
                Log.i("Button Click", "manual button clicked !!!!");
-               NavDirections navAction = scan_fragmentDirections.actionScanFragmentToManualEntryFragment();
+               navAction = scan_fragmentDirections.actionScanFragmentToManualEntryFragment();
                Navigation.findNavController(view).navigate(navAction);
            }
        });
 
-
-
         resultScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavDirections navAction = scan_fragmentDirections.actionScanFragmentToResultsFragment();
+                 navAction = scan_fragmentDirections.actionScanFragmentToResultsFragment();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
@@ -68,7 +66,6 @@ FragmentScanFragmentBinding binding;
         binding = FragmentScanFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-
 
     @Override
     public void onDestroyView() {

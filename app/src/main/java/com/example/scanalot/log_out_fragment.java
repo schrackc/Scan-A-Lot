@@ -25,12 +25,13 @@ import com.google.firebase.auth.FirebaseAuth;
 public class log_out_fragment extends Fragment {
 
     FragmentLogOutFragmentBinding binding;
-
+    NavDirections navAction;
+    Button logOutButton;
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
 
-        Button logOutButton = binding.logOutButton;
+        logOutButton = binding.logOutButton;
         Log.i("onCreate","log out button created");
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +39,7 @@ public class log_out_fragment extends Fragment {
                 Log.i("Button Click", "manual button clicked !!!!");
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
-                NavDirections navAction =  log_out_fragmentDirections.actionLogOutFragmentToLoginActivity();
+               navAction =  log_out_fragmentDirections.actionLogOutFragmentToLoginActivity();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });

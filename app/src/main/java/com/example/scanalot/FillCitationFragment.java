@@ -26,8 +26,6 @@ import java.util.ArrayList;
 public class FillCitationFragment extends Fragment {
 
     FragmentFillCitationBinding binding;
-
-
     TextView textView;
     Button cancelButton;
     Button savePrint;

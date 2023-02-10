@@ -30,28 +30,7 @@ public class ManualEntryFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
        // Toast.makeText(getActivity(),"This is Manual Entry Scan Fragment On Create",Toast.LENGTH_SHORT).show();
         Log.i("onCreate", "This is the Manual Entry Fragment being created");
-       /* NavDirections navAction = ManualEntryFragmentDirections.actionManualEntryFragment2ToScanFragment2();
-        Navigation.findNavController(view).navigate(navAction);*/
-       // MainActivity activity = (MainActivity) getActivity();
- /*       activity.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-               if(item.getItemId() == R.id.scan_fragment)
-               {
-                   Log.i("Item Selected", "onNavigationItemSelected: scanfragment");
-                   //NavDirections navAction = ManualEntryFragmentDirections.actionManualEntryFragment2ToScanFragment2();
-                  // Navigation.findNavController(view).navigate(navAction)
-               }
-               return true;
-            }
-
-
-
-        });*/
-
-
     }
-
 
     @Nullable
     @Override

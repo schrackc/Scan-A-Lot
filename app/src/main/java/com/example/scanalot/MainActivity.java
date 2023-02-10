@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    NavDirections navAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
     }
     // Method for creating new Intent class to start activity.
     private void enableCamera(){
-        NavDirections navAction = scan_fragmentDirections.actionScanFragmentToCameraActivity();
+        navAction = scan_fragmentDirections.actionScanFragmentToCameraActivity();
         Navigation.findNavController(this,R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //
