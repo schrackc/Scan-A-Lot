@@ -22,16 +22,17 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.scanalot.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements  ReplacementFragment {
+public class MainActivity extends AppCompatActivity implements ReplacementFragment {
     // CameraX code ------------------------------------------------ //
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
-                private static final int CAMERA_REQUEST_CODE = 10;
+    private static final int CAMERA_REQUEST_CODE = 10;
 
     // End of CameraX code ----------------------------------------- //
-   public BottomNavigationView bottomNavigationView;
+    public BottomNavigationView bottomNavigationView;
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    NavDirections navAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,24 +66,18 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
 
     // Method for cameraX launching. Checks permissions and returns bool if perms given or not.
     private boolean hasCameraPermission() {
-        return ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
     // Method for requesting permission of camera.
     private void requestPermission() {
-        ActivityCompat.requestPermissions(
-                this,
-                CAMERA_PERMISSION,
-                CAMERA_REQUEST_CODE
-        );
+        ActivityCompat.requestPermissions(this, CAMERA_PERMISSION, CAMERA_REQUEST_CODE);
     }
+
     // Method for creating new Intent class to start activity.
-    private void enableCamera(){
-        NavDirections navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
-        Navigation.findNavController(this,R.id.nav_host_fragment_content_main).navigate(navAction);
+    private void enableCamera() {
+        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //
 
@@ -93,11 +88,10 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
         return true;
     }
 
-   @Override
+    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
     @Override

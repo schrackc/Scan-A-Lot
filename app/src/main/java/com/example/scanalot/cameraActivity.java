@@ -28,14 +28,14 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class cameraActivity extends AppCompatActivity {
-// Defining instance variables.
+    // Defining instance variables.
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private TextView textView;
 
     //onCreate() method to initialize above variables and bind image analysis case to the camera provider.
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState){
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         previewView = findViewById(R.id.previewView);
@@ -56,9 +56,7 @@ public class cameraActivity extends AppCompatActivity {
 
     //bindImageAnalysis() method used above. Listens for changes in camera rotation.
     private void bindImageAnalysis(@NonNull ProcessCameraProvider cameraProvider) {
-        ImageAnalysis imageAnalysis =
-                new ImageAnalysis.Builder().setTargetResolution(new Size(1280, 720))
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder().setTargetResolution(new Size(1280, 720)).setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
         imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new ImageAnalysis.Analyzer() {
             @Override
             public void analyze(@NonNull ImageProxy image) {
@@ -66,12 +64,10 @@ public class cameraActivity extends AppCompatActivity {
             }
         });
         Preview preview = new Preview.Builder().build();
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+        CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
-        cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector,
-                imageAnalysis, preview);
+        cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, imageAnalysis, preview);
     }
-    
-    
+
+
 } // end of cameraActivity class
