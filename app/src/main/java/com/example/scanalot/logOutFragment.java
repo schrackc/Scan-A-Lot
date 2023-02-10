@@ -1,30 +1,28 @@
 package com.example.scanalot;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.scanalot.databinding.FragmentLogOutFragmentBinding;
-import com.example.scanalot.databinding.FragmentScanFragmentBinding;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+
+import com.example.scanalot.databinding.FragmentLogOutBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link log_out_fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class log_out_fragment extends Fragment {
 
-    FragmentLogOutFragmentBinding binding;
+// A simple {@link Fragment} subclass.
+// Use the {@link logOutFragment#newInstance} factory method to
+// create an instance of this fragment.
+
+public class logOutFragment extends Fragment {
+
+    FragmentLogOutBinding binding;
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -38,7 +36,7 @@ public class log_out_fragment extends Fragment {
                 Log.i("Button Click", "manual button clicked !!!!");
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
-                NavDirections navAction =  log_out_fragmentDirections.actionLogOutFragmentToLoginActivity();
+                NavDirections navAction =  logOutFragmentDirections.actionLogOutFragmentToLoginActivity();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
@@ -48,7 +46,7 @@ public class log_out_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding =FragmentLogOutFragmentBinding.inflate(inflater, container, false);
+        binding =FragmentLogOutBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 

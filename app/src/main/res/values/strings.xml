@@ -1,46 +1,46 @@
 <resources>
-    <string name="app_name">ScanALot</string>
-    <string name="action_settings">Settings</string>
+    <string name="appName">ScanALot</string>
+    <string name="actionSettings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="firstFragmentLabel">First Fragment</string>
+    <string name="secondFragmentLabel">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">LOG IN</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="helloFirstFragment">Hello first fragment</string>
+    <string name="helloSecondFragment">Hello second fragment. Arg: %1$s</string>
+    <string name="titleActivityLogin">LoginActivity</string>
+    <string name="promptEmail">Email</string>
+    <string name="promptPassword">Password</string>
+    <string name="actionSignIn">LOG IN</string>
+    <string name="actionSignInShort">Sign in</string>
     <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="invalidUsername">Not a valid username</string>
+    <string name="invalidPassword">Password must be >5 characters</string>
+    <string name="loginFailed">"Login failed"</string>
     <string name="passwordAutofillHint">Password</string>
     <string name="usernameAutofillHint">UserName</string>
     <!-- Nav Bar strings, found in menu/bottom_nav.xml -->
     <string name="scan">"Scan"</string>
-    <string name="edit_ticket">"Edit Ticket"</string>
-    <string name="select_lot">"Select Lot"</string>
-    <string name="log_out">"Log Out"</string>
+    <string name="editTicket">"Edit Ticket"</string>
+    <string name="selectLot">"Select Lot"</string>
+    <string name="logOut">"Log Out"</string>
     <!-- Scan Page Strings -->
-    <string name="scan_manual_button">Manual Entry</string>
-    <string name="take_photo">Take Photo</string>
-    <string name="start_camera">Start Camera</string>
+    <string name="scanManualButton">Manual Entry</string>
+    <string name="takePhoto">Take Photo</string>
+    <string name="startCamera">Start Camera</string>
     <!--Manual Entry Strings-->
-    <string name="manual_entry_search_button">Search</string>
-    <string name="state_spinner_name">State</string>
-    <string name="plate_number">Plate Number</string>
+    <string name="manualEntrySearchButton">Search</string>
+    <string name="stateSpinnerName">State</string>
+    <string name="plateNumber">Plate Number</string>
     <!-- Select Lot Strings-->
-    <string name="confirm_lot">Confirm Lot</string>
+    <string name="confirmLot">Confirm Lot</string>
     <!--Edit Ticket Screen Strings-->
-    <string name="edit_ticket_search_button">Search </string>
+    <string name="editTicketSearchButton">Search </string>
     <string name="editTicketSearch">Search</string>
     <string name="editTicketID">TicketID</string>
     <!-- Geolocation Fragment -->
     <string name="geolocationBannerText">Location: </string>
+    <!-- Citation Fragment-->
     <string name="FillCitationOfficerID">Officer ID</string>
     <string name="FillCitationPlateNumber">Plate Number</string>
     <string name="FillCitationVehicleColor">Vehicle Color</string>
@@ -50,7 +50,7 @@
     <string name="FillCitationAddCitations">Add Citations</string>
     <string name="FillCitationNotesHint">Notes</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="helloBlankFragment">Hello blank fragment</string>
     <string name="ResultFillCitation">Fill Citation</string>
     <string name="ScanScreenResultsFromScan">Results From Scan</string>
     <string name="ScanResultsWrongLot">Pass Expired - Wrong Lot</string>

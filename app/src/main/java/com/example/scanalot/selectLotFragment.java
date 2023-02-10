@@ -1,19 +1,18 @@
 package com.example.scanalot;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link edit_ticket_fragment#newInstance} factory method to
+ * Use the {@link selectLotFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class edit_ticket_fragment extends Fragment {
+public class selectLotFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +23,7 @@ public class edit_ticket_fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public edit_ticket_fragment() {
+    public selectLotFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +33,11 @@ public class edit_ticket_fragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment edit_ticket_fragment.
+     * @return A new instance of fragment selectLotFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static edit_ticket_fragment newInstance(String param1, String param2) {
-        edit_ticket_fragment fragment = new edit_ticket_fragment();
+    public static selectLotFragment newInstance(String param1, String param2) {
+        selectLotFragment fragment = new selectLotFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +58,6 @@ public class edit_ticket_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_ticket_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_select_lot, container, false);
     }
 }

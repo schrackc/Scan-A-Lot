@@ -6,9 +6,9 @@
     app:startDestination="@id/scan_fragment">
     <fragment
         android:id="@+id/scan_fragment"
-        android:name="com.example.scanalot.scan_fragment"
+        android:name="com.example.scanalot.scanFragment"
         android:label="fragment_scan_fragment"
-        tools:layout="@layout/fragment_scan_fragment" >
+        tools:layout="@layout/fragment_scan" >
         <action
             android:id="@+id/action_scan_fragment_to_manualEntryFragment"
             app:destination="@id/manualEntryFragment"
@@ -42,19 +42,19 @@
     </fragment>
     <fragment
         android:id="@+id/select_lot_fragment"
-        android:name="com.example.scanalot.select_lot_fragment"
+        android:name="com.example.scanalot.selectLotFragment"
         android:label="fragment_select_lot_fragment"
-        tools:layout="@layout/fragment_select_lot_fragment" />
+        tools:layout="@layout/fragment_select_lot" />
     <fragment
         android:id="@+id/edit_ticket_fragment"
-        android:name="com.example.scanalot.edit_ticket_fragment"
+        android:name="com.example.scanalot.editTicketFragment"
         android:label="fragment_edit_ticket_fragment"
-        tools:layout="@layout/fragment_edit_ticket_fragment" />
+        tools:layout="@layout/fragment_edit_ticket" />
     <fragment
         android:id="@+id/log_out_fragment"
-        android:name="com.example.scanalot.log_out_fragment"
+        android:name="com.example.scanalot.logOutFragment"
         android:label="fragment_log_out_fragment"
-        tools:layout="@layout/fragment_log_out_fragment" >
+        tools:layout="@layout/fragment_log_out" >
         <action
             android:id="@+id/action_log_out_fragment_to_loginActivity"
             app:destination="@id/loginActivity"

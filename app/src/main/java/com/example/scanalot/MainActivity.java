@@ -1,28 +1,18 @@
 package com.example.scanalot;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 
-
-// Bottom Nav Imports
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.view.MenuItem;
-// End of Bottom Nav Imports
-
-import com.google.android.material.navigation.NavigationBarView;
-
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -30,10 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.scanalot.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements  ReplacementFragment {
     // CameraX code ------------------------------------------------ //
@@ -94,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
     }
     // Method for creating new Intent class to start activity.
     private void enableCamera(){
-        NavDirections navAction = scan_fragmentDirections.actionScanFragmentToCameraActivity();
+        NavDirections navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
         Navigation.findNavController(this,R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //

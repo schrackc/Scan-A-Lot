@@ -9,7 +9,6 @@ package com.example.scanalot;
 
 import android.os.Bundle;
 import android.util.Size;
-import android.view.OrientationEventListener;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;

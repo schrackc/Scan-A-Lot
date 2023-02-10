@@ -6,17 +6,17 @@
         android:icon="@drawable/scan"
         />
     <item
-        android:title="@string/edit_ticket"
+        android:title="@string/editTicket"
         android:id="@+id/edit_ticket_fragment"
         android:icon="@drawable/edit_ticket"
         />
     <item
-        android:title="@string/select_lot"
+        android:title="@string/selectLot"
         android:id="@+id/select_lot_fragment"
         android:icon="@drawable/select_lot"
         />
     <item
-        android:title="@string/log_out"
+        android:title="@string/logOut"
         android:id="@+id/log_out_fragment"
         android:icon="@drawable/log_out"
         />
