@@ -22,34 +22,67 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.scanalot.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements ReplacementFragment {
-    // CameraX code ------------------------------------------------ //
+/**
+ * This class is used for the Main Activity. It creates the Main Activity and uses the activity_main layout. This will be used for
+ * hosting all the fragments after the user logs in.
+ *
+ * @author Andrew Hoffer
+ * @author Nick Downey
+ * @Created 1/21/23
+ * @Contributors Andrew Hoffer - 1/21/23 - Created the Activity and handlers
+ * Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
+ */
+public class MainActivity extends AppCompatActivity {
+    // CameraX code
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
 
-    // End of CameraX code ----------------------------------------- //
+
+    //the bottom nav menu
     public BottomNavigationView bottomNavigationView;
 
-    private AppBarConfiguration appBarConfiguration;
+    //for every activity or fragment, there is a BindingClass that allows you to access the views in a easy fashion
     private ActivityMainBinding binding;
-    NavDirections navAction;
 
+    //gets the action from the NavDirectionsObject
+    private NavDirections navAction;
+
+
+    /**
+     * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
+     * nav_host_fragment located in content_main.xml. The nav controller is responsible for controlling/replacing fragments within
+     * this activity.The nav controller(nav_host_fragment) is included in activity_main.xml in order to do this. The nav controller needs a
+     * nav map in order to be told what fragment to replace the current fragment inside of it with next. That is why we
+     * connect the nav map to the nav_host_fragment in nav_graph.xml.
+     * NavigationUI is a object built just for setting up menus. We can easily link the bottomNavigationBar to the nav controller
+     * using this. The only thing we must do is make sure that the nav menu ids in bottom_nav.xml match up with the ids in the nav graph. This
+     * will link the menu items to the appropriate destination without us having to deal with popping the fragments off the stack and creating
+     * a whole bunch of nav actions (the linkage arrows between the fragments) in nav_graph.xml.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //creates an instance of Main Activity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        //sets the Content we want to see by getting the root view  (the parent to all views)
         setContentView(binding.getRoot());
-
+        //gets the bottom menu
         bottomNavigationView = binding.bottomNav;
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+        //gets the nav controller within the nav host fragment
         NavController navController = navHostFragment.getNavController();
+        //binds the menu to the nav controller
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        // CameraX Code ------------------------------------------------------ //
-        // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
-        // I the following makes it so that the camera comes up with the nav bar. It can also use a button to appear.
-        // Still working in getting it automatically when the activity starts.
+
+        /*
+         CameraX Code-------------------------------------------------------------------
+         3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
+         the following makes it so that the camera comes up with the nav bar. It can also use a button to appear.
+         Still working in getting it automatically when this activity starts.
+         */
         Button enableCamera = findViewById(R.id.enableCamera);
         enableCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,42 +97,46 @@ public class MainActivity extends AppCompatActivity implements ReplacementFragme
 
     }// end of onCreate()
 
-    // Method for cameraX launching. Checks permissions and returns bool if perms given or not.
+    /**
+     * Method for cameraX launching. Checks permissions and returns bool if perms given or not.
+     *
+     * @return true or false
+     */
     private boolean hasCameraPermission() {
         return ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
-    // Method for requesting permission of camera.
+
+    /**
+     * Method for requesting permission of camera.
+     */
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, CAMERA_PERMISSION, CAMERA_REQUEST_CODE);
     }
 
-    // Method for creating new Intent class to start activity.
+
+    /**
+     * Method for creating new Intent class to start activity.
+     */
     private void enableCamera() {
         navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //
 
+
+    /**
+     * Inflates the menu; this adds items to the action bar if it is present.
+     *
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
-    }
 
-    @Override
-    public void replaceParentFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contentmainId, fragment).commit();
-    }
 }
 
 

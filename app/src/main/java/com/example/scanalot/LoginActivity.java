@@ -17,6 +17,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
+
+/**
+ * This class is used for the login Activity. It creates the login Activity and uses the activity_login layout. This will be used for
+ * further handling of the data when the user has attempted to login. This class is responsible for handling user authentication through Firebase
+ *
+ * @author Andrew Hoffer
+ * @Created 1/25/23
+ * @Contributors Andrew Hoffer - 1/25/23 - Created the Activity
+ */
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -54,8 +65,8 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Logs In the User Based on if their user email and password are correct.
      *
-     * @param p_strUserEmail    the user email string
-     * @param p_strUserPassword the user password
+     * @param {string} p_strUserEmail    the user email string
+     * @param {string} p_strUserPassword the user password
      */
     private void login(String p_strUserEmail, String p_strUserPassword) {
         mAuth.signInWithEmailAndPassword(p_strUserEmail, p_strUserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -75,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * Validates the users email and password
+     *
      * @return validates if the email and password fields have been filled out correctly.
      */
     private boolean validEmailPassWord() {
