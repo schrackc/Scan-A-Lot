@@ -12,14 +12,14 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/scan"
-        android:label="@string/app_name"
+        android:label="@string/appName"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScanALot"
         tools:targetApi="31">
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_login">
+            android:label="@string/titleActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/appName"
             android:theme="@style/Theme.ScanALot.NoActionBar"></activity>
     </application>
 

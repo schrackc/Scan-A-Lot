@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="618dp"
                     android:gravity="center"
-                    android:text="@string/start_camera" />
+                    android:text="@string/startCamera" />
 
             </RelativeLayout>
 
