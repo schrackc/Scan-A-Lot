@@ -45,14 +45,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="65dp"
                 android:padding="5dp">
-                <Button
-                    android:id="@+id/enableCamera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="618dp"
-                    android:gravity="center"
-                    android:text="@string/startCamera" />
-
             </RelativeLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView

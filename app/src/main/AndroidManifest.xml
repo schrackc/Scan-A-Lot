@@ -26,7 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".cameraActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

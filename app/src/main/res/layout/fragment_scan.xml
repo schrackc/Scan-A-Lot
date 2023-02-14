@@ -62,9 +62,6 @@
     </FrameLayout>
 
 
-    <!--CameraX Shutter Button-->
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

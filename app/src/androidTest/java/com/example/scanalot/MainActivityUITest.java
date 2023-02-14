@@ -40,23 +40,11 @@ public class MainActivityUITest{
         //super.setUp();
         activity = activityRule.getActivity();
         bottomNav = activity.findViewById(R.id.bottom_nav);
-        enableCamera = activity.findViewById(R.id.enableCamera);
     }
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void testCameraButton(){
-        // launch Activity
-        activityRule.launchActivity(new Intent());
-        // Check if button is on screen.
-        onView(withId(R.id.enableCamera)).check(matches(isDisplayed()));
-        // Click button.
-        onView(withId(R.id.enableCamera)).perform(click());
-        // Check if cameraActivity is launched.
-        onView(withId(R.id.cameraActivity)).check(matches(isDisplayed()));
-    }
 
     @Test
     public void testManualEntryButton(){

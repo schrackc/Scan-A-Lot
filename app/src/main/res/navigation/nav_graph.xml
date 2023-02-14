@@ -21,12 +21,6 @@
             app:popUpTo="@id/scan_fragment"
             app:popUpToSaveState="true"
             />
-        <action
-            android:id="@+id/action_scan_fragment_to_cameraActivity"
-            app:popUpTo="@id/scan_fragment"
-            app:destination="@id/cameraActivity"
-
-            />
     </fragment>
     <fragment
         android:id="@+id/manualEntryFragment"
@@ -98,11 +92,6 @@
             app:popUpToSaveState="true"
             />
     </fragment>
-    <activity
-        android:id="@+id/cameraActivity"
-        android:name="com.example.scanalot.cameraActivity"
-        android:label="activity_camera"
-        tools:layout="@layout/activity_camera" />
     <fragment
         android:id="@+id/printPreviewFragment"
         android:name="com.example.scanalot.PrintPreviewFragment"

@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraX;
+import androidx.camera.core.Preview;
+import androidx.camera.core.impl.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -46,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     //gets the action from the NavDirectionsObject
     private NavDirections navAction;
+
+    // Preview shows a live image of what the camera feed sees.
+    private Preview preview;
 
 
     /**
@@ -111,11 +117,10 @@ public class MainActivity extends AppCompatActivity {
      * Method for creating new Intent class to start activity.
      */
     private void enableCamera() {
-        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
+//        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
+//        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //
-
 
     /**
      * Inflates the menu; this adds items to the action bar if it is present.

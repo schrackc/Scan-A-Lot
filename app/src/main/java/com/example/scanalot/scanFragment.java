@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
@@ -37,7 +38,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
 //// ------------------------------------------------------------------------------------------------------------------------------//
-//// This class is responsible for initializing a provider. binding to that provider, and analyzing images with MLKit in the future.
+//// This fragment is responsible for initializing a provider. binding to that provider, and analyzing images with MLKit in the future.
 //// Should users want to rotate the camera horizontally to take scans, that function is intended to be supported here as well.
 //// Using the CameraX library and Google's MlKit - for OCR - in the future we will analyze images and extract UTF-8 data from them.
 //// CameraX mainly is used to interact with the camera's functions. It is currently set to build 1.2.1, the latest stable release.
@@ -46,7 +47,6 @@ public class scanFragment extends Fragment {
     // Defining instance variables.
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    FragmentScanBinding binding;
     FragmentScanBinding binding;
     NavDirections navAction;
     Button btnManualEntry;
@@ -122,17 +122,16 @@ public class scanFragment extends Fragment {
             }
         });
         Preview preview = new Preview.Builder().build();
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+        CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
-        cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector,
-                imageAnalysis, preview);
+        cameraProvider.bindToLifecycle(getViewLifecycleOwner(), cameraSelector, imageAnalysis, preview);
     }// end of bindImageAnalysis method
-
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
+
 }
