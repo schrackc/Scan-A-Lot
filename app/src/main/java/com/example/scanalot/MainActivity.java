@@ -47,19 +47,14 @@ public class MainActivity extends AppCompatActivity implements  ReplacementFragm
 
         // CameraX Code ------------------------------------------------------ //
         // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
-        // I the following makes it so that the camera comes up with the nav bar. It can also use a button to appear.
-        // Still working in getting it automatically when the activity starts.
-        Button enableCamera = findViewById(R.id.enableCamera);
-        enableCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasCameraPermission()) {
-                    enableCamera();
-                } else {
-                    requestPermission();
-                }
-            }
-        });
+        // I the following requests permission when the activity that the camera is within is created.
+        // Creating CameraPreview Permission Dialogue. Asks on create.
+        if (!hasCameraPermission()) {
+            requestPermission();
+        }
+        else {
+            enableCamera();
+        }
 
     }// end of onCreate()
 

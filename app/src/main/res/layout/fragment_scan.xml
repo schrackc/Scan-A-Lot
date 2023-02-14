@@ -45,19 +45,21 @@
         android:gravity="center"
         android:background="@color/purple_100"/>
 
-<!--CameraX Preview-->
+    <!--CameraX Preview-->
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="607dp"
+        app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/geolocationBanner">
 
-    <!-- Taking this button out because manual shutter clutters screen-->
-<!--    <Button-->
-<!--        android:id="@+id/scanCaptureButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="140dp"-->
-<!--        android:background="@drawable/rounded_button"-->
-<!--        android:elevation="2dp"-->
-<!--        android:text="@string/takePhoto"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 
     <!--CameraX Shutter Button-->
