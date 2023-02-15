@@ -107,9 +107,7 @@ public class scanFragment extends Fragment {
         return binding.getRoot();
     }
 
-    /**
-     * Cleans up resources when view is destroyed
-     */
+
     //bindImageAnalysis() method used above. Listens for changes in camera rotation.
     private void bindImageAnalysis(@NonNull ProcessCameraProvider cameraProvider) {
         ImageAnalysis imageAnalysis =
@@ -124,9 +122,14 @@ public class scanFragment extends Fragment {
         Preview preview = new Preview.Builder().build();
         CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
+        // Binding the camera to the fragment lifecycle. This makes it so that the camera is not taking up resources when not displayed.
+        // As the fragment is destroyed so is the camera view. It is created again when the fragment is resumed.
         cameraProvider.bindToLifecycle(getViewLifecycleOwner(), cameraSelector, imageAnalysis, preview);
     }// end of bindImageAnalysis method
 
+    /**
+     * Cleans up resources when view is destroyed
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

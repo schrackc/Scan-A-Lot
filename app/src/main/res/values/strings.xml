@@ -49,7 +49,7 @@
     <string name="FillCitationSaveAndPrint">Save And Print</string>
     <string name="FillCitationAddCitations">Add Citations</string>
     <string name="FillCitationNotesHint">Notes</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Print Preview Fragment -->
     <string name="helloBlankFragment">Hello blank fragment</string>
     <string name="ResultFillCitation">Fill Citation</string>
     <string name="ScanScreenResultsFromScan">Results From Scan</string>
@@ -66,6 +66,7 @@
     <string name="PrintPreviewVehicleOwner">Vehicle Owner:</string>
     <string name="PrintPreviewVehicleModel">Vehicle Model:</string>
     <string name="PrintPreviewVehicleColor">Vehicle Color:</string>
-
+    <!--  Login Log Messages  -->
+    <string name="strLoginFailMessage">Failed To Log In</string>
 
 </resources>

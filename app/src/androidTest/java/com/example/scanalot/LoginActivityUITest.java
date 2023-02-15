@@ -5,9 +5,12 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import static org.hamcrest.CoreMatchers.not;
 
 import android.content.Intent;
 
@@ -48,21 +51,21 @@ public class LoginActivityUITest {
         onView(withId(R.id.container)).check(matches(isDisplayed()));
     }
 // Not working.
-//    @Test
-//    public void testLoginIncorrectCredentials() {
-//        // UI testing the Login Page.
-//        // Launch Activity.
-//        activityRule.launchActivity(new Intent());
-//
-//        // Entering invalid uname.
-//        onView(withId(R.id.username)).perform(typeText("2@2.edu"), closeSoftKeyboard());
-//        // Entering invalid password.
-//        onView(withId(R.id.password)).perform(typeText("loremIpsum123"), closeSoftKeyboard());
-//        // Click login button.
-//        onView(withId(R.id.login)).perform(click());
-//        // Check for error message outlined in LoginActivity.java.
-//        onView(withText("Failed To Log In")).check(matches(isDisplayed()));
-//    }
+    @Test
+    public void testLoginIncorrectCredentials() {
+        // UI testing the Login Page.
+        // Launch Activity.
+        activityRule.launchActivity(new Intent());
+
+        // Entering invalid uname.
+        onView(withId(R.id.username)).perform(typeText("2@2.edu"), closeSoftKeyboard());
+        // Entering invalid password.
+        onView(withId(R.id.password)).perform(typeText("loremIpsum123"), closeSoftKeyboard());
+        // Click login button.
+        onView(withId(R.id.login)).perform(click());
+        // Check for error message outlined in LoginActivity.java.
+        onView(withText("Failed To Log In")).check(matches(isDisplayed()));
+    }
 }
 
 
