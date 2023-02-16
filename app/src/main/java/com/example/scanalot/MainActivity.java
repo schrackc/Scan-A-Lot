@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraX;
+import androidx.camera.core.Preview;
+import androidx.camera.core.impl.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -47,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     //gets the action from the NavDirectionsObject
     private NavDirections navAction;
 
+    // Preview shows a live image of what the camera feed sees.
+    private Preview preview;
+
 
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
@@ -76,24 +82,16 @@ public class MainActivity extends AppCompatActivity {
         //binds the menu to the nav controller
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-
-        /*
-         CameraX Code-------------------------------------------------------------------
-         3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
-         the following makes it so that the camera comes up with the nav bar. It can also use a button to appear.
-         Still working in getting it automatically when this activity starts.
-         */
-        Button enableCamera = findViewById(R.id.enableCamera);
-        enableCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasCameraPermission()) {
-                    enableCamera();
-                } else {
-                    requestPermission();
-                }
-            }
-        });
+        // CameraX Code ------------------------------------------------------ //
+        // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
+        // I the following requests permission when the activity that the camera is within is created.
+        // Creating CameraPreview Permission Dialogue. Asks on create.
+        if (!hasCameraPermission()) {
+            requestPermission();
+        }
+        else {
+            enableCamera();
+        }
 
     }// end of onCreate()
 
@@ -119,11 +117,10 @@ public class MainActivity extends AppCompatActivity {
      * Method for creating new Intent class to start activity.
      */
     private void enableCamera() {
-        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
+//        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
+//        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //
-
 
     /**
      * Inflates the menu; this adds items to the action bar if it is present.

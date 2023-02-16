@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
- * This class is used for the editTicketFragment. It creates the fragment and uses the fragment_edit_ticket layout. This will be used for
+ * This class is used for the EditTicketFragment. It creates the fragment and uses the fragment_edit_ticket layout. This will be used for
  * further handling of the data that will be submitted on this fragment
  *
  * @author Andrew Hoffer
@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
  */
 
 
-public class editTicketFragment extends Fragment {
+public class EditTicketFragment extends Fragment {
     FragmentEditTicketBinding binding;
 
 
