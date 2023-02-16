@@ -14,6 +14,8 @@ import static org.hamcrest.CoreMatchers.not;
 
 import android.content.Intent;
 
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -32,14 +34,13 @@ public class LoginActivityUITest {
     // ActivityTestRule is deprecated. We should use ActivityScenario instead.
     // https://developer.android.com/reference/androidx/test/core/app/ActivityScenario
     @Rule
-    public ActivityTestRule<LoginActivity> activityRule =
-            new ActivityTestRule<>(LoginActivity.class, true, false);
+    public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
     public void testLoginCorrectCredentials() {
         // UI testing the login page.
         // Launch Activity.
-        activityRule.launchActivity(new Intent());
+        activityRule.getScenario();
 
         // Enter valid username.
         onView(withId(R.id.username)).perform(typeText("2@2.edu"), closeSoftKeyboard());
@@ -55,7 +56,7 @@ public class LoginActivityUITest {
     public void testLoginIncorrectCredentials() {
         // UI testing the Login Page.
         // Launch Activity.
-        activityRule.launchActivity(new Intent());
+        activityRule.getScenario();
 
         // Entering invalid uname.
         onView(withId(R.id.username)).perform(typeText("2@2.edu"), closeSoftKeyboard());

@@ -59,8 +59,17 @@ public class MainActivityUITest{
     @Test
     public void testBottomNavbar(){
         BottomNavigationView bottomNavBar = activity.findViewById(R.id.bottom_nav);
+        onView(withId(R.id.scan_fragment)).perform(click()); // click on the scan_fragment menu item
+        onView(withId(R.id.scan_fragment)).check(matches(isDisplayed())); // check that scan_fragment is displayed
+
+        onView(withId(R.id.edit_ticket_fragment)).perform(click()); // click on the edit_ticket_fragment menu item
+        onView(withId(R.id.edit_ticket_fragment)).check(matches(isDisplayed())); // check that edit_ticket_fragment is displayed
+
+        onView(withId(R.id.select_lot_fragment)).perform(click()); // click on the select_lot_fragment menu item
+        onView(withId(R.id.select_lot_fragment)).check(matches(isDisplayed())); // check that select_lot_fragment is displayed
+
+        onView(withId(R.id.log_out_fragment)).perform(click()); // click on the log_out_fragment menu item
+        onView(withId(R.id.log_out_fragment)).check(matches(isDisplayed())); // check that log_out_fragment is displayed
     }
 
 }
-
-

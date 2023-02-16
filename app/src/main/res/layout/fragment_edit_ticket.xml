@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".editTicketFragment">
+    tools:context=".EditTicketFragment">
 
     <Button
         android:id="@+id/editTicketSearchButton"

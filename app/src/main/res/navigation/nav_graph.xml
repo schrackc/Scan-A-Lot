@@ -41,7 +41,7 @@
         tools:layout="@layout/fragment_select_lot" />
     <fragment
         android:id="@+id/edit_ticket_fragment"
-        android:name="com.example.scanalot.editTicketFragment"
+        android:name="com.example.scanalot.EditTicketFragment"
         android:label="fragment_edit_ticket_fragment"
         tools:layout="@layout/fragment_edit_ticket" />
     <fragment
