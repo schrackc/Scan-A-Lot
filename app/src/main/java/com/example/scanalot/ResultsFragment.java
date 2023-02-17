@@ -39,7 +39,7 @@ public class ResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //getting the button
-        btnFillCitation = binding.resultFillCitationButton;
+        btnFillCitation = binding.fillSavePrintButton;
 
         //setting the event listener
         btnFillCitation.setOnClickListener(new View.OnClickListener() {

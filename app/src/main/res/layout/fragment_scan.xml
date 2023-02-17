@@ -23,6 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/geolocationBanner"
         app:layout_constraintVertical_bias="0.696" />
 
+
     <Button
         android:id="@+id/outlinedButton"
         style="?attr/materialButtonOutlinedStyle"
@@ -38,6 +39,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <!-- Geolocation Banner Layout. Needs Variable for Lot Specific -->
     <TextView
         android:id="@+id/geolocationBanner"
@@ -51,7 +53,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--CameraX Preview-->
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

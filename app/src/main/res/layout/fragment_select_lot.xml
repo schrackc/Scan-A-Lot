@@ -10,6 +10,7 @@
 
 
     <Spinner
+        android:id="@+id/selectLotSpinner"
         style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="378dp"
         android:layout_height="48dp"
