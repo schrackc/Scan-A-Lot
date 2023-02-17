@@ -36,6 +36,10 @@ android {
         //on each layout rather than getting each one through "findViewById"
         viewBinding true
     }
+
+    testOptions{
+                animationsDisabled = true;
+            }
 }
 
 dependencies {

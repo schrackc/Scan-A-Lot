@@ -45,9 +45,9 @@ public class FillCitationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        textView = binding.textView;
-        btnCancel = binding.CancelButton;
-        btnSavePrint = binding.resultFillCitationButton;
+        textView = binding.fillAddCitations;
+        btnCancel = binding.fillCancelButton;
+        btnSavePrint = binding.fillSavePrintButton;
 
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override

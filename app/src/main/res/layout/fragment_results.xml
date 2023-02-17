@@ -38,7 +38,7 @@
         app:layout_constraintVertical_bias="0.499" />
 
     <Button
-        android:id="@+id/resultFillCitationButton"
+        android:id="@+id/fillSavePrintButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="140dp"
