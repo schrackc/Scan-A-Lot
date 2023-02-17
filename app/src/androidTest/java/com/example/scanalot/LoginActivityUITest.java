@@ -50,12 +50,15 @@ public class LoginActivityUITest {
     public void testLoginCorrectCredentials() {
         // UI testing the login page.
         // Launch Activity.
-        activityRule.getScenario();
 
-        // Enter valid username.
+// Enter valid username.
         onView(withId(R.id.username)).perform(typeText("2@2.edu"), closeSoftKeyboard());
         // Enter valid password.
-        onView(withId(R.id.scan_fragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.password)).perform(typeText("123456"), closeSoftKeyboard());
+        // CLick login button.
+        onView(withId(R.id.login)).perform(click());
+        // Check if success leads to MainActivity.
+        onView(withId(R.id.container)).check(matches(isDisplayed()));
 
     }
 
