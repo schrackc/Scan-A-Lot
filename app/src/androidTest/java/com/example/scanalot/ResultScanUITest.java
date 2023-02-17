@@ -15,7 +15,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+/**
+ * This class is used for UI Testing on the Result Scan Fragment.
+ * @author Andrew Hoffer
+ * @Created 2/17/23
+ * @Contributors Andrew Hoffer - 2/17/23 - Made Test
+ */
 @RunWith(AndroidJUnit4.class)
 public class ResultScanUITest {
 
@@ -31,7 +36,6 @@ public class ResultScanUITest {
         onView(withText("Pass Expired - Wrong Lot")).check(matches(isDisplayed()));
         //Click the button tha will take you to fill Citation page
         onView(withId(R.id.fillSavePrintButton)).perform(click());
-
 
     }
 }

@@ -10,7 +10,9 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.CoreMatchers.anything;
@@ -68,15 +70,14 @@ public class LoginActivityUITest {
         // UI testing the Login Page.
         // Launch Activity.
         activityRule.getScenario();
-
         // Entering invalid uname.
         onView(withId(R.id.username)).perform(typeText("2@2.edu"), closeSoftKeyboard());
         // Entering invalid password.
         onView(withId(R.id.password)).perform(typeText("loremIpsum123"), closeSoftKeyboard());
         // Click login button.
         onView(withId(R.id.login)).perform(click());
-        //check to see if login is still displayed due to fail
-        onView(withId(R.id.login)).check(matches(isDisplayed()));
+        //check to see if login is still displayed by checking username is displayed due to fail
+        onView(withId(R.id.username)).check(matches(isDisplayed()));
     }
 
 
