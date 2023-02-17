@@ -33,6 +33,7 @@
     <string name="stateSpinnerName">State</string>
     <string name="plateNumber">Plate Number</string>
     <!-- Select Lot Strings-->
+    <string name="selectLotSpinner">Select Lot</string>
     <string name="confirmLot">Confirm Lot</string>
     <!--Edit Ticket Screen Strings-->
     <string name="editTicketSearchButton">Search </string>
