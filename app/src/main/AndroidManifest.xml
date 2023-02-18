@@ -29,8 +29,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/appName"
-            android:theme="@style/Theme.ScanALot.NoActionBar"></activity>
+            android:theme="@style/Theme.ScanALot.NoActionBar" />
+        <!--Automatically downloads the ML model to the device after installing app from Play Store.-->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
 
 </manifest>
