@@ -16,7 +16,7 @@ import com.example.scanalot.databinding.FragmentLogOutBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This class is used for the logOutFragment. It creates the fragment and uses the fragment_log_out layout. This will be used for logging the user
+ * This class is used for the LogOutFragment. It creates the fragment and uses the fragment_log_out layout. This will be used for logging the user
  * out of both the app and Firebase.
  *
  * @author Andrew Hoffer
@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * @Contributors Andrew Hoffer - 1/25/23 - Created the fragment
  */
 
-public class logOutFragment extends Fragment {
+public class LogOutFragment extends Fragment {
     FragmentLogOutBinding binding;
     NavDirections navAction;
     Button btnLogOut;

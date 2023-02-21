@@ -6,7 +6,7 @@
     app:startDestination="@id/scan_fragment">
     <fragment
         android:id="@+id/scan_fragment"
-        android:name="com.example.scanalot.scanFragment"
+        android:name="com.example.scanalot.ScanFragment"
         android:label="fragment_scan_fragment"
         tools:layout="@layout/fragment_scan" >
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/select_lot_fragment"
-        android:name="com.example.scanalot.selectLotFragment"
+        android:name="com.example.scanalot.SelectLotFragment"
         android:label="fragment_select_lot_fragment"
         tools:layout="@layout/fragment_select_lot" />
     <fragment
@@ -46,7 +46,7 @@
         tools:layout="@layout/fragment_edit_ticket" />
     <fragment
         android:id="@+id/log_out_fragment"
-        android:name="com.example.scanalot.logOutFragment"
+        android:name="com.example.scanalot.LogOutFragment"
         android:label="fragment_log_out_fragment"
         tools:layout="@layout/fragment_log_out" >
         <action

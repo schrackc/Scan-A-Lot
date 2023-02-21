@@ -11,7 +11,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
@@ -19,7 +18,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -27,7 +25,7 @@ import com.example.scanalot.databinding.FragmentScanBinding;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * This class is used for the scanFragment. It creates the fragment and uses the fragment_scan layout. This is used as the main page when the user
+ * This class is used for the ScanFragment. It creates the fragment and uses the fragment_scan layout. This is used as the main page when the user
  * logs into the app. This fragment will be responsible for hosting the camera and getting the scan from the license plate.
  *
  * @author Andrew Hoffer
@@ -43,7 +41,7 @@ import java.util.concurrent.ExecutionException;
 //// Using the CameraX library and Google's MlKit - for OCR - in the future we will analyze images and extract UTF-8 data from them.
 //// CameraX mainly is used to interact with the camera's functions. It is currently set to build 1.2.1, the latest stable release.
 //// ------------------------------------------------------------------------------------------------------------------------------//
-public class scanFragment extends Fragment {
+public class ScanFragment extends Fragment {
     // Defining instance variables.
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;

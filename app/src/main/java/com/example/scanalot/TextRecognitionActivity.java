@@ -39,8 +39,8 @@ public class TextRecognitionActivity implements ImageAnalysis.Analyzer{
         Image mediaImage = imageProxy.getImage();
         if (mediaImage != null) {
             InputImage image = InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
+            imageProxy.close();
             // Pass image to an ML Kit Vision API
-            // ...
         }
     }
 
@@ -76,3 +76,5 @@ public class TextRecognitionActivity implements ImageAnalysis.Analyzer{
 
 
 }
+
+
