@@ -27,11 +27,11 @@
 //
 //    @Test
 //    public void verifySelectLotButtonDisplayed() {
-//        // Launch the selectLotFragment by clicking on its menu item
+//        // Launch the SelectLotFragment by clicking on its menu item
 //        onView(withId(R.id.select_lot_fragment)).perform(click());
 //        // Check that the select lot button is displayed
 //        onView(withId(R.id.selectLotButton)).check(matches(isDisplayed()));
-//        // Launch the selectLotFragment by clicking on its menu item
+//        // Launch the SelectLotFragment by clicking on its menu item
 //        activityRule.getScenario();
 //        // select from spinner
 //        onView(withId(R.id.editTicketSearchBox)).perform(typeText("1111"), closeSoftKeyboard());
@@ -76,7 +76,7 @@ public class SelectLotFragmentUITest {
 
     @Test
     public void verifySelectLotControls() {
-        // Launch the selectLotFragment by clicking on its menu item
+        // Launch the SelectLotFragment by clicking on its menu item
         onView(withId(R.id.select_lot_fragment)).perform(click());
         // Check that the select lot button is displayed
         onView(withId(R.id.selectLotButton)).check(matches(isDisplayed()));

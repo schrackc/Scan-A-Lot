@@ -27,7 +27,7 @@ public class EditTicketFragmentUITest {
 
     @Test
     public void testEditTicketControls() {
-        // Launch the selectLotFragment by clicking on its menu item
+        // Launch the SelectLotFragment by clicking on its menu item
         onView(withId(R.id.edit_ticket_fragment)).perform(click());
         // Check that the select lot button is displayed
         onView(withId(R.id.editTicketSearchButton)).check(matches(isDisplayed()));

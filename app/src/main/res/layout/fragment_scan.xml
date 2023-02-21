@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scanFragment">
+    tools:context=".ScanFragment">
     <!--Manual Entry Button Layout-->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
@@ -52,12 +52,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--CameraX Preview-->
+    <Button
+        android:id="@+id/detectTextButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:backgroundTint="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:gravity="center"
+        android:text="@string/scanDetectText"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!--This is a button I made that makes the Manual entry have rounded corners.
-    When used with the style tag it disappears entirely-->
-    <!--android:background="@drawable/rounded_outlined_button"-->
