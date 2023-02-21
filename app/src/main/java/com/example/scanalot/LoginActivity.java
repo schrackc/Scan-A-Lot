@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -51,14 +52,13 @@ public class LoginActivity extends AppCompatActivity {
                 String strUserEmail = binding.username.getText().toString().trim();
                 String strUserPassword = binding.password.getText().toString().trim();
                 if (validEmailPassWord()) {
-
                     login(strUserEmail, strUserPassword);
-
-
+                }else
+                {
+                    Toast.makeText(LoginActivity.this, "Incorrect Username or Password", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
 
     }
 
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Failed To Log In", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Failed to Log In", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -95,13 +95,9 @@ public class LoginActivity extends AppCompatActivity {
         EditText userEmail = binding.username;
         EditText userPass = binding.password;
         if (!Patterns.EMAIL_ADDRESS.matcher(userEmail.getText()).matches()) {
-            userEmail.setError("Please Enter Valid Email Address");
-            userEmail.requestFocus();
             isTrue = false;
         }
         if (userPass.getText().length() < 6) {
-            userPass.setError("Enter Valid Password");
-            userPass.requestFocus();
             isTrue = false;
         }
 
