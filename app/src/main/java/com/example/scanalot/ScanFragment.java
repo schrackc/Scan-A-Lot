@@ -69,7 +69,7 @@ public class ScanFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Button Click", "manual button clicked !!!!");
-                navAction = scanFragmentDirections.actionScanFragmentToManualEntryFragment();
+                navAction = ScanFragmentDirections.actionScanFragmentToManualEntryFragment();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
@@ -77,7 +77,7 @@ public class ScanFragment extends Fragment {
         btnResultScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navAction = scanFragmentDirections.actionScanFragmentToResultsFragment();
+                navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
