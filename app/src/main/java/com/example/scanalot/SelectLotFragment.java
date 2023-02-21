@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.scanalot.databinding.FragmentSelectLotBinding;
+
 /**
  * This class is used for the SelectLotFragment. It creates the fragment and uses the fragment_select_layout layout. This will be used for
  * when the user wants to select the parking lot they want to scan. This allows for the app to know which cars belong and dont belong in the
