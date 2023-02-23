@@ -27,12 +27,9 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 public class TextRecognitionActivity implements ImageAnalysis.Analyzer{
     // Create instance of TextRecognizer
     TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-
-
     // Pass a media.Image to as the InputImage object because the app takes pictures.
     // We would use a file URI if we wanted to select images from a photo gallery.
     // Analyze takes in an image and gets information from it.
-
     @Override
     @ExperimentalGetImage
     public void analyze(ImageProxy imageProxy) {
