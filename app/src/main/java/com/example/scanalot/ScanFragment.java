@@ -40,6 +40,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
  * @Contributors Andrew Hoffer - 1/21/23 - Created the fragment
  */
 
+import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 //// ------------------------------------------------------------------------------------------------------------------------------//
@@ -84,7 +85,7 @@ public class ScanFragment extends Fragment {
             Log.i("ERROR", ex.toString());
         }
         //set the camera view which is the front camera
-        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA;
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
         //use image capture use case since we want an image
         imageCapture = new ImageCapture.Builder().build();
 
@@ -102,8 +103,6 @@ public class ScanFragment extends Fragment {
 
         return binding.getRoot();
     }
-
-
 
 
     /**
@@ -139,12 +138,11 @@ public class ScanFragment extends Fragment {
             }
         });
 
-
         btnDetectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    imageCapture.takePicture(getContext().getMainExecutor(), new ImageCapture.OnImageCapturedCallback()
+        /*      imageCapture.takePicture(getContext().getMainExecutor(), new ImageCapture.OnImageCapturedCallback()
                 {
                     @Override
                     public void onCaptureSuccess(@NonNull ImageProxy image) {
@@ -156,12 +154,29 @@ public class ScanFragment extends Fragment {
                     public void onError(@NonNull ImageCaptureException exception) {
                         Log.i("CAMERA FAIL", "CAMERA FAILED");
                     }
-                });
+                });*/
+                
+
+
+                    /*Save to a Folder*/
+                    File imageFile = new  File("../../assets/somePicture.jpg");
+
+                    ImageCapture.OutputFileOptions options =new  ImageCapture.OutputFileOptions.Builder(imageFile).build();
+
+                    imageCapture.takePicture(options, getContext().getMainExecutor(), new ImageCapture.OnImageSavedCallback() {
+                        @Override
+                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                            Log.i("SAVED","CAMERA SAVE SUCCESS");
+                        }
+
+                        @Override
+                        public void onError(@NonNull ImageCaptureException exception) {
+                            Log.i("SAVE FAILED","CAMERA SAVE FAILED");
+                        }
+                    });
                 }
             }
         });
-
-
     }
 
 
