@@ -53,8 +53,7 @@
             android:id="@+id/action_log_out_fragment_to_loginActivity"
             app:destination="@id/loginActivity"
             app:popUpTo="@id/loginActivity"
-           app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
 
     </fragment>
     <activity

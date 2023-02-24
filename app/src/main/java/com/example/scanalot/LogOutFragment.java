@@ -44,8 +44,11 @@ public class LogOutFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
+                //Navigate to destination
                 navAction = LogOutFragmentDirections.actionLogOutFragmentToLoginActivity();
                 Navigation.findNavController(view).navigate(navAction);
+                //kill Activity
+                getActivity().finish();
             }
         });
 

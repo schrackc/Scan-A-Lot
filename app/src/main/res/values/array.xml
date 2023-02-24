@@ -2,6 +2,7 @@
 <resources>
 <!--States Array for manual entry dropdown-->
     <string-array name="states">
+        <item>Pennsylvania</item>
         <item>Alabama</item>
         <item>Alaska</item>
         <item>Arizona</item>
@@ -56,7 +57,7 @@
 
     <!-- Parking Lot Array for Select Lot -->
     <string-array name="parkingLots">
-
+        <item>     </item>
         <item>Lot A</item>
         <item>Lot B</item>
         <item>Lot C</item>
