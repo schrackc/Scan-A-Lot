@@ -2,8 +2,6 @@ package com.example.scanalot;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.Image;
@@ -15,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
@@ -58,15 +55,14 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 //// ------------------------------------------------------------------------------------------------------------------------------//
 public class ScanFragment extends Fragment {
     // Defining instance variables.
-    private TextView overlayText;
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     FragmentScanBinding binding;
     NavDirections navAction;
     Button btnManualEntry;
     Button btnResultScan;
-    Button btnDetectText;
 
+    Button btnDetectText;
 
     TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
@@ -83,7 +79,6 @@ public class ScanFragment extends Fragment {
         binding = FragmentScanBinding.inflate(inflater, container, false);
         previewView = binding.previewView;
         cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
-        overlayText = binding.overlayTextView;
         try {
             cameraProvider = cameraProviderFuture.get();
         }catch(Exception ex)
@@ -142,7 +137,6 @@ public class ScanFragment extends Fragment {
                       //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
 
                          InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
-
                         Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
                             @Override
                             public void onComplete(@NonNull Task<Text> task) {
@@ -150,12 +144,25 @@ public class ScanFragment extends Fragment {
                                 // after done, release the ImageProxy object
                                 imageProxy.close();
                                 Log.i("RESULT TEXT", resultText);
-                                overlayText.setText(resultText);
-                                overlayText.setVisibility(View.VISIBLE);
                             }
                         });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     }
+
                 }
             });
         }
@@ -176,6 +183,7 @@ public class ScanFragment extends Fragment {
 
         btnManualEntry = binding.outlinedButton;
         btnResultScan = binding.ResultsScanButton;
+        btnDetectText = binding.detectTextButton;
         Log.i("onCreate", "scan fragment created");
 
         //event listener on the manual entry button. Navigate to manual entry fragment
