@@ -4,7 +4,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraX;
@@ -34,8 +36,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  * @Created 1/21/23
  * @Contributors Andrew Hoffer - 1/21/23 - Created the Activity and handlers
  * Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
+ * Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener{
     // CameraX code
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     // Preview shows a live image of what the camera feed sees.
     private Preview preview;
 
+    // TextView that will be updated by a spinner on SelectLotFragment.
+    private TextView locationBanner;
 
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
@@ -68,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //creates an instance of Main Activity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         //sets the Content we want to see by getting the root view  (the parent to all views)
         setContentView(binding.getRoot());
+        // gets the location banner.
+        locationBanner = findViewById(R.id.geolocationBanner);
         //gets the bottom menu
         bottomNavigationView = binding.bottomNav;
-
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
         //gets the nav controller within the nav host fragment
         NavController navController = navHostFragment.getNavController();
@@ -121,6 +126,18 @@ public class MainActivity extends AppCompatActivity {
 //        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
     }
     // End of CameraX -------------------------------------------------- //
+
+    /**
+     * Method that handles updating the textView geolocationBanner. It pulls from the selectLot spinner
+     * on the SelectLotFragment.
+     * @param item
+     */
+    @Override
+    public void onSpinnerSelected(String item) {
+        // setting text with whatever is selected in the select lot fragment.
+        String location = "Location: " + item;
+        locationBanner.setText(location);
+    }
 
     /**
      * Inflates the menu; this adds items to the action bar if it is present.
