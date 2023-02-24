@@ -183,7 +183,6 @@ public class ScanFragment extends Fragment {
 
         btnManualEntry = binding.outlinedButton;
         btnResultScan = binding.ResultsScanButton;
-        btnDetectText = binding.detectTextButton;
         Log.i("onCreate", "scan fragment created");
 
         //event listener on the manual entry button. Navigate to manual entry fragment
