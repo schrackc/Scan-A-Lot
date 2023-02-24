@@ -2,6 +2,8 @@ package com.example.scanalot;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.Image;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
@@ -55,6 +58,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 //// ------------------------------------------------------------------------------------------------------------------------------//
 public class ScanFragment extends Fragment {
     // Defining instance variables.
+    private TextView overlayText;
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     FragmentScanBinding binding;
@@ -62,7 +66,6 @@ public class ScanFragment extends Fragment {
     Button btnManualEntry;
     Button btnResultScan;
 
-    Button btnDetectText;
 
     TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
@@ -75,10 +78,11 @@ public class ScanFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       // super.onViewCreated(view, savedInstanceState);
+        // super.onViewCreated(view, savedInstanceState);
         binding = FragmentScanBinding.inflate(inflater, container, false);
         previewView = binding.previewView;
         cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
+        overlayText = binding.overlayTextView;
         try {
             cameraProvider = cameraProviderFuture.get();
         }catch(Exception ex)
@@ -94,7 +98,7 @@ public class ScanFragment extends Fragment {
         ImageAnalysis imageAnalysis =
                 new ImageAnalysis.Builder()
                         // enable the following line if RGBA output is needed.
-                      //  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                        //  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                         .setTargetResolution(new Size(1280, 720))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
@@ -107,7 +111,7 @@ public class ScanFragment extends Fragment {
 
 
         //bind all of these together on the lifecycle
-       // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
+        // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
         cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageAnalysis,preview);
 
         //process the images coming in and get text using TextRecognition Object
@@ -134,9 +138,10 @@ public class ScanFragment extends Fragment {
                         //create an image of type InputImage to pass into a vision api
                         InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
                         //pass into a vision api such as tesseract
-                      //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
+                        //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
 
-                         InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+                        InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+
                         Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
                             @Override
                             public void onComplete(@NonNull Task<Text> task) {
@@ -144,25 +149,12 @@ public class ScanFragment extends Fragment {
                                 // after done, release the ImageProxy object
                                 imageProxy.close();
                                 Log.i("RESULT TEXT", resultText);
+                                overlayText.setText(resultText);
+                                overlayText.setVisibility(View.VISIBLE);
                             }
                         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     }
-
                 }
             });
         }
