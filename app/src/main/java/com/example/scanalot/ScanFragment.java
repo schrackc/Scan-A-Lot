@@ -2,6 +2,8 @@ package com.example.scanalot;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,8 +28,12 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.scanalot.databinding.FragmentScanBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
@@ -128,10 +134,35 @@ public class ScanFragment extends Fragment {
                         //create an image of type InputImage to pass into a vision api
                         InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
                         //pass into a vision api such as tesseract
-                        Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
+                      //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
+
+                         InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+                        Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Text> task) {
+                                String resultText = task.getResult().getText();
+                                // after done, release the ImageProxy object
+                                imageProxy.close();
+                                Log.i("RESULT TEXT", resultText);
+                            }
+                        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     }
-                    // after done, release the ImageProxy object
-                    imageProxy.close();
+
                 }
             });
         }
