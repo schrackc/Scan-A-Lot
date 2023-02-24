@@ -40,7 +40,7 @@
     <string name="editTicketSearch">Search</string>
     <string name="editTicketID">TicketID</string>
     <!-- Geolocation Fragment -->
-    <string name="geolocationBannerText">Location: </string>
+    <string name="geolocationBannerText">No Location Selected: </string>
     <!-- Citation Fragment-->
     <string name="FillCitationOfficerID">Officer ID</string>
     <string name="FillCitationPlateNumber">Plate Number</string>

@@ -6,10 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ScanFragment">
     <!--Manual Entry Button Layout-->
+
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+    </androidx.camera.view.PreviewView>
 
     <Button
         android:id="@+id/ResultsScanButton"
@@ -18,9 +20,10 @@
         android:text="@string/ScanScreenResultsFromScan"
         app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/geolocationBanner"
+
+        app:layout_constraintTop_toTopOf="@+id/previewView"
         app:layout_constraintVertical_bias="0.696" />
 
 
@@ -40,17 +43,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Geolocation Banner Layout. Needs Variable for Lot Specific -->
+
     <TextView
-        android:id="@+id/geolocationBanner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_100"
-        android:gravity="center"
-        android:text="@string/geolocationBannerText"
-        android:textSize="20sp"
+        android:id="@+id/overlayTextView"
+        android:layout_width="169dp"
+        android:layout_height="76dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:textAlignment="inherit"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ResultsScanButton" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

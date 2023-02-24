@@ -5,9 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".SelectLotFragment">
-
 
     <Spinner
         android:id="@+id/selectLotSpinner"
@@ -20,25 +18,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:entries="@array/parkingLots"/>
-
-
-    <Button
-        android:id="@+id/selectLotButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="112dp"
-        android:layout_marginBottom="100dp"
-        android:background="@drawable/rounded_button"
-        android:gravity="center"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="@string/confirmLot"
-        android:textAllCaps="false"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/purple_700" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
