@@ -1,6 +1,7 @@
 package com.example.scanalot;
 
 
+import android.annotation.SuppressLint;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,13 +21,13 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.scanalot.databinding.FragmentScanBinding;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
@@ -39,9 +40,6 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
  * @Created 1/21/23
  * @Contributors Andrew Hoffer - 1/21/23 - Created the fragment
  */
-
-import java.io.File;
-import java.util.concurrent.ExecutionException;
 
 //// ------------------------------------------------------------------------------------------------------------------------------//
 //// This fragment is responsible for initializing a provider. binding to that provider, and analyzing images with MLKit in the future.
@@ -60,14 +58,11 @@ public class ScanFragment extends Fragment {
 
     Button btnDetectText;
 
-   // TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-
-
-
+    TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
     ProcessCameraProvider cameraProvider;
     CameraSelector cameraSelector;
-    ImageCapture imageCapture;
+
 
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
@@ -87,7 +82,16 @@ public class ScanFragment extends Fragment {
         //set the camera view which is the front camera
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
         //use image capture use case since we want an image
-        imageCapture = new ImageCapture.Builder().build();
+
+
+        //create an image analysis instance which is responsible for capturing images
+        ImageAnalysis imageAnalysis =
+                new ImageAnalysis.Builder()
+                        // enable the following line if RGBA output is needed.
+                      //  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                        .setTargetResolution(new Size(1280, 720))
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build();
 
         //set the display of camera view using Preview
         Preview preview = new Preview.Builder().build();
@@ -97,9 +101,40 @@ public class ScanFragment extends Fragment {
 
 
         //bind all of these together on the lifecycle
-        cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
+       // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
+        cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageAnalysis,preview);
 
+        //process the images coming in and get text using TextRecognition Object
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            imageAnalysis.setAnalyzer(getContext().getMainExecutor(), new ImageAnalysis.Analyzer() {
+                @SuppressLint("UnsafeOptInUsageError")
+                @Override
+                public void analyze(@NonNull ImageProxy imageProxy) {
+                    int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
 
+                    Image cameraImage = null;
+
+                    // attempt to get the image
+                    try {
+                        cameraImage =  imageProxy.getImage();
+                    } catch(Exception ex)
+                    {
+                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " +  ex.getMessage().toString());
+                    }
+
+                    //check if we got the image
+                    if(cameraImage !=null)
+                    {
+                        //create an image of type InputImage to pass into a vision api
+                        InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
+                        //pass into a vision api such as tesseract
+                        Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
+                    }
+                    // after done, release the ImageProxy object
+                    imageProxy.close();
+                }
+            });
+        }
 
         return binding.getRoot();
     }
@@ -138,46 +173,8 @@ public class ScanFragment extends Fragment {
             }
         });
 
-        btnDetectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        /*      imageCapture.takePicture(getContext().getMainExecutor(), new ImageCapture.OnImageCapturedCallback()
-                {
-                    @Override
-                    public void onCaptureSuccess(@NonNull ImageProxy image) {
-                     Log.i("CAMERA SUCCESS", "CAMERA TOOK A PICTURE");
-                     image.close();
-                    }
-
-                    @Override
-                    public void onError(@NonNull ImageCaptureException exception) {
-                        Log.i("CAMERA FAIL", "CAMERA FAILED");
-                    }
-                });*/
-                
-
-
-                    /*Save to a Folder*/
-                    File imageFile = new  File("../../assets/somePicture.jpg");
-
-                    ImageCapture.OutputFileOptions options =new  ImageCapture.OutputFileOptions.Builder(imageFile).build();
-
-                    imageCapture.takePicture(options, getContext().getMainExecutor(), new ImageCapture.OnImageSavedCallback() {
-                        @Override
-                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                            Log.i("SAVED","CAMERA SAVE SUCCESS");
-                        }
-
-                        @Override
-                        public void onError(@NonNull ImageCaptureException exception) {
-                            Log.i("SAVE FAILED","CAMERA SAVE FAILED");
-                        }
-                    });
-                }
-            }
-        });
     }
+
 
 
     /**
