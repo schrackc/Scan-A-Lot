@@ -19,13 +19,17 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        app:popupTheme="@style/Theme.ScanALot.PopupOverlay" />-->
-
+    <!-- Location Banner Layout -->
+    <TextView
+        android:id="@+id/geolocationBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_100"
+        android:gravity="center"
+        android:text="@string/geolocationBannerText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
