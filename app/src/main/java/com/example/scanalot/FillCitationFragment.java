@@ -59,14 +59,16 @@ public class FillCitationFragment extends Fragment {
     TextView tvBanner =  getActivity().findViewById(R.id.geolocationBanner);
         Log.i("tvBanner",tvBanner.getText().toString());
     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.FillCitationLots, android.R.layout.simple_spinner_item);
+                R.array.parkingLots, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinnerChooseLot.setAdapter(adapter);
-        Log.i("SUBSTRING SPINNER", tvBanner.getText().toString().substring(10,14));
+        //last char index of string
+        int lastCharacter = tvBanner.getText().toString().length();
+        Log.i("SUBSTRING SPINNER", tvBanner.getText().toString().substring(10,lastCharacter));
         //get spinner position
-        int spinnerValueIndex = adapter.getPosition(tvBanner.getText().toString().substring(10,15));
+        int spinnerValueIndex = adapter.getPosition(tvBanner.getText().toString().substring(10,lastCharacter));
 
         //set selection
         spinnerChooseLot.setSelection(spinnerValueIndex);
