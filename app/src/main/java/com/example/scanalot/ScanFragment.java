@@ -1,6 +1,13 @@
 package com.example.scanalot;
 
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -8,21 +15,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.scanalot.databinding.FragmentScanBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 /**
  * This class is used for the ScanFragment. It creates the fragment and uses the fragment_scan layout. This is used as the main page when the user
@@ -33,8 +50,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @Contributors Andrew Hoffer - 1/21/23 - Created the fragment
  */
 
-import java.util.concurrent.ExecutionException;
-
 //// ------------------------------------------------------------------------------------------------------------------------------//
 //// This fragment is responsible for initializing a provider. binding to that provider, and analyzing images with MLKit in the future.
 //// Should users want to rotate the camera horizontally to take scans, that function is intended to be supported here as well.
@@ -43,12 +58,110 @@ import java.util.concurrent.ExecutionException;
 //// ------------------------------------------------------------------------------------------------------------------------------//
 public class ScanFragment extends Fragment {
     // Defining instance variables.
+    private TextView overlayText;
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     FragmentScanBinding binding;
     NavDirections navAction;
     Button btnManualEntry;
     Button btnResultScan;
+
+
+    TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+
+    ProcessCameraProvider cameraProvider;
+    CameraSelector cameraSelector;
+
+
+    /**
+     * Method in which executes during the creation of the view. It is creating an instance of this fragment
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // super.onViewCreated(view, savedInstanceState);
+        binding = FragmentScanBinding.inflate(inflater, container, false);
+        previewView = binding.previewView;
+        cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
+        overlayText = binding.overlayTextView;
+        try {
+            cameraProvider = cameraProviderFuture.get();
+        }catch(Exception ex)
+        {
+            Log.i("ERROR", ex.toString());
+        }
+        //set the camera view which is the front camera
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+        //use image capture use case since we want an image
+
+
+        //create an image analysis instance which is responsible for capturing images
+        ImageAnalysis imageAnalysis =
+                new ImageAnalysis.Builder()
+                        // enable the following line if RGBA output is needed.
+                        //  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                        .setTargetResolution(new Size(1280, 720))
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build();
+
+        //set the display of camera view using Preview
+        Preview preview = new Preview.Builder().build();
+
+        //set the surface for the camera through the Preview Layout
+        preview.setSurfaceProvider(binding.previewView.getSurfaceProvider());
+
+
+        //bind all of these together on the lifecycle
+        // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
+        cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageAnalysis,preview);
+
+        //process the images coming in and get text using TextRecognition Object
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            imageAnalysis.setAnalyzer(getContext().getMainExecutor(), new ImageAnalysis.Analyzer() {
+                @SuppressLint("UnsafeOptInUsageError")
+                @Override
+                public void analyze(@NonNull ImageProxy imageProxy) {
+                    int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
+
+                    Image cameraImage = null;
+
+                    // attempt to get the image
+                    try {
+                        cameraImage =  imageProxy.getImage();
+                    } catch(Exception ex)
+                    {
+                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " +  ex.getMessage().toString());
+                    }
+
+                    //check if we got the image
+                    if(cameraImage !=null)
+                    {
+                        //create an image of type InputImage to pass into a vision api
+                        InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
+                        //pass into a vision api such as tesseract
+                        //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
+
+                        InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+
+                        Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Text> task) {
+                                String resultText = task.getResult().getText();
+                                // after done, release the ImageProxy object
+                                imageProxy.close();
+                                Log.i("RESULT TEXT", resultText);
+                                overlayText.setText(resultText);
+                                overlayText.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+
+        return binding.getRoot();
+    }
+
 
     /**
      * Method used when the view is created. This is the destination fragment when the user logs in. There are two buttons which are given click
@@ -81,49 +194,10 @@ public class ScanFragment extends Fragment {
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
-    }
 
-    /**
-     * Method in which executes during the creation of the view. It is creating an instance of this fragment
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentScanBinding.inflate(inflater, container, false);
-        previewView = binding.previewView;
-        cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
-        cameraProviderFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                    bindImageAnalysis(cameraProvider);
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, ContextCompat.getMainExecutor(getContext()));
-        return binding.getRoot();
     }
 
 
-    //bindImageAnalysis() method used above. Listens for changes in camera rotation.
-    private void bindImageAnalysis(@NonNull ProcessCameraProvider cameraProvider) {
-        ImageAnalysis imageAnalysis =
-                new ImageAnalysis.Builder().setTargetResolution(new Size(1280, 720))
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
-        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(getContext()), new ImageAnalysis.Analyzer() {
-            @Override
-            public void analyze(@NonNull ImageProxy image) {
-                image.close();
-            }
-        });
-        Preview preview = new Preview.Builder().build();
-        CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
-        preview.setSurfaceProvider(previewView.getSurfaceProvider());
-        // Binding the camera to the fragment lifecycle. This makes it so that the camera is not taking up resources when not displayed.
-        // As the fragment is destroyed so is the camera view. It is created again when the fragment is resumed.
-        cameraProvider.bindToLifecycle(getViewLifecycleOwner(), cameraSelector, imageAnalysis, preview);
-    }// end of bindImageAnalysis method
 
     /**
      * Cleans up resources when view is destroyed
