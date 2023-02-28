@@ -3,10 +3,13 @@ package com.example.scanalot;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,7 +38,7 @@ public class FillCitationFragment extends Fragment {
     TextView textView;
     Button btnCancel;
     Button btnSavePrint;
-
+    Spinner spinnerChooseLot;
 
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
@@ -48,6 +51,27 @@ public class FillCitationFragment extends Fragment {
         textView = binding.fillAddCitations;
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
+        spinnerChooseLot = binding.fillChooseLotSpinner;
+
+
+
+    //get banner from activity
+    TextView tvBanner =  getActivity().findViewById(R.id.geolocationBanner);
+        Log.i("tvBanner",tvBanner.getText().toString());
+    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.parkingLots, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinnerChooseLot.setAdapter(adapter);
+        //last char index of string
+        int lastCharacter = tvBanner.getText().toString().length();
+        Log.i("SUBSTRING SPINNER", tvBanner.getText().toString().substring(10,lastCharacter));
+        //get spinner position
+        int spinnerValueIndex = adapter.getPosition(tvBanner.getText().toString().substring(10,lastCharacter));
+
+        //set selection
+        spinnerChooseLot.setSelection(spinnerValueIndex);
 
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override

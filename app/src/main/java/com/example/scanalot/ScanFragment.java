@@ -99,7 +99,8 @@ public class ScanFragment extends Fragment {
                 new ImageAnalysis.Builder()
                         // enable the following line if RGBA output is needed.
                         //  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                        .setTargetResolution(new Size(1280, 720))
+                        // was 1280 720
+                        .setTargetResolution(new Size(1080, 2400))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
 
