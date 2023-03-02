@@ -83,6 +83,7 @@ public class SelectLotFragment extends Fragment {
                 R.array.parkingLots, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectLotSpinner.setAdapter(adapter);
+        selectLotSpinner.setSelection(0, false);
         // Handles selecting from the lot spinner. Passed to main so that the TextView can be updated.
         // sets a listener and turns the selection into a string that can be passed to text.
         selectLotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
