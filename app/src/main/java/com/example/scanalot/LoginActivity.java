@@ -29,6 +29,7 @@ import java.util.List;
  * @author Andrew Hoffer
  * @Created 1/25/23
  * @Contributors Andrew Hoffer - 1/25/23 - Created the Activity
+ * @Contributors Nick Downey - 3/1/23 - Added loading bar to login.
  */
 
 public class LoginActivity extends AppCompatActivity {
