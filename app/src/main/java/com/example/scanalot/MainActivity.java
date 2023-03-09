@@ -26,6 +26,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.scanalot.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * This class is used for the Main Activity. It creates the Main Activity and uses the activity_main layout. This will be used for
@@ -35,8 +36,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  * @author Nick Downey
  * @Created 1/21/23
  * @Contributors Andrew Hoffer - 1/21/23 - Created the Activity and handlers
- * Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
- * Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
+ * @Contributors Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
+ * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
+ * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
  */
 public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener{
     // CameraX code
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
 
     //the bottom nav menu
     public BottomNavigationView bottomNavigationView;
+
+    //Dynamic variables to show license information between screens
+    public String strLicenseNumber;
+    public String strLicenseState;
 
     //for every activity or fragment, there is a BindingClass that allows you to access the views in a easy fashion
     private ActivityMainBinding binding;
@@ -58,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
 
     // TextView that will be updated by a spinner on SelectLotFragment.
     private TextView locationBanner;
+
+    // Access a Cloud Firestore instance from your Activity
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the

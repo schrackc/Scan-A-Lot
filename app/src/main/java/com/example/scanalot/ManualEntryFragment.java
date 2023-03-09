@@ -45,10 +45,13 @@ public class ManualEntryFragment extends Fragment {
         btn_manualSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String strLicenseNum = binding.plateSearch.getText().toString().trim();
-                String strLicenseState = binding.stateSpinner.getSelectedItem().toString();
-                if ((strLicenseNum.length() > 1 && strLicenseNum.length() < 9) && strLicenseState != null) {
-                    //To Do: Return values dynamic values
+                String strLicenseNumTemp = binding.plateSearch.getText().toString().trim();
+                String strLicenseStateTemp = binding.stateSpinner.getSelectedItem().toString();
+                if ((strLicenseNumTemp.length() > 1 && strLicenseNumTemp.length() < 9) && strLicenseStateTemp != null) {
+                    MainActivity getActivity = (MainActivity)getActivity();
+                    getActivity.strLicenseNumber = strLicenseNumTemp;
+                    getActivity.strLicenseState = strLicenseStateTemp;
+                    Log.i("ManualEntryFragment", "License Number" + getActivity.strLicenseNumber);
                     navAction = ManualEntryFragmentDirections.actionManualEntryFragmentToResultsFragment();
                     Navigation.findNavController(view).navigate(navAction);
                 }
