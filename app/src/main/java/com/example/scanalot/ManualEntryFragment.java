@@ -1,5 +1,6 @@
 package com.example.scanalot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -32,13 +35,15 @@ public class ManualEntryFragment extends Fragment {
     private ActivityManualEntryBinding binding;
     NavDirections navAction;
     Button btn_manualSearch;
+    TicketDataViewModel viewModel;
     /**
      * Method in which executes after the view has been created. It is saving the state of the view
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        //get the view model that the main activity has
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
         // If search button clicked gives license number and license state value field values to dynamic values in MainActivity the navigates to results page
         btn_manualSearch = binding.manualSearchButton;
         btn_manualSearch.setEnabled(true);
@@ -48,14 +53,23 @@ public class ManualEntryFragment extends Fragment {
                 String strLicenseNumTemp = binding.plateSearch.getText().toString().trim();
                 String strLicenseStateTemp = binding.stateSpinner.getSelectedItem().toString();
                 if ((strLicenseNumTemp.length() > 1 && strLicenseNumTemp.length() < 9) && strLicenseStateTemp != null) {
-                    MainActivity getActivity = (MainActivity)getActivity();
-                    getActivity.strLicenseNumber = strLicenseNumTemp;
-                    getActivity.strLicenseState = strLicenseStateTemp;
+                setTicketDataViewModelValues(strLicenseNumTemp,strLicenseStateTemp);
+                Log.i("MANUAL ENTRY SET VALUES",viewModel.getLicenseState().getValue().toString());
+                Log.i("MANUAL ENTRY SET VALUES",viewModel.getLicenseNumber().getValue().toString());
+
                     navAction = ManualEntryFragmentDirections.actionManualEntryFragmentToResultsFragment();
                     Navigation.findNavController(view).navigate(navAction);
                 }
             }
         });
+    }
+
+    private void setTicketDataViewModelValues(String p_StrLicenseNumTemp, String p_StrLicenseStateTemp) {
+
+        //set the live data objects in the view model
+        viewModel.setLicenseNumber(p_StrLicenseNumTemp);
+        viewModel.setLicenseState(p_StrLicenseStateTemp);
+
     }
 
     /**

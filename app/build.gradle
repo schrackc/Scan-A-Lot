@@ -40,6 +40,10 @@ android {
     testOptions{
                 animationsDisabled = true;
             }
+
+    task prepareKotlinBuildScriptModel{
+
+    }
 }
 
 dependencies {

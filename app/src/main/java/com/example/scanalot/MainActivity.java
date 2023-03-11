@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Preview;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
  * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
  * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
  */
-public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener{
+public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener {
     // CameraX code
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
@@ -67,11 +68,12 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //A list of all the vehicles in the database
-    public ArrayList<ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
+    public ArrayList <ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
 
     //Reference row value in arrVehicles for quick pull of other row information
     public int iRowReferenceLocation;
-
+    //View Model for passing data between fragments/parent Activities
+    private TicketDataViewModel viewModel;
 
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
@@ -87,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Instantiate View Model for passing data between fragment and this activity
+        viewModel = new ViewModelProvider(this).get(TicketDataViewModel.class);
         //creates an instance of Main Activity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         //sets the Content we want to see by getting the root view  (the parent to all views)
@@ -107,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         // Creating CameraPreview Permission Dialogue. Asks on create.
         if (!hasCameraPermission()) {
             requestPermission();
-        }
-        else {
+        } else {
             enableCamera();
         }
 
@@ -123,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Add values to 2d Array List
                                 arrVehicles.add(new ArrayList<>());
-                                arrVehicles.get(iRowValue).add(0,document.getString("OwnerFirstName")+ " " + document.getString("OwnerLastName"));
-                                arrVehicles.get(iRowValue).add(1,document.getString("Make"));
-                                arrVehicles.get(iRowValue).add(2,document.getString("Model"));
-                                arrVehicles.get(iRowValue).add(3,document.getString("Color"));
-                                arrVehicles.get(iRowValue).add(4,document.getString("LicenseNum"));
-                                arrVehicles.get(iRowValue).add(5,document.getString("LicenseState"));
-                                arrVehicles.get(iRowValue).add(6,document.get("ParkingLot"));
+                                arrVehicles.get(iRowValue).add(0, document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
+                                arrVehicles.get(iRowValue).add(1, document.getString("Make"));
+                                arrVehicles.get(iRowValue).add(2, document.getString("Model"));
+                                arrVehicles.get(iRowValue).add(3, document.getString("Color"));
+                                arrVehicles.get(iRowValue).add(4, document.getString("LicenseNum"));
+                                arrVehicles.get(iRowValue).add(5, document.getString("LicenseState"));
+                                arrVehicles.get(iRowValue).add(6, document.get("ParkingLot"));
                                 Log.d("GotDoc", document.getId() + " => " + document.getData());
                                 iRowValue++;
                             }
@@ -140,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                     }
                 });
 
+        //set the vehicle array in view model to the array of data retrieved from firebase
+        viewModel.setLicenseVehicleList(arrVehicles);
     }// end of onCreate()
 
     /**
@@ -172,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     /**
      * Method that handles updating the textView geolocationBanner. It pulls from the selectLot spinner
      * on the SelectLotFragment.
+     *
      * @param item
      */
     @Override
@@ -191,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
 }
 

@@ -3,14 +3,19 @@ package com.example.scanalot;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -35,7 +40,10 @@ public class FillCitationFragment extends Fragment {
     TextView textView;
     Button btnCancel;
     Button btnSavePrint;
+    TicketDataViewModel viewModel;
 
+    Spinner chooseStateSpinner;
+    Spinner chooseLotSpinner;
 
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
@@ -45,10 +53,13 @@ public class FillCitationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
         textView = binding.fillAddCitations;
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
-
+        chooseStateSpinner = binding.fillChooseTheStateSpinner;
+        chooseLotSpinner = binding.fillChooseLotSpinner;
+        autoFillCitationData();
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,6 +142,24 @@ public class FillCitationFragment extends Fragment {
                 builder.show();
             }
         });
+    }
+
+    /**
+     * set Live Data values to view values within Fragment
+     * */
+    private void autoFillCitationData(){
+        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
+        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
+
+        binding.fillTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
+        //set the value of the chooseStateSpinner
+        ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
+        chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
+        //set the value of the chooseLotSpinner
+        ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
+        chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
+
+
     }
 
     @Override
