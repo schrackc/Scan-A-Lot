@@ -2,31 +2,29 @@ package com.example.scanalot;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.CameraX;
 import androidx.camera.core.Preview;
-import androidx.camera.core.impl.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.scanalot.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * This class is used for the Main Activity. It creates the Main Activity and uses the activity_main layout. This will be used for
@@ -68,6 +66,13 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    //A list of all the vehicles in the database
+    public ArrayList<ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
+
+    //Reference row value in arrVehicles for quick pull of other row information
+    public int iRowReferenceLocation;
+
+
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
      * nav_host_fragment located in content_main.xml. The nav controller is responsible for controlling/replacing fragments within
@@ -106,6 +111,34 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         else {
             enableCamera();
         }
+
+        // Gets firebase Vehicles collection and adds all the records to the dbVehicles variable
+        db.collection("Vehicles")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int iRowValue = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Add values to 2d Array List
+                                arrVehicles.add(new ArrayList<>());
+                                arrVehicles.get(iRowValue).add(0,document.getString("OwnerFirstName")+ " " + document.getString("OwnerLastName"));
+                                arrVehicles.get(iRowValue).add(1,document.getString("Make"));
+                                arrVehicles.get(iRowValue).add(2,document.getString("Model"));
+                                arrVehicles.get(iRowValue).add(3,document.getString("Color"));
+                                arrVehicles.get(iRowValue).add(4,document.getString("LicenseNum"));
+                                arrVehicles.get(iRowValue).add(5,document.getString("LicenseState"));
+                                arrVehicles.get(iRowValue).add(6,document.get("ParkingLot"));
+                                Log.d("GotDoc", document.getId() + " => " + document.getData());
+                                iRowValue++;
+                            }
+                        } else {
+                            Log.d("NoDoc", "Error getting documents: ", task.getException());
+                        }
+                        Log.d("RunComplete", "Yah");
+                    }
+                });
 
     }// end of onCreate()
 

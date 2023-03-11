@@ -51,7 +51,6 @@ public class ManualEntryFragment extends Fragment {
                     MainActivity getActivity = (MainActivity)getActivity();
                     getActivity.strLicenseNumber = strLicenseNumTemp;
                     getActivity.strLicenseState = strLicenseStateTemp;
-                    Log.i("ManualEntryFragment", "License Number" + getActivity.strLicenseNumber);
                     navAction = ManualEntryFragmentDirections.actionManualEntryFragmentToResultsFragment();
                     Navigation.findNavController(view).navigate(navAction);
                 }
