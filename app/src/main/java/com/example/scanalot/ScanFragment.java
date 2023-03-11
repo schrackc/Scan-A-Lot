@@ -167,9 +167,7 @@ public class ScanFragment extends Fragment {
                                          imageProxy.close();
                                          // used for checking what MLKit is seeing.
                                          Log.i("RESULT TEXT", resultText);
-                                         //overlayText.setText(resultText);
-                                         //overlayText.setVisibility(View.VISIBLE);
-                                     //imageProxy.close();
+
                                     }
                                 });
                     } else {
