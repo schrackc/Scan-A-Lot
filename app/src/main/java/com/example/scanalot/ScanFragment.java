@@ -2,10 +2,6 @@ package com.example.scanalot;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,8 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -115,50 +109,127 @@ public class ScanFragment extends Fragment {
         // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
         cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageAnalysis,preview);
 
+
+
+        ///////////////////// NEW MLKIT START///////////////////////////////////////////////
         //process the images coming in and get text using TextRecognition Object
+        //This if statement checks if the device's API level is equal to or greater than Android P (API level 28).
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            //This line sets the analyzer for the ImageAnalysis object, which processes the incoming images.
             imageAnalysis.setAnalyzer(getContext().getMainExecutor(), new ImageAnalysis.Analyzer() {
                 @SuppressLint("UnsafeOptInUsageError")
                 @Override
                 public void analyze(@NonNull ImageProxy imageProxy) {
+                    //This line gets the rotation of the image in degrees.
                     int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
 
+                    //This block of code attempts to retrieve the image from the ImageProxy object, logs an error message if it fails, and assigns the image to the cameraImage variable.
                     Image cameraImage = null;
-
-                    // attempt to get the image
                     try {
                         cameraImage =  imageProxy.getImage();
-                    } catch(Exception ex)
-                    {
-                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " +  ex.getMessage().toString());
+                    } catch(Exception ex) {
+                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " + ex.getMessage());
                     }
 
-                    //check if we got the image
-                    if(cameraImage !=null)
-                    {
-                        //create an image of type InputImage to pass into a vision api
+                    //This if statement checks if the cameraImage variable is not null.
+                    if(cameraImage != null) {
+                        //This line creates an InputImage object from the cameraImage and rotationDegrees variables.
                         InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
-                        //pass into a vision api such as tesseract
-                        //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
 
-                        InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+                        //This block of code uses the TextRecognition object to process the InputImage and extract text.
+                        // It then filters the extracted text using a regular expression pattern and sets it to the overlayText TextView.
+                        // Finally, it logs the extracted text- for debug purposes - and closes the ImageProxy object.
+                        textRecognizer.process(image)
+                                .addOnSuccessListener(new OnSuccessListener<Text>() {
+                                    @Override
+                                    public void onSuccess(Text visionText) {
+                                        StringBuilder sb = new StringBuilder();
 
-                        Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Text> task) {
-                                String resultText = task.getResult().getText();
-                                // after done, release the ImageProxy object
-                                imageProxy.close();
-                                Log.i("RESULT TEXT", resultText);
-                                overlayText.setText(resultText);
-                                overlayText.setVisibility(View.VISIBLE);
-                            }
-                        });
+                                        for (Text.TextBlock block : visionText.getTextBlocks()) {
+                                            for (Text.Line line : block.getLines()) {
+                                                String text = line.getText().trim();
 
+                                                if (text.matches("^[A-Za-z]{3}[-\\s]\\d{4}$")) {
+                                                    sb.append(text).append("\n");
+                                                }
+                                            }
+                                        }
+
+                                        // set the filtered text to the overlayText TextView
+                                        overlayText.post(() -> overlayText.setText(sb.toString()));
+                                    }
+                                })
+                                .addOnCompleteListener(new OnCompleteListener<Text>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Text> task) {
+                                        String resultText = task.getResult().getText();
+                                        // after done, release the ImageProxy object
+                                         imageProxy.close();
+                                         // used for checking what MLKit is seeing.
+                                         Log.i("RESULT TEXT", resultText);
+                                         //overlayText.setText(resultText);
+                                         //overlayText.setVisibility(View.VISIBLE);
+                                     //imageProxy.close();
+                                    }
+                                });
+                    } else {
+                        //This else statement closes the ImageProxy object if the cameraImage variable is null.
+                        // This is a requirement for CameraX implementations of MLKit in particular.
+                        imageProxy.close();
                     }
                 }
             });
+
         }
+///////////////////// NEW MLKIT END ////////////////////////////////
+
+
+// ///////////// OLD MLKIT START ////////////////////////////////////////////////
+        //process the images coming in and get text using TextRecognition Object
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            imageAnalysis.setAnalyzer(getContext().getMainExecutor(), new ImageAnalysis.Analyzer() {
+//                @SuppressLint("UnsafeOptInUsageError")
+//                @Override
+//                public void analyze(@NonNull ImageProxy imageProxy) {
+//                    int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
+//
+//                    Image cameraImage = null;
+//
+//                    // attempt to get the image
+//                    try {
+//                        cameraImage =  imageProxy.getImage();
+//                    } catch(Exception ex)
+//                    {
+//                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " +  ex.getMessage().toString());
+//                    }
+//
+//                    //check if we got the image
+//                    if(cameraImage !=null)
+//                    {
+//                        //create an image of type InputImage to pass into a vision api
+//                        InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
+//                        //pass into a vision api such as tesseract
+//                        //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
+//
+//                        InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+//
+//                        Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Text> task) {
+//                                String resultText = task.getResult().getText();
+//                                // after done, release the ImageProxy object
+//                                imageProxy.close();
+//                                Log.i("RESULT TEXT", resultText);
+//                                overlayText.setText(resultText);
+//                                overlayText.setVisibility(View.VISIBLE);
+//                            }
+//                        });
+//
+//                    }
+//                }
+//            });
+//        }
+        /////////////////////////////////////////////// OLD MLKIT END ////////////////////////////////////
 
         return binding.getRoot();
     }

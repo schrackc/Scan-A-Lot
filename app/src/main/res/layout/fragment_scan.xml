@@ -46,11 +46,11 @@
     <TextView
         android:id="@+id/overlayTextView"
         android:layout_width="169dp"
-        android:layout_height="76dp"
+        android:layout_height="110dp"
         android:gravity="center_horizontal|center_vertical"
         android:textAlignment="inherit"
         android:textColor="@color/white"
-        android:textSize="12dp"
+        android:textSize="30dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/outlinedButton"
         app:layout_constraintEnd_toEndOf="parent"
