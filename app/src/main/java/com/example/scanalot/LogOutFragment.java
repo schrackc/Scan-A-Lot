@@ -47,6 +47,9 @@ public class LogOutFragment extends Fragment {
                 //Navigate to destination
                 navAction =LogOutFragmentDirections.actionLogOutFragmentToLoginActivity();
                 Navigation.findNavController(view).navigate(navAction);
+                //Kill printer properly
+                MainActivity mainActivity = (MainActivity)getActivity();
+                mainActivity.printDisconnect();
                 //kill Activity
                 getActivity().finish();
             }

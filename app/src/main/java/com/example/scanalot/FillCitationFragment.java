@@ -85,7 +85,8 @@ public class FillCitationFragment extends Fragment {
 
                 MainActivity mainActivity =(MainActivity)getActivity();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                   //ask for permissions for Bluetooth
+                   //connect to printer if it isn't already
+
                     try {
                         mainActivity.printText();
                     } catch (EscPosEncodingException | EscPosConnectionException |

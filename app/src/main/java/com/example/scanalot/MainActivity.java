@@ -57,7 +57,7 @@ import java.util.Map;
  * Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
  * Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
  */
-public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener{
+public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener {
     // CameraX code
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
@@ -79,16 +79,18 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     private TextView locationBanner;
 
 
-    //Printer Variables
+    /*Printer Variables*/
+    //the permission list in which permissions are added/removed
     ArrayList<String> permissionsList;
     AlertDialog alertDialog;
-    //pass this to the launcher in order to request permissions
+    //permissions passed to launcher
     String[] permissionsStr = {android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN};
+   //number of permissions that still need approved by user
     int permissionsCount = 0;
+    //declaration of printer
     EscPosPrinter printer = null;
+    //Address of printer
     String strPrinterAddress = "57:4C:54:03:26:32";
-
-
 
 
     /**
@@ -124,13 +126,9 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         // Creating CameraPreview Permission Dialogue. Asks on create.
         if (!hasCameraPermission()) {
             requestPermission();
-        }
-        else {
+        } else {
             enableCamera();
         }
-
-
-
 
         /*Printer appending permissions to list*/
         permissionsList = new ArrayList<>();
@@ -169,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     /**
      * Method that handles updating the textView geolocationBanner. It pulls from the selectLot spinner
      * on the SelectLotFragment.
+     *
      * @param item
      */
     @Override
@@ -190,15 +189,14 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     }
 
 
-    /*Printer Code*/
-
+    /*Printer Code------------------------------------------------*/
 
     /*Receives permission request results for printer*/
     ActivityResultLauncher<String[]> permissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     new ActivityResultCallback<Map<String, Boolean>>() {
                         @Override
-                        public void onActivityResult(Map<String,Boolean> result) {
+                        public void onActivityResult(Map<String, Boolean> result) {
                             //get the result values from all the permissions being requested
                             ArrayList<Boolean> list = new ArrayList<>(result.values());
                             permissionsList = new ArrayList<>();
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                             for (int i = 0; i < list.size(); i++) {
                                 if (shouldShowRequestPermissionRationale(permissionsStr[i])) {
                                     permissionsList.add(permissionsStr[i]);
-                                }else if (!hasPermission(getApplicationContext(), permissionsStr[i])){
+                                } else if (!hasPermission(getApplicationContext(), permissionsStr[i])) {
                                     permissionsCount++;
                                 }
                             }
@@ -217,81 +215,81 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                                 //Show alert dialog
                                 showPermissionDialog();
                             } else {
+                                //on successfully accepting all permissions
                                 connectToPrinter();
                             }
-
 
 
                         }
                     });
 
 
-
-
-    public void connectToPrinter()
-    {
+    /**
+     * Creates a printer instance from the Bluetooth paired Device List that is a Thermal Printer
+     */
+    public void connectToPrinter() {
         BluetoothConnection connection = getBluetoothConnection(strPrinterAddress);
-        if(connection!=null)
-        {
-            try
-            {
+        if (connection != null && printer == null) {
+            try {
 
                 printer = new EscPosPrinter(connection, 203, 48f, 32);
-            }
-            catch (EscPosConnectionException ex)
-            {
-
+            } catch (EscPosConnectionException ex) {
                 ex.printStackTrace();
-                printerConnectionFailed(getApplicationContext());
-
+                printerConnectionFailed();
             }
 
-        }else
-        {
-            printerNotFound(getApplicationContext());
+        } else {
+            printerNotFound();
         }
 
     }
 
+    /**
+     * Used to output message when printer has failed to connect.
+     */
+    private void printerConnectionFailed() {
+        Toast.makeText(this, "Printer Failed To Connect.", Toast.LENGTH_LONG).show();
+    }
 
-    private void printerConnectionFailed(Context context)
-    {
-        Toast.makeText(context,"Printer Failed To Connect.",Toast.LENGTH_LONG).show();
+    /**
+     * Used to output a message when the thermal printer is not found in the Bluetooth paired list
+     */
+    private void printerNotFound() {
+        Toast.makeText(this, "Printer Not Found. Please Pair Printer.", Toast.LENGTH_LONG).show();
     }
-    private void printerNotFound(Context context)
-    {
-        Toast.makeText(context,"Printer Not Found. Please Pair Printer.",Toast.LENGTH_LONG).show();
-    }
-    private BluetoothConnection getBluetoothConnection(String printerAddress)
-    {
+
+    /**
+     * Looks through the paired devices list and searches for a specific device address and returns the
+     * Bluetooth connection object with that address
+     * @param{String} printerAddress
+     * @return null or BluetoothConnection
+     */
+    private BluetoothConnection getBluetoothConnection(String printerAddress) {
         BluetoothConnection bluetoothConnection = null;
         BluetoothConnection[] connections = new BluetoothPrintersConnections().getList();
-        if(connections!=null){
-            for(int connectionCount = 0; connectionCount<connections.length;connectionCount++)
-            {
+        if (connections != null) {
+            for (int connectionCount = 0; connectionCount < connections.length; connectionCount++) {
                 //output the addresses
-                Log.i ("BLUETOOTH DEVICE",connections[connectionCount].getDevice().getAddress());
+                Log.i("BLUETOOTH DEVICE", connections[connectionCount].getDevice().getAddress());
                 //get the correct address if in list of paired
-                if(connections[connectionCount].getDevice().getAddress().contains(printerAddress))
-                {
-                    bluetoothConnection =  connections[connectionCount];
+                if (connections[connectionCount].getDevice().getAddress().contains(printerAddress)) {
+                    bluetoothConnection = connections[connectionCount];
                 }
-
             }
         }
         return bluetoothConnection;
     }
 
-
     /**
      * Checks to see if the permission was granted or not
-     * */
+     */
     private boolean hasPermission(Context context, String permissionStr) {
         return ContextCompat.checkSelfPermission(context, permissionStr) == PackageManager.PERMISSION_GRANTED;
     }
 
-
-    //requests the permissions through using the launcher
+    /**
+     * Requests Bluetooth permissions in order to connect to the printer
+     */
     public void askForPermissions() {
 
         String[] newPermissionStr = new String[permissionsList.size()];
@@ -309,7 +307,10 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         }
     }
 
-
+    /**
+     * If user denies permission, this will be shown to the user as the rationale for why the permissions
+     * are needed.
+     */
     private void showPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Permission required")
@@ -325,19 +326,23 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         }
     }
 
+    /**
+     * Used to properly disconnect the printer
+     */
+    public void printDisconnect() {
+        if (printer != null) {
+            printer.disconnectPrinter();
+        }
+    }
 
-public void printText() throws EscPosEncodingException, EscPosBarcodeException, EscPosParserException, EscPosConnectionException {
-    printer.printFormattedText(
-            "[L]\n" +"CURTIS and NICK, Got Printer WORKING." +
-                    "[L]\n :)"+
-                    "[L]\n :)"+
-                    "[L]\n :)"+
-                    "[L]\n :)"+
-                    "[L]\n :)"
-
-    );
-}
-
+    /**
+     *Command the thermal printer to print the given text for the ticket.
+     */
+    public void printText() throws EscPosEncodingException, EscPosBarcodeException, EscPosParserException, EscPosConnectionException {
+        printer.printFormattedText(
+                "[L]\n" + "Printing Ticket."
+        );
+    }
 }
 
 
