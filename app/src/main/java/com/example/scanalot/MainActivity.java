@@ -1,13 +1,21 @@
 package com.example.scanalot;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraX;
 import androidx.camera.core.Preview;
@@ -24,8 +32,19 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.dantsu.escposprinter.EscPosPrinter;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * This class is used for the Main Activity. It creates the Main Activity and uses the activity_main layout. This will be used for
@@ -59,6 +78,19 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     // TextView that will be updated by a spinner on SelectLotFragment.
     private TextView locationBanner;
 
+
+    //Printer Variables
+    ArrayList<String> permissionsList;
+    AlertDialog alertDialog;
+    //pass this to the launcher in order to request permissions
+    String[] permissionsStr = {android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN};
+    int permissionsCount = 0;
+    EscPosPrinter printer = null;
+    String strPrinterAddress = "57:4C:54:03:26:32";
+
+
+
+
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
      * nav_host_fragment located in content_main.xml. The nav controller is responsible for controlling/replacing fragments within
@@ -86,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         NavController navController = navHostFragment.getNavController();
         //binds the menu to the nav controller
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
         // CameraX Code ------------------------------------------------------ //
         // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
         // I the following requests permission when the activity that the camera is within is created.
@@ -97,6 +128,14 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         else {
             enableCamera();
         }
+
+
+
+
+        /*Printer appending permissions to list*/
+        permissionsList = new ArrayList<>();
+        permissionsList.addAll(Arrays.asList(permissionsStr));
+        askForPermissions();
 
     }// end of onCreate()
 
@@ -150,6 +189,154 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         return true;
     }
 
+
+    /*Printer Code*/
+
+
+    /*Receives permission request results for printer*/
+    ActivityResultLauncher<String[]> permissionsLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                    new ActivityResultCallback<Map<String, Boolean>>() {
+                        @Override
+                        public void onActivityResult(Map<String,Boolean> result) {
+                            //get the result values from all the permissions being requested
+                            ArrayList<Boolean> list = new ArrayList<>(result.values());
+                            permissionsList = new ArrayList<>();
+                            permissionsCount = 0;
+                            for (int i = 0; i < list.size(); i++) {
+                                if (shouldShowRequestPermissionRationale(permissionsStr[i])) {
+                                    permissionsList.add(permissionsStr[i]);
+                                }else if (!hasPermission(getApplicationContext(), permissionsStr[i])){
+                                    permissionsCount++;
+                                }
+                            }
+                            if (permissionsList.size() > 0) {
+                                //Some permissions are denied and can be asked again.
+                                askForPermissions();
+                            } else if (permissionsCount > 0) {
+                                //Show alert dialog
+                                showPermissionDialog();
+                            } else {
+                                connectToPrinter();
+                            }
+
+
+
+                        }
+                    });
+
+
+
+
+    public void connectToPrinter()
+    {
+        BluetoothConnection connection = getBluetoothConnection(strPrinterAddress);
+        if(connection!=null)
+        {
+            try
+            {
+
+                printer = new EscPosPrinter(connection, 203, 48f, 32);
+            }
+            catch (EscPosConnectionException ex)
+            {
+
+                ex.printStackTrace();
+                printerConnectionFailed(getApplicationContext());
+
+            }
+
+        }else
+        {
+            printerNotFound(getApplicationContext());
+        }
+
+    }
+
+
+    private void printerConnectionFailed(Context context)
+    {
+        Toast.makeText(context,"Printer Failed To Connect.",Toast.LENGTH_LONG).show();
+    }
+    private void printerNotFound(Context context)
+    {
+        Toast.makeText(context,"Printer Not Found. Please Pair Printer.",Toast.LENGTH_LONG).show();
+    }
+    private BluetoothConnection getBluetoothConnection(String printerAddress)
+    {
+        BluetoothConnection bluetoothConnection = null;
+        BluetoothConnection[] connections = new BluetoothPrintersConnections().getList();
+        if(connections!=null){
+            for(int connectionCount = 0; connectionCount<connections.length;connectionCount++)
+            {
+                //output the addresses
+                Log.i ("BLUETOOTH DEVICE",connections[connectionCount].getDevice().getAddress());
+                //get the correct address if in list of paired
+                if(connections[connectionCount].getDevice().getAddress().contains(printerAddress))
+                {
+                    bluetoothConnection =  connections[connectionCount];
+                }
+
+            }
+        }
+        return bluetoothConnection;
+    }
+
+
+    /**
+     * Checks to see if the permission was granted or not
+     * */
+    private boolean hasPermission(Context context, String permissionStr) {
+        return ContextCompat.checkSelfPermission(context, permissionStr) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    //requests the permissions through using the launcher
+    public void askForPermissions() {
+
+        String[] newPermissionStr = new String[permissionsList.size()];
+        for (int i = 0; i < newPermissionStr.length; i++) {
+            //creates the array of permissions to be passed to launcher
+            newPermissionStr[i] = permissionsList.get(i);
+        }
+        //request permissions if the string is not empty
+        if (newPermissionStr.length > 0) {
+            permissionsLauncher.launch(newPermissionStr);
+        } else {
+        /* User has pressed 'Deny & Don't ask again' so we have to show the enable permissions dialog
+        which will lead them to app details page to enable permissions from there. */
+            showPermissionDialog();
+        }
+    }
+
+
+    private void showPermissionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permission required")
+                .setMessage("Some permissions are need to be allowed to use this app without any problems.")
+                .setPositiveButton("Settings", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+        if (alertDialog == null) {
+            alertDialog = builder.create();
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+        }
+    }
+
+
+public void printText() throws EscPosEncodingException, EscPosBarcodeException, EscPosParserException, EscPosConnectionException {
+    printer.printFormattedText(
+            "[L]\n" +"CURTIS and NICK, Got Printer WORKING." +
+                    "[L]\n :)"+
+                    "[L]\n :)"+
+                    "[L]\n :)"+
+                    "[L]\n :)"+
+                    "[L]\n :)"
+
+    );
+}
 
 }
 

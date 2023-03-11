@@ -2,6 +2,7 @@ package com.example.scanalot;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.FragmentFillCitationBinding;
 
 import java.util.ArrayList;
@@ -73,13 +78,27 @@ public class FillCitationFragment extends Fragment {
         //set selection
         spinnerChooseLot.setSelection(spinnerValueIndex);
 
+
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //the next nav location through using a nav Action
-                navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
-                //get the nav controller and tell it to naviagate
-                Navigation.findNavController(view).navigate(navAction);
+
+                MainActivity mainActivity =(MainActivity)getActivity();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                   //ask for permissions for Bluetooth
+                    try {
+                        mainActivity.printText();
+                    } catch (EscPosEncodingException | EscPosConnectionException |
+                             EscPosParserException | EscPosBarcodeException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                    //the next nav location through using a nav Action
+                    navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
+                    //get the nav controller and tell it to naviagate
+                    Navigation.findNavController(view).navigate(navAction);
+                }
             }
         });
 
@@ -156,6 +175,8 @@ public class FillCitationFragment extends Fragment {
             }
         });
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
