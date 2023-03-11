@@ -33,6 +33,9 @@
             app:popUpTo="@id/scan_fragment"
             app:popUpToSaveState="true"
             />
+        <action
+            android:id="@+id/action_manualEntryFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
     </fragment>
     <fragment
         android:id="@+id/select_lot_fragment"

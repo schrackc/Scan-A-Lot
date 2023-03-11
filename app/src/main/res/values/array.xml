@@ -57,7 +57,7 @@
 
     <!-- Parking Lot Array for Select Lot -->
     <string-array name="parkingLots">
-        <item>     </item>
+        <item>Select a lot…</item>
         <item>Lot A</item>
         <item>Lot B</item>
         <item>Lot C</item>

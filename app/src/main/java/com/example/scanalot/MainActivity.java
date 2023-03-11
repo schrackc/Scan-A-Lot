@@ -6,30 +6,21 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.CameraX;
 import androidx.camera.core.Preview;
-import androidx.camera.core.impl.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.dantsu.escposprinter.EscPosPrinter;
@@ -40,7 +31,14 @@ import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
 import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
 import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,8 +52,9 @@ import java.util.Map;
  * @author Nick Downey
  * @Created 1/21/23
  * @Contributors Andrew Hoffer - 1/21/23 - Created the Activity and handlers
- * Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
- * Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
+ * @Contributors Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
+ * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
+ * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
  */
 public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener {
     // CameraX code
@@ -65,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
 
     //the bottom nav menu
     public BottomNavigationView bottomNavigationView;
+
+    //Dynamic variables to show license information between screens
+    public String strLicenseNumber;
+    public String strLicenseState;
 
     //for every activity or fragment, there is a BindingClass that allows you to access the views in a easy fashion
     private ActivityMainBinding binding;
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
 
     // TextView that will be updated by a spinner on SelectLotFragment.
     private TextView locationBanner;
+
 
 
     /*Printer Variables*/
@@ -93,6 +97,18 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     String strPrinterAddress = "57:4C:54:03:26:32";
 
 
+    // Access a Cloud Firestore instance from your Activity
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //A list of all the vehicles in the database
+    public ArrayList <ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
+
+    //Reference row value in arrVehicles for quick pull of other row information
+    public int iRowReferenceLocation;
+    //View Model for passing data between fragments/parent Activities
+    private TicketDataViewModel viewModel;
+
+
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
      * nav_host_fragment located in content_main.xml. The nav controller is responsible for controlling/replacing fragments within
@@ -107,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Instantiate View Model for passing data between fragment and this activity
+        viewModel = new ViewModelProvider(this).get(TicketDataViewModel.class);
         //creates an instance of Main Activity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         //sets the Content we want to see by getting the root view  (the parent to all views)
@@ -130,11 +148,43 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
             enableCamera();
         }
 
+
         /*Printer appending permissions to list*/
         permissionsList = new ArrayList<>();
         permissionsList.addAll(Arrays.asList(permissionsStr));
         askForPermissions();
 
+
+        // Gets firebase Vehicles collection and adds all the records to the dbVehicles variable
+        db.collection("Vehicles")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int iRowValue = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Add values to 2d Array List
+                                arrVehicles.add(new ArrayList<>());
+                                arrVehicles.get(iRowValue).add(0, document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
+                                arrVehicles.get(iRowValue).add(1, document.getString("Make"));
+                                arrVehicles.get(iRowValue).add(2, document.getString("Model"));
+                                arrVehicles.get(iRowValue).add(3, document.getString("Color"));
+                                arrVehicles.get(iRowValue).add(4, document.getString("LicenseNum"));
+                                arrVehicles.get(iRowValue).add(5, document.getString("LicenseState"));
+                                arrVehicles.get(iRowValue).add(6, document.get("ParkingLot"));
+                                Log.d("GotDoc", document.getId() + " => " + document.getData());
+                                iRowValue++;
+                            }
+                        } else {
+                            Log.d("NoDoc", "Error getting documents: ", task.getException());
+                        }
+                        Log.d("RunComplete", "Yah");
+                    }
+                });
+
+        //set the vehicle array in view model to the array of data retrieved from firebase
+        viewModel.setLicenseVehicleList(arrVehicles);
     }// end of onCreate()
 
     /**
@@ -187,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     /*Printer Code------------------------------------------------*/
 
@@ -343,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                 "[L]\n" + "Printing Ticket."
         );
     }
+
 }
 
 
