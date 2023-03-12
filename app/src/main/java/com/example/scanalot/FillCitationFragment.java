@@ -70,24 +70,14 @@ public class FillCitationFragment extends Fragment {
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                MainActivity mainActivity =(MainActivity)getActivity();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                   //connect to printer if it isn't already
-
-                    try {
+                    MainActivity mainActivity =(MainActivity)getActivity();
                         mainActivity.printText();
-                    } catch (EscPosEncodingException | EscPosConnectionException |
-                             EscPosParserException | EscPosBarcodeException e) {
-                        throw new RuntimeException(e);
-                    }
-
-
-                    //the next nav location through using a nav Action
-                    navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
-                    //get the nav controller and tell it to naviagate
-                    Navigation.findNavController(view).navigate(navAction);
                 }
+               // navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
+                //get the nav controller and tell it to navigate
+               // Navigation.findNavController(view).navigate(navAction);
+
             }
         });
 

@@ -88,7 +88,13 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     ArrayList<String> permissionsList;
     AlertDialog alertDialog;
     //permissions passed to launcher
-    String[] permissionsStr = {android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN};
+    String[] permissionsStr = {
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+            android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.BLUETOOTH_ADMIN,
+            android.Manifest.permission.CAMERA
+    };
    //number of permissions that still need approved by user
     int permissionsCount = 0;
     //declaration of printer
@@ -107,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     public int iRowReferenceLocation;
     //View Model for passing data between fragments/parent Activities
     private TicketDataViewModel viewModel;
+    BluetoothConnection bluetoothConnection = null;
 
 
     /**
@@ -142,16 +149,13 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
         // I the following requests permission when the activity that the camera is within is created.
         // Creating CameraPreview Permission Dialogue. Asks on create.
-        if (!hasCameraPermission()) {
-            requestPermission();
-        } else {
-            enableCamera();
-        }
+
 
 
         /*Printer appending permissions to list*/
         permissionsList = new ArrayList<>();
         permissionsList.addAll(Arrays.asList(permissionsStr));
+        //Ask for camera and printer permissions
         askForPermissions();
 
 
@@ -187,31 +191,6 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         viewModel.setLicenseVehicleList(arrVehicles);
     }// end of onCreate()
 
-    /**
-     * Method for cameraX launching. Checks permissions and returns bool if perms given or not.
-     *
-     * @return true or false
-     */
-    private boolean hasCameraPermission() {
-        return ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-    }
-
-
-    /**
-     * Method for requesting permission of camera.
-     */
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, CAMERA_PERMISSION, CAMERA_REQUEST_CODE);
-    }
-
-
-    /**
-     * Method for creating new Intent class to start activity.
-     */
-    private void enableCamera() {
-//        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
-//        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
-    }
     // End of CameraX -------------------------------------------------- //
 
     /**
@@ -265,10 +244,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                                 showPermissionDialog();
                             } else {
                                 //on successfully accepting all permissions
-                                connectToPrinter();
                             }
-
-
                         }
                     });
 
@@ -277,26 +253,23 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
      * Creates a printer instance from the Bluetooth paired Device List that is a Thermal Printer
      */
     public void connectToPrinter() {
-        BluetoothConnection connection = getBluetoothConnection(strPrinterAddress);
-        if (connection != null && printer == null) {
-            try {
 
-                printer = new EscPosPrinter(connection, 203, 48f, 32);
-            } catch (EscPosConnectionException ex) {
-                ex.printStackTrace();
-                printerConnectionFailed();
-            }
+            bluetoothConnection = getBluetoothConnection(strPrinterAddress);
 
-        } else {
-            printerNotFound();
-        }
-
+                if(printer==null) {
+                    try {
+                        printer = new EscPosPrinter(bluetoothConnection, 203, 48f, 32);
+                    } catch (EscPosConnectionException e) {
+                        printerNotFound();
+                    }
+                }
     }
+
 
     /**
      * Used to output message when printer has failed to connect.
      */
-    private void printerConnectionFailed() {
+    public void printerConnectionFailed() {
         Toast.makeText(this, "Printer Failed To Connect.", Toast.LENGTH_LONG).show();
     }
 
@@ -387,10 +360,20 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     /**
      *Command the thermal printer to print the given text for the ticket.
      */
-    public void printText() throws EscPosEncodingException, EscPosBarcodeException, EscPosParserException, EscPosConnectionException {
-        printer.printFormattedText(
-                "[L]\n" + "Printing Ticket."
-        );
+    public void printText()  {
+        if(printer!=null) {
+            try {
+                printer.printFormattedText(
+                        "[L]\n" + "Printing Ticket."
+                );
+            } catch (Exception e) {
+                printerConnectionFailed();
+            }
+
+        }else
+        {
+            connectToPrinter();
+        }
     }
 
 }
