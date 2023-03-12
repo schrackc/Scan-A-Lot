@@ -68,10 +68,8 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //A list of all the vehicles in the database
-    public ArrayList <ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
+    private ArrayList <ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
 
-    //Reference row value in arrVehicles for quick pull of other row information
-    public int iRowReferenceLocation;
     //View Model for passing data between fragments/parent Activities
     private TicketDataViewModel viewModel;
 

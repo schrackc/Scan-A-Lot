@@ -64,13 +64,14 @@ public class ResultsFragment extends Fragment {
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE STATE: " + strLicenseState);
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE VEHICLES: " + arrVehicles.toString());
         //Check for if license info is in the database
- /*       boolean isLicenseFound = false;
+        boolean isLicenseFound = false;
         for (int iRowCheck = 0; iRowCheck < arrVehicles.size() || isLicenseFound; iRowCheck++) {
-            if (arrVehicles.get(iRowCheck).get(4) == strLicenseNumber && arrVehicles.get(iRowCheck).get(5) == strLicenseState) {
-                getActivity.iRowReferenceLocation = iRowCheck;
+            if (arrVehicles.get(iRowCheck).get(4).equals(strLicenseNumber) && arrVehicles.get(iRowCheck).get(5).equals(strLicenseState)){
+                //set iRowReferenceLocation for easy access in citation autofill
+                viewModel.setReferenceNum(iRowCheck);
                 isLicenseFound = true;
             }
-        }*/
+        }
 
         //getting the button
         btnFillCitation = binding.fillSavePrintButton;
