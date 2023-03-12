@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //A list of all the vehicles in the database
-    private ArrayList <ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
+    private ArrayList <VehicleCategories> arrVehicles = new ArrayList<>();
 
     //View Model for passing data between fragments/parent Activities
     private TicketDataViewModel viewModel;
@@ -123,14 +123,14 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                             int iRowValue = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Add values to 2d Array List
-                                arrVehicles.add(new ArrayList<>());
-                                arrVehicles.get(iRowValue).add(0, document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
-                                arrVehicles.get(iRowValue).add(1, document.getString("Make"));
-                                arrVehicles.get(iRowValue).add(2, document.getString("Model"));
-                                arrVehicles.get(iRowValue).add(3, document.getString("Color"));
-                                arrVehicles.get(iRowValue).add(4, document.getString("LicenseNum"));
-                                arrVehicles.get(iRowValue).add(5, document.getString("LicenseState"));
-                                arrVehicles.get(iRowValue).add(6, document.get("ParkingLot"));
+                                arrVehicles.add(new VehicleCategories());
+                                arrVehicles.get(iRowValue).OwnerName = document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName");
+                                arrVehicles.get(iRowValue).Make = document.getString("Make");
+                                arrVehicles.get(iRowValue).Model = document.getString("Model");
+                                arrVehicles.get(iRowValue).Color = document.getString("Color");
+                                arrVehicles.get(iRowValue).LicenseNumber = document.getString("LicenseNum");
+                                arrVehicles.get(iRowValue).LicenseState = document.getString("LicenseState");
+                                arrVehicles.get(iRowValue).ParkingLot = (ArrayList<String>) document.get("ParkingLot");
                                 Log.d("GotDoc", document.getId() + " => " + document.getData());
                                 iRowValue++;
                             }
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                 });
 
         //set the vehicle array in view model to the array of data retrieved from firebase
-        viewModel.setLicenseVehicleList(arrVehicles);
+        viewModel.setVehicleList(arrVehicles);
     }// end of onCreate()
 
     /**
