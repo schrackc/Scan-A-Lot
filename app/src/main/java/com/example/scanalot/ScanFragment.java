@@ -59,14 +59,10 @@ public class ScanFragment extends Fragment {
     NavDirections navAction;
     Button btnManualEntry;
     Button btnResultScan;
-
-
     TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
     ProcessCameraProvider cameraProvider;
     CameraSelector cameraSelector;
-
-
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
      */
@@ -104,12 +100,9 @@ public class ScanFragment extends Fragment {
         //set the surface for the camera through the Preview Layout
         preview.setSurfaceProvider(binding.previewView.getSurfaceProvider());
 
-
         //bind all of these together on the lifecycle
         // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
         cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageAnalysis,preview);
-
-
 
         ///////////////////// NEW MLKIT START///////////////////////////////////////////////
         //process the images coming in and get text using TextRecognition Object
@@ -179,56 +172,6 @@ public class ScanFragment extends Fragment {
             });
 
         }
-///////////////////// NEW MLKIT END ////////////////////////////////
-
-
-// ///////////// OLD MLKIT START ////////////////////////////////////////////////
-        //process the images coming in and get text using TextRecognition Object
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            imageAnalysis.setAnalyzer(getContext().getMainExecutor(), new ImageAnalysis.Analyzer() {
-//                @SuppressLint("UnsafeOptInUsageError")
-//                @Override
-//                public void analyze(@NonNull ImageProxy imageProxy) {
-//                    int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
-//
-//                    Image cameraImage = null;
-//
-//                    // attempt to get the image
-//                    try {
-//                        cameraImage =  imageProxy.getImage();
-//                    } catch(Exception ex)
-//                    {
-//                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " +  ex.getMessage().toString());
-//                    }
-//
-//                    //check if we got the image
-//                    if(cameraImage !=null)
-//                    {
-//                        //create an image of type InputImage to pass into a vision api
-//                        InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
-//                        //pass into a vision api such as tesseract
-//                        //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
-//
-//                        InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
-//
-//                        Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Text> task) {
-//                                String resultText = task.getResult().getText();
-//                                // after done, release the ImageProxy object
-//                                imageProxy.close();
-//                                Log.i("RESULT TEXT", resultText);
-//                                overlayText.setText(resultText);
-//                                overlayText.setVisibility(View.VISIBLE);
-//                            }
-//                        });
-//
-//                    }
-//                }
-//            });
-//        }
-        /////////////////////////////////////////////// OLD MLKIT END ////////////////////////////////////
-
         return binding.getRoot();
     }
 

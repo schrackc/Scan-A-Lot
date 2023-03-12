@@ -81,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     // TextView that will be updated by a spinner on SelectLotFragment.
     private TextView locationBanner;
 
-
-
     /*Printer Variables*/
     //the permission list in which permissions are added/removed
     ArrayList<String> permissionsList;
@@ -286,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
      * @param{String} printerAddress
      * @return null or BluetoothConnection
      */
+
     private BluetoothConnection getBluetoothConnection(String printerAddress) {
         BluetoothConnection bluetoothConnection = null;
         BluetoothConnection[] connections = new BluetoothPrintersConnections().getList();

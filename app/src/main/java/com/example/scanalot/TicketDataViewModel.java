@@ -95,20 +95,16 @@ public class TicketDataViewModel extends ViewModel {
     {
         strLicenseVehicleModel.setValue(p_VehicleModel);
     }
-
     public LiveData<String> getLicenseVehicleModel()
     {
         return strLicenseVehicleModel;
     }
-
-
 
     /*Vehicle Color Setter/Getter*/
     public void setStrLicenseVehicleColor(String p_VehicleColor)
     {
         strLicenseVehicleColor.setValue(p_VehicleColor);
     }
-
     public LiveData<String> getLicenseVehicleColor()
     {
         return strLicenseVehicleColor;
