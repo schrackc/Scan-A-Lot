@@ -21,6 +21,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -29,11 +30,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+
+import java.util.ArrayList;
 
 /**
  * This class is used for the ScanFragment. It creates the fragment and uses the fragment_scan layout. This is used as the main page when the user
@@ -63,6 +71,12 @@ public class ScanFragment extends Fragment {
 
     ProcessCameraProvider cameraProvider;
     CameraSelector cameraSelector;
+    TicketDataViewModel viewModel;
+    ArrayList<ArrayList<Object>> vehicleList;
+
+    FirebaseFirestore db;
+
+    CollectionReference vehiclesCollection;
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
      */
@@ -73,6 +87,41 @@ public class ScanFragment extends Fragment {
         previewView = binding.previewView;
         cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
         overlayText = binding.overlayTextView;
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
+        //get the list of vehicle data which was from firebase
+        // vehicleList = viewModel.getLicenseVehicleList().getValue();
+        db = FirebaseFirestore.getInstance();
+        //get the collection
+        vehiclesCollection = db.collection("Vehicles");
+        //now set up a query to get the particular vehicles that belong with the lot
+        Query lotQuery = vehiclesCollection.whereEqualTo("ParkingLot", viewModel.getParkingLot().getValue());
+        //get the Data from firestore
+        lotQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    vehicleList = new ArrayList<ArrayList<Object>>();
+                    int iRowValue = 0;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //Add values to 2d Array List
+                        vehicleList.add(new ArrayList<>());
+                        vehicleList.get(iRowValue).add(0, document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
+                        vehicleList.get(iRowValue).add(1, document.getString("Make"));
+                        vehicleList.get(iRowValue).add(2, document.getString("Model"));
+                        vehicleList.get(iRowValue).add(3, document.getString("Color"));
+                        vehicleList.get(iRowValue).add(4, document.getString("LicenseNum"));
+                        vehicleList.get(iRowValue).add(5, document.getString("LicenseState"));
+                        vehicleList.get(iRowValue).add(6, document.get("ParkingLot"));
+                        Log.d("GotDoc", document.getId() + " => " + document.getData());
+                        iRowValue++;
+                    }
+                }else
+                {
+                    Log.e("FIRE STORE ERROR: ", "Could not get data");
+                }
+            }
+        });
         try {
             cameraProvider = cameraProviderFuture.get();
         }catch(Exception ex)
@@ -150,6 +199,17 @@ public class ScanFragment extends Fragment {
 
                                         // set the filtered text to the overlayText TextView
                                         overlayText.post(() -> overlayText.setText(sb.toString()));
+
+                                      boolean isCorrectLot =  compareLicensePlates(overlayText.getText());
+
+                                        if(isCorrectLot)
+                                        {
+                                            Log.i("IS CORRECT LOT","GOOD VEHICLE YAHHHH!!!!");
+                                        }
+                                        else
+                                        {
+                                            Log.i("IS CORRECT LOT","BAD VEHICLE NAHHHH !!!!");
+                                        }
                                     }
                                 })
                                 .addOnCompleteListener(new OnCompleteListener<Text>() {
@@ -169,10 +229,30 @@ public class ScanFragment extends Fragment {
                         imageProxy.close();
                     }
                 }
+
+
             });
 
         }
         return binding.getRoot();
+    }
+
+
+    private boolean compareLicensePlates(CharSequence p_licensePlate) {
+       boolean isCorrectLot = false;
+        Log.i("VEHICLE PLATE ",p_licensePlate.toString());
+        for(int vehicleCount = 0; vehicleCount < vehicleList.size();vehicleCount++ )
+        {
+            String vehicleListPlate = vehicleList.get(vehicleCount).get(4).toString();
+            Log.i("VEHICLE LIST PLATE ", vehicleListPlate);
+            if(vehicleListPlate.contains(p_licensePlate.toString()))
+            {
+                isCorrectLot = true;
+            }
+        }
+
+        return isCorrectLot;
+
     }
 
 

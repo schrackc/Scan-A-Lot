@@ -96,7 +96,6 @@ public class SelectLotFragment extends Fragment {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 //set the live data object so we can use this in other fragments
                 viewModel.setParkingLot(selectedItem);
-
                 listener.onSpinnerSelected(selectedItem);
 
             }
