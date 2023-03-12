@@ -16,7 +16,7 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<String> strLicenseVehicleModel = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseVehicleColor = new MutableLiveData<String>();
     private final MutableLiveData<ArrayList<ArrayList<Object>>> arrVehicles = new MutableLiveData<ArrayList<ArrayList<Object>>>();
-    private final MutableLiveData<Integer> iRowReference =new MutableLiveData<>();
+    private  final MutableLiveData<Integer> iRowReference = new MutableLiveData<>();
 
     /*Public */
 
@@ -121,8 +121,8 @@ public class TicketDataViewModel extends ViewModel {
         iRowReference.setValue(ref);
     }
 
-    public LiveData<Integer> getReferenceNum()
+    public int getReferenceNum()
     {
-        return iRowReference;
+        return iRowReference.getValue().intValue();
     }
 }

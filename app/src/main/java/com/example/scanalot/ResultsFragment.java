@@ -65,7 +65,7 @@ public class ResultsFragment extends Fragment {
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE VEHICLES: " + arrVehicles.toString());
         //Check for if license info is in the database
         boolean isLicenseFound = false;
-        for (int iRowCheck = 0; iRowCheck < arrVehicles.size() || isLicenseFound; iRowCheck++) {
+        for (int iRowCheck = 0; iRowCheck < arrVehicles.size() && !isLicenseFound; iRowCheck++) {
             if (arrVehicles.get(iRowCheck).get(4).equals(strLicenseNumber) && arrVehicles.get(iRowCheck).get(5).equals(strLicenseState)){
                 //set iRowReferenceLocation for easy access in citation autofill
                 viewModel.setReferenceNum(iRowCheck);
@@ -84,8 +84,22 @@ public class ResultsFragment extends Fragment {
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
-        //sets the text of the result text view. Will need to add more to this functionality when camera is able to scan.
-        binding.ResultTextView.setText("Pass Expired - Wrong Lot");
+        if (isLicenseFound){
+            //Check if in  right parking lot
+            boolean isInRightLot = false;
+
+            if (isInRightLot){
+                //sets the text of the result text view. Will need to add more to this functionality when camera is able to scan.
+                binding.ResultTextView.setText("Vehicle in Correct Lot");
+            } else {
+                //sets the text of the result text view. Will need to add more to this functionality when camera is able to scan.
+                binding.ResultTextView.setText("Vehicle in Wrong Lot");
+            }
+        } else{
+            //No vehicle was found in database print out response
+            binding.ResultTextView.setText("No Record of Vehicle");
+        }
+
     }
 
 

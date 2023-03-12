@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -151,6 +152,7 @@ public class FillCitationFragment extends Fragment {
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
 
+        //set the value fillTextPlateNumber box
         binding.fillTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
         //set the value of the chooseStateSpinner
         ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
@@ -158,8 +160,10 @@ public class FillCitationFragment extends Fragment {
         //set the value of the chooseLotSpinner
         ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
-
-
+        //set the value fillVehicleModel box
+        binding.fillVehicleModel.setText((viewModel.getLicenseVehicleList().getValue().get(viewModel.getReferenceNum()).get(2)).toString());
+        //set the value fillVehicleModel box
+        binding.fillVehicleColor.setText((viewModel.getLicenseVehicleList().getValue().get(viewModel.getReferenceNum()).get(3)).toString());
     }
 
     @Override

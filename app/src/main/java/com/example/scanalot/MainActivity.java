@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                         } else {
                             Log.d("NoDoc", "Error getting documents: ", task.getException());
                         }
-                        Log.d("RunComplete", "Yah");
                     }
                 });
 
