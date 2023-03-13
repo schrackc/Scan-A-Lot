@@ -160,10 +160,14 @@ public class FillCitationFragment extends Fragment {
         //set the value of the chooseLotSpinner
         ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
-        //set the value fillVehicleModel box
-        binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel()).toString());
-        //set the value fillVehicleModel box
-        binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()).toString());
+
+        //If there is no reference value found means no license was found was found
+        try {
+            //set the value fillVehicleModel box
+            binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel()).toString());
+            //set the value fillVehicleModel box
+            binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()).toString());
+        }catch (Exception e){}
     }
 
     @Override
