@@ -2,18 +2,29 @@ package com.example.scanalot;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.FragmentFillCitationBinding;
 
 import java.util.ArrayList;
@@ -35,6 +46,9 @@ public class FillCitationFragment extends Fragment {
     TextView textView;
     Button btnCancel;
     Button btnSavePrint;
+    TicketDataViewModel viewModel;
+    Spinner chooseStateSpinner;
+    Spinner chooseLotSpinner;
 
 
     /**
@@ -45,17 +59,27 @@ public class FillCitationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
         textView = binding.fillAddCitations;
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
 
+        chooseStateSpinner = binding.fillChooseTheStateSpinner;
+        chooseLotSpinner = binding.fillChooseLotSpinner;
+        autoFillCitationData();
+
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //the next nav location through using a nav Action
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    MainActivity mainActivity =(MainActivity)getActivity();
+                        mainActivity.printText();
+                }
+
                 navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
-                //get the nav controller and tell it to naviagate
-                Navigation.findNavController(view).navigate(navAction);
+                //get the nav controller and tell it to navigate
+               Navigation.findNavController(view).navigate(navAction);
+
             }
         });
 
@@ -131,6 +155,31 @@ public class FillCitationFragment extends Fragment {
                 builder.show();
             }
         });
+    }
+
+    /**
+     * set Live Data values to view values within Fragment
+     * */
+    private void autoFillCitationData(){
+        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
+        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
+
+        //set the value fillTextPlateNumber box
+        binding.fillTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
+        //set the value of the chooseStateSpinner
+        ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
+        chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
+        //set the value of the chooseLotSpinner
+        ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
+        chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
+
+        //If there is no reference value found means no license was found was found
+        try {
+            //set the value fillVehicleModel box
+            binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel()).toString());
+            //set the value fillVehicleModel box
+            binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()).toString());
+        }catch (Exception e){}
     }
 
     @Override

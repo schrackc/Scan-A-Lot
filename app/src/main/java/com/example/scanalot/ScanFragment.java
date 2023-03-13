@@ -2,10 +2,6 @@ package com.example.scanalot;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,13 +16,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -35,11 +30,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+
+import java.util.ArrayList;
 
 /**
  * This class is used for the ScanFragment. It creates the fragment and uses the fragment_scan layout. This is used as the main page when the user
@@ -65,14 +67,16 @@ public class ScanFragment extends Fragment {
     NavDirections navAction;
     Button btnManualEntry;
     Button btnResultScan;
-
-
     TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
     ProcessCameraProvider cameraProvider;
     CameraSelector cameraSelector;
+    TicketDataViewModel viewModel;
+    ArrayList<ArrayList<Object>> vehicleList;
 
+    FirebaseFirestore db;
 
+    CollectionReference vehiclesCollection;
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
      */
@@ -83,6 +87,41 @@ public class ScanFragment extends Fragment {
         previewView = binding.previewView;
         cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
         overlayText = binding.overlayTextView;
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
+        //get the list of vehicle data which was from firebase
+        // vehicleList = viewModel.getLicenseVehicleList().getValue();
+        db = FirebaseFirestore.getInstance();
+        //get the collection
+        vehiclesCollection = db.collection("Vehicles");
+        //now set up a query to get the particular vehicles that belong with the lot
+        Query lotQuery = vehiclesCollection.whereEqualTo("ParkingLot", viewModel.getParkingLot().getValue());
+        //get the Data from firestore
+        lotQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    vehicleList = new ArrayList<ArrayList<Object>>();
+                    int iRowValue = 0;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //Add values to 2d Array List
+                        vehicleList.add(new ArrayList<>());
+                        vehicleList.get(iRowValue).add(0, document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
+                        vehicleList.get(iRowValue).add(1, document.getString("Make"));
+                        vehicleList.get(iRowValue).add(2, document.getString("Model"));
+                        vehicleList.get(iRowValue).add(3, document.getString("Color"));
+                        vehicleList.get(iRowValue).add(4, document.getString("LicenseNum"));
+                        vehicleList.get(iRowValue).add(5, document.getString("LicenseState"));
+                        vehicleList.get(iRowValue).add(6, document.get("ParkingLot"));
+                        Log.d("GotDoc", document.getId() + " => " + document.getData());
+                        iRowValue++;
+                    }
+                }else
+                {
+                    Log.e("FIRE STORE ERROR: ", "Could not get data");
+                }
+            }
+        });
         try {
             cameraProvider = cameraProviderFuture.get();
         }catch(Exception ex)
@@ -99,7 +138,8 @@ public class ScanFragment extends Fragment {
                 new ImageAnalysis.Builder()
                         // enable the following line if RGBA output is needed.
                         //  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                        .setTargetResolution(new Size(1280, 720))
+                        // was 1280 720
+                        .setTargetResolution(new Size(1080, 2400))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
 
@@ -109,57 +149,110 @@ public class ScanFragment extends Fragment {
         //set the surface for the camera through the Preview Layout
         preview.setSurfaceProvider(binding.previewView.getSurfaceProvider());
 
-
         //bind all of these together on the lifecycle
         // cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageCapture,preview);
         cameraProvider.bindToLifecycle(getViewLifecycleOwner(),cameraSelector,imageAnalysis,preview);
 
+        ///////////////////// NEW MLKIT START///////////////////////////////////////////////
         //process the images coming in and get text using TextRecognition Object
+        //This if statement checks if the device's API level is equal to or greater than Android P (API level 28).
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            //This line sets the analyzer for the ImageAnalysis object, which processes the incoming images.
             imageAnalysis.setAnalyzer(getContext().getMainExecutor(), new ImageAnalysis.Analyzer() {
                 @SuppressLint("UnsafeOptInUsageError")
                 @Override
                 public void analyze(@NonNull ImageProxy imageProxy) {
+                    //This line gets the rotation of the image in degrees.
                     int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
 
+                    //This block of code attempts to retrieve the image from the ImageProxy object, logs an error message if it fails, and assigns the image to the cameraImage variable.
                     Image cameraImage = null;
-
-                    // attempt to get the image
                     try {
                         cameraImage =  imageProxy.getImage();
-                    } catch(Exception ex)
-                    {
-                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " +  ex.getMessage().toString());
+                    } catch(Exception ex) {
+                        Log.e("IMAGE ANALYSIS","FAILED TO GET THE IMAGE: " + ex.getMessage());
                     }
 
-                    //check if we got the image
-                    if(cameraImage !=null)
-                    {
-                        //create an image of type InputImage to pass into a vision api
+                    //This if statement checks if the cameraImage variable is not null.
+                    if(cameraImage != null) {
+                        //This line creates an InputImage object from the cameraImage and rotationDegrees variables.
                         InputImage image = InputImage.fromMediaImage(cameraImage, imageProxy.getImageInfo().getRotationDegrees());
-                        //pass into a vision api such as tesseract
-                        //  Log.i("VISION API","PASSING IMAGE INTO THE VISION API");
 
-                        InputImage img =  InputImage.fromMediaImage(cameraImage, rotationDegrees);
+                        //This block of code uses the TextRecognition object to process the InputImage and extract text.
+                        // It then filters the extracted text using a regular expression pattern and sets it to the overlayText TextView.
+                        // Finally, it logs the extracted text- for debug purposes - and closes the ImageProxy object.
+                        textRecognizer.process(image)
+                                .addOnSuccessListener(new OnSuccessListener<Text>() {
+                                    @Override
+                                    public void onSuccess(Text visionText) {
+                                        StringBuilder sb = new StringBuilder();
 
-                        Task<Text> result = textRecognizer.process(img).addOnCompleteListener(new OnCompleteListener<Text>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Text> task) {
-                                String resultText = task.getResult().getText();
-                                // after done, release the ImageProxy object
-                                imageProxy.close();
-                                Log.i("RESULT TEXT", resultText);
-                                overlayText.setText(resultText);
-                                overlayText.setVisibility(View.VISIBLE);
-                            }
-                        });
+                                        for (Text.TextBlock block : visionText.getTextBlocks()) {
+                                            for (Text.Line line : block.getLines()) {
+                                                String text = line.getText().trim();
 
+                                                if (text.matches("^[A-Za-z]{3}[-\\s]\\d{4}$")) {
+                                                    sb.append(text).append("\n");
+                                                }
+                                            }
+                                        }
+
+                                        // set the filtered text to the overlayText TextView
+                                        overlayText.post(() -> overlayText.setText(sb.toString()));
+
+                                      boolean isCorrectLot =  compareLicensePlates(overlayText.getText());
+
+                                        if(isCorrectLot)
+                                        {
+                                            Log.i("IS CORRECT LOT","GOOD VEHICLE YAHHHH!!!!");
+                                        }
+                                        else
+                                        {
+                                            Log.i("IS CORRECT LOT","BAD VEHICLE NAHHHH !!!!");
+                                        }
+                                    }
+                                })
+                                .addOnCompleteListener(new OnCompleteListener<Text>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Text> task) {
+                                        String resultText = task.getResult().getText();
+                                        // after done, release the ImageProxy object
+                                         imageProxy.close();
+                                         // used for checking what MLKit is seeing.
+                                         Log.i("RESULT TEXT", resultText);
+
+                                    }
+                                });
+                    } else {
+                        //This else statement closes the ImageProxy object if the cameraImage variable is null.
+                        // This is a requirement for CameraX implementations of MLKit in particular.
+                        imageProxy.close();
                     }
                 }
+
+
             });
+
+        }
+        return binding.getRoot();
+    }
+
+
+    private boolean compareLicensePlates(CharSequence p_licensePlate) {
+       boolean isCorrectLot = false;
+        Log.i("VEHICLE PLATE ",p_licensePlate.toString());
+        for(int vehicleCount = 0; vehicleCount < vehicleList.size();vehicleCount++ )
+        {
+            String vehicleListPlate = vehicleList.get(vehicleCount).get(4).toString();
+            Log.i("VEHICLE LIST PLATE ", vehicleListPlate);
+            if(vehicleListPlate.contains(p_licensePlate.toString()))
+            {
+                isCorrectLot = true;
+            }
         }
 
-        return binding.getRoot();
+        return isCorrectLot;
+
     }
 
 

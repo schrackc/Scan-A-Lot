@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.application' version '7.4.0'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs'
 
@@ -40,6 +40,12 @@ android {
     testOptions{
                 animationsDisabled = true;
             }
+
+    task prepareKotlinBuildScriptModel
+            {
+
+            }
+
 }
 
 dependencies {
@@ -73,9 +79,17 @@ dependencies {
 
     //MLKit Dependencies
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
+    //Printer Library
+    implementation 'com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.2.1'
 
-
+    //Firebase Connection
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+    // Declare the dependency for the Cloud Firestore library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-firestore'
 
 
     //implementation 'com.google.google.android.gms:play-services-mlkit-text-recognition:18.0.2' //using Google's mlkit to try to recognize text. This is a backup because android studio seems to not be recognizing the openALPR library.
+
 }
