@@ -1,31 +1,48 @@
 package com.example.scanalot;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.CameraX;
 import androidx.camera.core.Preview;
-import androidx.camera.core.impl.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.dantsu.escposprinter.EscPosPrinter;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * This class is used for the Main Activity. It creates the Main Activity and uses the activity_main layout. This will be used for
@@ -35,10 +52,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  * @author Nick Downey
  * @Created 1/21/23
  * @Contributors Andrew Hoffer - 1/21/23 - Created the Activity and handlers
- * Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
- * Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
+ * @Contributors Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
+ * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
+ * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
  */
-public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener{
+public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener {
     // CameraX code
     private static final String[] CAMERA_PERMISSION = new String[]{android.Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
@@ -46,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
 
     //the bottom nav menu
     public BottomNavigationView bottomNavigationView;
+
+    //Dynamic variables to show license information between screens
+    public String strLicenseNumber;
+    public String strLicenseState;
 
     //for every activity or fragment, there is a BindingClass that allows you to access the views in a easy fashion
     private ActivityMainBinding binding;
@@ -58,6 +80,39 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
 
     // TextView that will be updated by a spinner on SelectLotFragment.
     private TextView locationBanner;
+
+    /*Printer Variables*/
+    //the permission list in which permissions are added/removed
+    ArrayList<String> permissionsList;
+    AlertDialog alertDialog;
+    //permissions passed to launcher
+    String[] permissionsStr = {
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+            android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.BLUETOOTH_ADMIN,
+            android.Manifest.permission.CAMERA
+    };
+   //number of permissions that still need approved by user
+    int permissionsCount = 0;
+    //declaration of printer
+    EscPosPrinter printer = null;
+    //Address of printer
+    String strPrinterAddress = "57:4C:54:03:26:32";
+
+
+    // Access a Cloud Firestore instance from your Activity
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //A list of all the vehicles in the database
+    public ArrayList <ArrayList<Object>> arrVehicles = new ArrayList<ArrayList<Object>>();
+
+    //Reference row value in arrVehicles for quick pull of other row information
+    public int iRowReferenceLocation;
+    //View Model for passing data between fragments/parent Activities
+    private TicketDataViewModel viewModel;
+    BluetoothConnection bluetoothConnection = null;
+
 
     /**
      * Creates the Main Activity and sets the bottom navigation bar to the navigation controller. The navigation controller is the
@@ -73,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Instantiate View Model for passing data between fragment and this activity
+        viewModel = new ViewModelProvider(this).get(TicketDataViewModel.class);
         //creates an instance of Main Activity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         //sets the Content we want to see by getting the root view  (the parent to all views)
@@ -86,50 +143,58 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         NavController navController = navHostFragment.getNavController();
         //binds the menu to the nav controller
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
         // CameraX Code ------------------------------------------------------ //
         // 3 Methods required are: requestPermission, enableCamera, and hasCameraPermission
         // I the following requests permission when the activity that the camera is within is created.
         // Creating CameraPreview Permission Dialogue. Asks on create.
-        if (!hasCameraPermission()) {
-            requestPermission();
-        }
-        else {
-            enableCamera();
-        }
 
+
+
+        /*Printer appending permissions to list*/
+        permissionsList = new ArrayList<>();
+        permissionsList.addAll(Arrays.asList(permissionsStr));
+        //Ask for camera and printer permissions
+        askForPermissions();
+
+
+        // Gets firebase Vehicles collection and adds all the records to the dbVehicles variable
+        db.collection("Vehicles")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int iRowValue = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Add values to 2d Array List
+                                arrVehicles.add(new ArrayList<>());
+                                arrVehicles.get(iRowValue).add(0, document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
+                                arrVehicles.get(iRowValue).add(1, document.getString("Make"));
+                                arrVehicles.get(iRowValue).add(2, document.getString("Model"));
+                                arrVehicles.get(iRowValue).add(3, document.getString("Color"));
+                                arrVehicles.get(iRowValue).add(4, document.getString("LicenseNum"));
+                                arrVehicles.get(iRowValue).add(5, document.getString("LicenseState"));
+                                arrVehicles.get(iRowValue).add(6, document.get("ParkingLot"));
+                                Log.d("GotDoc", document.getId() + " => " + document.getData());
+                                iRowValue++;
+                            }
+                        } else {
+                            Log.d("NoDoc", "Error getting documents: ", task.getException());
+                        }
+                        Log.d("RunComplete", "Yah");
+                    }
+                });
+
+        //set the vehicle array in view model to the array of data retrieved from firebase
+        viewModel.setLicenseVehicleList(arrVehicles);
     }// end of onCreate()
 
-    /**
-     * Method for cameraX launching. Checks permissions and returns bool if perms given or not.
-     *
-     * @return true or false
-     */
-    private boolean hasCameraPermission() {
-        return ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-    }
-
-
-    /**
-     * Method for requesting permission of camera.
-     */
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, CAMERA_PERMISSION, CAMERA_REQUEST_CODE);
-    }
-
-
-    /**
-     * Method for creating new Intent class to start activity.
-     */
-    private void enableCamera() {
-//        navAction = scanFragmentDirections.actionScanFragmentToCameraActivity();
-//        Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(navAction);
-    }
     // End of CameraX -------------------------------------------------- //
 
     /**
      * Method that handles updating the textView geolocationBanner. It pulls from the selectLot spinner
      * on the SelectLotFragment.
+     *
      * @param item
      */
     @Override
@@ -150,6 +215,165 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         return true;
     }
 
+    /*Printer Code------------------------------------------------*/
+
+    /*Receives permission request results for printer*/
+    ActivityResultLauncher<String[]> permissionsLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                    new ActivityResultCallback<Map<String, Boolean>>() {
+                        @Override
+                        public void onActivityResult(Map<String, Boolean> result) {
+                            //get the result values from all the permissions being requested
+                            ArrayList<Boolean> list = new ArrayList<>(result.values());
+                            permissionsList = new ArrayList<>();
+                            permissionsCount = 0;
+                            for (int i = 0; i < list.size(); i++) {
+                                if (shouldShowRequestPermissionRationale(permissionsStr[i])) {
+                                    permissionsList.add(permissionsStr[i]);
+                                } else if (!hasPermission(getApplicationContext(), permissionsStr[i])) {
+                                    permissionsCount++;
+                                }
+                            }
+                            if (permissionsList.size() > 0) {
+                                //Some permissions are denied and can be asked again.
+                                askForPermissions();
+                            } else if (permissionsCount > 0) {
+                                //Show alert dialog
+                                showPermissionDialog();
+                            } else {
+                                //on successfully accepting all permissions
+                            }
+                        }
+                    });
+
+
+    /**
+     * Creates a printer instance from the Bluetooth paired Device List that is a Thermal Printer
+     */
+    public void connectToPrinter() {
+
+            bluetoothConnection = getBluetoothConnection(strPrinterAddress);
+
+                if(printer==null) {
+                    try {
+                        printer = new EscPosPrinter(bluetoothConnection, 203, 48f, 32);
+                    } catch (EscPosConnectionException e) {
+                        printerNotFound();
+                    }
+                }
+    }
+
+
+    /**
+     * Used to output message when printer has failed to connect.
+     */
+    public void printerConnectionFailed() {
+        Toast.makeText(this, "Printer Failed To Connect.", Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Used to output a message when the thermal printer is not found in the Bluetooth paired list
+     */
+    private void printerNotFound() {
+        Toast.makeText(this, "Printer Not Found. Please Pair Printer.", Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Looks through the paired devices list and searches for a specific device address and returns the
+     * Bluetooth connection object with that address
+     * @param{String} printerAddress
+     * @return null or BluetoothConnection
+     */
+
+    private BluetoothConnection getBluetoothConnection(String printerAddress) {
+        BluetoothConnection bluetoothConnection = null;
+        BluetoothConnection[] connections = new BluetoothPrintersConnections().getList();
+        if (connections != null) {
+            for (int connectionCount = 0; connectionCount < connections.length; connectionCount++) {
+                //output the addresses
+                Log.i("BLUETOOTH DEVICE", connections[connectionCount].getDevice().getAddress());
+                //get the correct address if in list of paired
+                if (connections[connectionCount].getDevice().getAddress().contains(printerAddress)) {
+                    bluetoothConnection = connections[connectionCount];
+                }
+            }
+        }
+        return bluetoothConnection;
+    }
+
+    /**
+     * Checks to see if the permission was granted or not
+     */
+    private boolean hasPermission(Context context, String permissionStr) {
+        return ContextCompat.checkSelfPermission(context, permissionStr) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Requests Bluetooth permissions in order to connect to the printer
+     */
+    public void askForPermissions() {
+
+        String[] newPermissionStr = new String[permissionsList.size()];
+        for (int i = 0; i < newPermissionStr.length; i++) {
+            //creates the array of permissions to be passed to launcher
+            newPermissionStr[i] = permissionsList.get(i);
+        }
+        //request permissions if the string is not empty
+        if (newPermissionStr.length > 0) {
+            permissionsLauncher.launch(newPermissionStr);
+        } else {
+        /* User has pressed 'Deny & Don't ask again' so we have to show the enable permissions dialog
+        which will lead them to app details page to enable permissions from there. */
+            showPermissionDialog();
+        }
+    }
+
+    /**
+     * If user denies permission, this will be shown to the user as the rationale for why the permissions
+     * are needed.
+     */
+    private void showPermissionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permission required")
+                .setMessage("Some permissions are need to be allowed to use this app without any problems.")
+                .setPositiveButton("Settings", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+        if (alertDialog == null) {
+            alertDialog = builder.create();
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+        }
+    }
+
+    /**
+     * Used to properly disconnect the printer
+     */
+    public void printDisconnect() {
+        if (printer != null) {
+            printer.disconnectPrinter();
+        }
+    }
+
+    /**
+     *Command the thermal printer to print the given text for the ticket.
+     */
+    public void printText()  {
+        if(printer!=null) {
+            try {
+                printer.printFormattedText(
+                        "[L]\n" + "Printing Ticket."
+                );
+            } catch (Exception e) {
+                printerConnectionFailed();
+            }
+
+        }else
+        {
+            connectToPrinter();
+        }
+    }
 
 }
 

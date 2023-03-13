@@ -6,11 +6,13 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.transition.Visibility;
 
 import com.example.scanalot.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,12 +29,14 @@ import java.util.List;
  * @author Andrew Hoffer
  * @Created 1/25/23
  * @Contributors Andrew Hoffer - 1/25/23 - Created the Activity
+ * @Contributors Nick Downey - 3/1/23 - Added loading bar to login.
  */
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ActivityLoginBinding binding;
+    private ProgressBar loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        // Initialize loadingBar
+        loadingBar = binding.loading;
+        loadingBar.setVisibility(View.INVISIBLE);
 
         setContentView(binding.getRoot());
         setTitle("Scan A Lot");
@@ -52,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 String strUserEmail = binding.username.getText().toString().trim();
                 String strUserPassword = binding.password.getText().toString().trim();
                 if (validEmailPassWord()) {
+                    loadingBar.setVisibility(View.VISIBLE);
                     login(strUserEmail, strUserPassword);
                 }else
                 {
@@ -73,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
 

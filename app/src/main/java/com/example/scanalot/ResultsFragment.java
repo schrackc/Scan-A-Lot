@@ -1,6 +1,7 @@
 package com.example.scanalot;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,15 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.scanalot.databinding.FragmentResultsBinding;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 /**
  * This class is used for the resultsFragment. It creates the fragment and uses the fragment_results layout. This will be used right after
@@ -21,6 +27,7 @@ import com.example.scanalot.databinding.FragmentResultsBinding;
  * @author Andrew Hoffer
  * @Created 2/4/23
  * @Contributors Andrew Hoffer - 2/4/23 - Created the fragment
+ * @Contributors Curtis Schrack - 3/10/23 - Check License plate with database vehicles
  */
 
 public class ResultsFragment extends Fragment {
@@ -28,6 +35,15 @@ public class ResultsFragment extends Fragment {
     FragmentResultsBinding binding;
     NavDirections navAction;
     Button btnFillCitation;
+    MainActivity getActivity = (MainActivity)getActivity();
+   // String strLicenseNumber = getActivity.strLicenseNumber;
+    //String strLicenseState = getActivity.strLicenseState;
+  //  ArrayList<ArrayList<Object>> arrVehicles = getActivity.arrVehicles;
+    //view model
+    TicketDataViewModel viewModel;
+     String strLicenseNumber;
+    String strLicenseState;
+    ArrayList<ArrayList<Object>> arrVehicles;
 
 
     /**
@@ -37,6 +53,24 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //get the view model which contains the live,changeable data that was made in main activity
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
+        /*get the variables that were set in the view model and assign them to the variables*/
+        strLicenseNumber = viewModel.getLicenseNumber().getValue();
+        strLicenseState = viewModel.getLicenseState().getValue();
+        arrVehicles = viewModel.getLicenseVehicleList().getValue();
+        //Logging the results which were passed
+        Log.i("LIVE DATA RESULTS FRAG", "LICENSE NUM: " + strLicenseNumber);
+        Log.i("LIVE DATA RESULTS FRAG", "LICENSE STATE: " + strLicenseState);
+        Log.i("LIVE DATA RESULTS FRAG", "LICENSE VEHICLES: " + arrVehicles.toString());
+        //Check for if license info is in the database
+ /*       boolean isLicenseFound = false;
+        for (int iRowCheck = 0; iRowCheck < arrVehicles.size() || isLicenseFound; iRowCheck++) {
+            if (arrVehicles.get(iRowCheck).get(4) == strLicenseNumber && arrVehicles.get(iRowCheck).get(5) == strLicenseState) {
+                getActivity.iRowReferenceLocation = iRowCheck;
+                isLicenseFound = true;
+            }
+        }*/
 
         //getting the button
         btnFillCitation = binding.fillSavePrintButton;

@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
@@ -27,6 +28,7 @@ import com.example.scanalot.databinding.FragmentSelectLotBinding;
 public class SelectLotFragment extends Fragment {
 
     FragmentSelectLotBinding binding;
+    TicketDataViewModel viewModel;
 
     ///////////////Spinner Selecting Interface - Implemented in MainActivity.java///////////////
     private Spinner selectLotSpinner;
@@ -34,6 +36,7 @@ public class SelectLotFragment extends Fragment {
 
     public interface OnSpinnerSelectedListener{
         void onSpinnerSelected(String item);
+
     }
 
     @Override
@@ -60,7 +63,8 @@ public class SelectLotFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        //get the view model which contains the live,changeable data that was made in main activity
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
 
     }
 
@@ -83,13 +87,17 @@ public class SelectLotFragment extends Fragment {
                 R.array.parkingLots, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectLotSpinner.setAdapter(adapter);
+        selectLotSpinner.setSelection(0, false);
         // Handles selecting from the lot spinner. Passed to main so that the TextView can be updated.
         // sets a listener and turns the selection into a string that can be passed to text.
         selectLotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
+                //set the live data object so we can use this in other fragments
+                viewModel.setParkingLot(selectedItem);
                 listener.onSpinnerSelected(selectedItem);
+
             }
             // Handles nothing selected. Writes to log.
             @Override

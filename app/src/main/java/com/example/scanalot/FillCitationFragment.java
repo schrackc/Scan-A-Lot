@@ -2,11 +2,13 @@ package com.example.scanalot;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -14,9 +16,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.FragmentFillCitationBinding;
 
 import java.util.ArrayList;
@@ -38,7 +45,10 @@ public class FillCitationFragment extends Fragment {
     TextView textView;
     Button btnCancel;
     Button btnSavePrint;
-    Spinner spinnerChooseLot;
+    TicketDataViewModel viewModel;
+    Spinner chooseStateSpinner;
+    Spinner chooseLotSpinner;
+
 
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
@@ -48,38 +58,27 @@ public class FillCitationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
         textView = binding.fillAddCitations;
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
-        spinnerChooseLot = binding.fillChooseLotSpinner;
 
-
-
-    //get banner from activity
-    TextView tvBanner =  getActivity().findViewById(R.id.geolocationBanner);
-        Log.i("tvBanner",tvBanner.getText().toString());
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.parkingLots, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinnerChooseLot.setAdapter(adapter);
-        //last char index of string
-        int lastCharacter = tvBanner.getText().toString().length();
-        Log.i("SUBSTRING SPINNER", tvBanner.getText().toString().substring(10,lastCharacter));
-        //get spinner position
-        int spinnerValueIndex = adapter.getPosition(tvBanner.getText().toString().substring(10,lastCharacter));
-
-        //set selection
-        spinnerChooseLot.setSelection(spinnerValueIndex);
+        chooseStateSpinner = binding.fillChooseTheStateSpinner;
+        chooseLotSpinner = binding.fillChooseLotSpinner;
+        autoFillCitationData();
 
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //the next nav location through using a nav Action
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    MainActivity mainActivity =(MainActivity)getActivity();
+                        mainActivity.printText();
+                }
+
                 navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
-                //get the nav controller and tell it to naviagate
-                Navigation.findNavController(view).navigate(navAction);
+                //get the nav controller and tell it to navigate
+               Navigation.findNavController(view).navigate(navAction);
+
             }
         });
 
@@ -155,6 +154,24 @@ public class FillCitationFragment extends Fragment {
                 builder.show();
             }
         });
+    }
+
+    /**
+     * set Live Data values to view values within Fragment
+     * */
+    private void autoFillCitationData(){
+        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
+        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
+
+        binding.fillTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
+        //set the value of the chooseStateSpinner
+        ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
+        chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
+        //set the value of the chooseLotSpinner
+        ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
+        chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
+
+
     }
 
     @Override

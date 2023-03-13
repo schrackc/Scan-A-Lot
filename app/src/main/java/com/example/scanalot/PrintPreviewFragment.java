@@ -23,7 +23,7 @@ import com.example.scanalot.databinding.FragmentSelectLotBinding;
 public class PrintPreviewFragment extends Fragment {
 
     FragmentPrintPreviewBinding binding;
-
+    MainActivity mainActivity;
     /**
      * Method in which executes after the view has been created. It is saving the state of the view
      */
