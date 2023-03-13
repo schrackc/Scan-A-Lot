@@ -161,9 +161,9 @@ public class FillCitationFragment extends Fragment {
         ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
         //set the value fillVehicleModel box
-        binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).Model).toString());
+        binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel()).toString());
         //set the value fillVehicleModel box
-        binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).Color).toString());
+        binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()).toString());
     }
 
     @Override

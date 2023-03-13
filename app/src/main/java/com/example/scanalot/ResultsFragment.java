@@ -68,7 +68,7 @@ public class ResultsFragment extends Fragment {
         //Check for if license info is in the database
         boolean isLicenseFound = false;
         for (int iRowCheck = 0; iRowCheck < arrVehicles.size() && !isLicenseFound; iRowCheck++) {
-            if (arrVehicles.get(iRowCheck).LicenseNumber.equals(strLicenseNumber) && arrVehicles.get(iRowCheck).LicenseState.equals(strLicenseState)){
+            if (arrVehicles.get(iRowCheck).getLicNum().equals(strLicenseNumber) && arrVehicles.get(iRowCheck).getLicState().equals(strLicenseState)){
                 //set iRowReferenceLocation for easy access in citation autofill
                 viewModel.setReferenceNum(iRowCheck);
                 isLicenseFound = true;
@@ -91,9 +91,9 @@ public class ResultsFragment extends Fragment {
         if (isLicenseFound){
             //Check if in the right parking lot
             boolean isInRightLot = false;
-            ArrayList<String> lstAuthParkingLots = arrVehicles.get(viewModel.getReferenceNum()).ParkingLot;
-            for (int iParkLotIndex = 0; iParkLotIndex < arrVehicles.get(viewModel.getReferenceNum()).ParkingLot.size() && !isInRightLot; iParkLotIndex++){
-                if (arrVehicles.get(viewModel.getReferenceNum()).ParkingLot.get(iParkLotIndex).equals(viewModel.getParkingLot().getValue()))
+            ArrayList<String> lstAuthParkingLots = arrVehicles.get(viewModel.getReferenceNum()).getAuthParkingLot();
+            for (int iParkLotIndex = 0; iParkLotIndex < arrVehicles.get(viewModel.getReferenceNum()).getAuthParkingLot().size() && !isInRightLot; iParkLotIndex++){
+                if (arrVehicles.get(viewModel.getReferenceNum()).getAuthParkingLot().get(iParkLotIndex).equals(viewModel.getParkingLot().getValue()))
                     isInRightLot = true;
             }
 

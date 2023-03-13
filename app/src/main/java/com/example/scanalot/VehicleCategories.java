@@ -1,5 +1,6 @@
 package com.example.scanalot;
 
+import java.security.acl.Owner;
 import java.util.ArrayList;
 
 /**
@@ -11,11 +12,59 @@ import java.util.ArrayList;
  */
 public class VehicleCategories {
     //Vehicle Firebase value Categories
-    String OwnerName;
-    String Make;
-    String Model;
-    String Color;
-    String LicenseNumber;
-    String LicenseState;
-    ArrayList<String> ParkingLot;
+    private String strOwnerName;
+    private String strCarMake;
+    private String strCarModel;
+    private String strCarColor;
+    private String strLicenseNumber;
+    private String strLicenseState;
+    private ArrayList<String> arrParkingLot;
+
+    //OwnerName getter and setter
+    String getOwnerName(){ return strOwnerName;}
+    void setOwnerName(String owner){
+        strOwnerName = owner;
+    }
+
+    //Car Make getter and setter
+    String getMake(){ return strCarMake;}
+    void setMake(String make){
+        strCarMake = make;
+        return;
+    }
+
+    //Car Model getter and setter
+    String getModel(){ return strCarModel;}
+    void setModel(String model){
+        strCarModel = model;
+        return;
+    }
+
+    //Car Color getter and setter
+    String getColor(){ return strCarColor;}
+    void setColor(String color){
+        strCarColor = color;
+        return;
+    }
+
+    //Car License Number getter and setter
+    String getLicNum(){ return strLicenseNumber;}
+    void setLicNum(String LicNum){
+        strLicenseNumber = LicNum;
+        return;
+    }
+
+    //Car State getter and setter
+    String getLicState(){ return strLicenseState;}
+    void setLicState(String LicState){
+        strLicenseState = LicState;
+        return;
+    }
+
+    //Allowed ParkingLot getter and setter
+    ArrayList<String> getAuthParkingLot(){ return arrParkingLot;}
+    void setAuthParkingLot(ArrayList<String> AuthParkingLot) {
+        arrParkingLot = AuthParkingLot;
+        return;
+    }
 }

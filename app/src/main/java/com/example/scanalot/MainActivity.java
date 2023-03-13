@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Add values to 2d Array List
                                 arrVehicles.add(new VehicleCategories());
-                                arrVehicles.get(iRowValue).OwnerName = document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName");
-                                arrVehicles.get(iRowValue).Make = document.getString("Make");
-                                arrVehicles.get(iRowValue).Model = document.getString("Model");
-                                arrVehicles.get(iRowValue).Color = document.getString("Color");
-                                arrVehicles.get(iRowValue).LicenseNumber = document.getString("LicenseNum");
-                                arrVehicles.get(iRowValue).LicenseState = document.getString("LicenseState");
-                                arrVehicles.get(iRowValue).ParkingLot = (ArrayList<String>) document.get("ParkingLot");
+                                arrVehicles.get(iRowValue).setOwnerName(document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
+                                arrVehicles.get(iRowValue).setMake(document.getString("Make"));
+                                arrVehicles.get(iRowValue).setModel(document.getString("Model"));
+                                arrVehicles.get(iRowValue).setColor(document.getString("Color"));
+                                arrVehicles.get(iRowValue).setLicNum(document.getString("LicenseNum"));
+                                arrVehicles.get(iRowValue).setLicState(document.getString("LicenseState"));
+                                arrVehicles.get(iRowValue).setAuthParkingLot((ArrayList<String>) document.get("ParkingLot"));
                                 Log.d("GotDoc", document.getId() + " => " + document.getData());
                                 iRowValue++;
                             }
