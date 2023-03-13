@@ -110,6 +110,8 @@ public class ResultsFragment extends Fragment {
             }
         //No vehicle found banner
         } else{
+            //Reset reference
+            viewModel.setReferenceNum(null);
             //No vehicle was found in database print out response
             binding.ResultTextView.setText("No Record of Vehicle");
             binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));
