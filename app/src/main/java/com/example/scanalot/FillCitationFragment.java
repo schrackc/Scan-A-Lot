@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -163,6 +164,7 @@ public class FillCitationFragment extends Fragment {
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
 
+        //set the value fillTextPlateNumber box
         binding.fillTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
         //set the value of the chooseStateSpinner
         ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
@@ -171,7 +173,13 @@ public class FillCitationFragment extends Fragment {
         ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
 
-
+        //If there is no reference value found means no license was found was found
+        try {
+            //set the value fillVehicleModel box
+            binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel()).toString());
+            //set the value fillVehicleModel box
+            binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()).toString());
+        }catch (Exception e){}
     }
 
     @Override
