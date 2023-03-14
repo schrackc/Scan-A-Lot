@@ -63,6 +63,8 @@ public class FillCitationFragment extends Fragment {
         textView = binding.fillAddCitations;
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
+        MainActivity mainActivity = (MainActivity)getActivity();
+        mainActivity.connectToPrinter();
 
         chooseStateSpinner = binding.fillChooseTheStateSpinner;
         chooseLotSpinner = binding.fillChooseLotSpinner;

@@ -55,6 +55,7 @@ import java.util.Map;
  * @Contributors Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
  * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
  * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
+ * @Contributors Nick Downey - 3/13/2023 - Formatted Printer printed text with values from citation screen. 
  */
 public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener {
     // CameraX code
@@ -360,7 +361,14 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         if(printer!=null) {
             try {
                 printer.printFormattedText(
-                        "[L]\n" + "Printing Ticket."
+                        "[C]---TICKET---" + "\n" +
+                        "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
+                        "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
+                        "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
+                        "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
+                        "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
+                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel() + "\n" +
+                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()
                 );
             } catch (Exception e) {
                 printerConnectionFailed();
