@@ -73,12 +73,12 @@ public class FillCitationFragment extends Fragment {
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     MainActivity mainActivity =(MainActivity)getActivity();
-                        mainActivity.printText();
+                    mainActivity.printText();
                 }
 
                 navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
                 //get the nav controller and tell it to navigate
-               Navigation.findNavController(view).navigate(navAction);
+                Navigation.findNavController(view).navigate(navAction);
 
             }
         });
