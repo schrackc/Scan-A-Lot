@@ -360,14 +360,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         if(printer!=null) {
             try {
                 printer.printFormattedText(
-                        "[C]" + "---TICKET---" + "\n" +
-                        "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
-                        "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
-                        "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
-                        "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
-                        "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
-                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel() + "\n" +
-                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()
+                        "[L]\n" + "Printing Ticket."
                 );
             } catch (Exception e) {
                 printerConnectionFailed();
@@ -380,3 +373,5 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     }
 
 }
+
+
