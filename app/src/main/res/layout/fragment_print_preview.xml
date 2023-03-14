@@ -79,7 +79,7 @@
         android:layout_width="260dp"
         android:layout_height="30dp"
         android:layout_marginTop="12dp"
-        android:text="@string/FillCitationVehicleColor"
+        android:text="@string/PrintPreviewVehicleColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
