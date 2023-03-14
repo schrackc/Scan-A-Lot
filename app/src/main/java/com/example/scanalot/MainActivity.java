@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                                 arrVehicles.add(new VehicleCategories());
                                 arrVehicles.get(iRowValue).setOwnerName(document.getString("OwnerFirstName") + " " + document.getString("OwnerLastName"));
                                 arrVehicles.get(iRowValue).setMake(document.getString("Make"));
-                                viewModel.setLicenseVehicleModel(document.getString("Model"));
+                                arrVehicles.get(iRowValue).setModel(document.getString("Model"));
                                 arrVehicles.get(iRowValue).setColor(document.getString("Color"));
                                 arrVehicles.get(iRowValue).setLicNum(document.getString("LicenseNum"));
                                 arrVehicles.get(iRowValue).setLicState(document.getString("LicenseState"));
