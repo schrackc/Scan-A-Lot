@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
             android.Manifest.permission.BLUETOOTH_ADMIN,
             android.Manifest.permission.CAMERA
     };
-   //number of permissions that still need approved by user
+    //number of permissions that still need approved by user
     int permissionsCount = 0;
     //declaration of printer
     EscPosPrinter printer = null;
@@ -249,15 +249,15 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
      */
     public void connectToPrinter() {
 
-            bluetoothConnection = getBluetoothConnection(strPrinterAddress);
+        bluetoothConnection = getBluetoothConnection(strPrinterAddress);
 
-                if(printer==null) {
-                    try {
-                        printer = new EscPosPrinter(bluetoothConnection, 203, 48f, 32);
-                    } catch (EscPosConnectionException e) {
-                        printerNotFound();
-                    }
-                }
+        if(printer==null) {
+            try {
+                printer = new EscPosPrinter(bluetoothConnection, 203, 48f, 32);
+            } catch (EscPosConnectionException e) {
+                printerNotFound();
+            }
+        }
     }
 
 
@@ -361,13 +361,13 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
             try {
                 printer.printFormattedText(
                         "[C]" + "---TICKET---" + "\n" +
-                        "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
-                        "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
-                        "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
-                        "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
-                        "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
-                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel() + "\n" +
-                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()
+                                "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
+                                "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
+                                "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
+                                "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
+                                "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
+                                "[L]Car Model:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel() + "\n" +
+                                "[L]Car Color:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()
                 );
             } catch (Exception e) {
                 printerConnectionFailed();
