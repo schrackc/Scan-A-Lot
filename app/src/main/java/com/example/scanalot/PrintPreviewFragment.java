@@ -40,17 +40,17 @@ public class PrintPreviewFragment extends Fragment {
             int iDay = LocalDateTime.now().getDayOfMonth();
             int iYear = LocalDateTime.now().getYear();
 
-            binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() + strMonth + iDay + "/" + iYear);
+            binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
 
-            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() + viewModel.getParkingLot().getValue());
+            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
 
             binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $100.00");
 
-            binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() + viewModel.getLicenseNumber().getValue());
+            binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());
 
-            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor().toString());
+            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor().toString());
 
-            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel().toString());
+            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel().toString());
         }
     }
 
