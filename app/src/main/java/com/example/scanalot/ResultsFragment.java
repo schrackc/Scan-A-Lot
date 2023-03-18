@@ -42,7 +42,7 @@ public class ResultsFragment extends Fragment {
   //  ArrayList<ArrayList<Object>> arrVehicles = getActivity.arrVehicles;
     //view model
     TicketDataViewModel viewModel;
-     String strLicenseNumber;
+    String strLicenseNumber;
     String strLicenseState;
     ArrayList<VehicleCategories> arrVehicles;
 
