@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
  * @author Andrew Hoffer
  * @Created 2/4/23
  * @Contributors Andrew Hoffer - 2/4/23 - Created the fragment
+ * @Contributors Curtis Schrack - 3/18/23 - Add Auto fill for Vehicle information
  */
 
 public class PrintPreviewFragment extends Fragment {
@@ -48,9 +49,9 @@ public class PrintPreviewFragment extends Fragment {
 
             binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());
 
-            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor().toString());
+            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleColor().getValue());
 
-            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel().toString());
+            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleModel().getValue());
         }
     }
 

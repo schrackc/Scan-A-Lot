@@ -67,11 +67,14 @@ public class ResultsFragment extends Fragment {
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE VEHICLES: " + arrVehicles.toString());
         //Check for if license info is in the database
         boolean isLicenseFound = false;
-        for (int iRowCheck = 0; iRowCheck < arrVehicles.size() && !isLicenseFound; iRowCheck++) {
+        int iRowCheck = 0;
+        for (; iRowCheck < arrVehicles.size(); iRowCheck++) {
             if (arrVehicles.get(iRowCheck).getLicNum().equals(strLicenseNumber) && arrVehicles.get(iRowCheck).getLicState().equals(strLicenseState)){
-                //set iRowReferenceLocation for easy access in citation autofill
-                viewModel.setReferenceNum(iRowCheck);
+                //set values for autofill
+                viewModel.setVehicleModel(arrVehicles.get(iRowCheck).getModel());
+                viewModel.setVehicleColor(arrVehicles.get(iRowCheck).getColor());
                 isLicenseFound = true;
+                break;
             }
         }
 
@@ -91,9 +94,9 @@ public class ResultsFragment extends Fragment {
         if (isLicenseFound){
             //Check if in the right parking lot
             boolean isInRightLot = false;
-            ArrayList<String> lstAuthParkingLots = arrVehicles.get(viewModel.getReferenceNum()).getAuthParkingLot();
-            for (int iParkLotIndex = 0; iParkLotIndex < arrVehicles.get(viewModel.getReferenceNum()).getAuthParkingLot().size() && !isInRightLot; iParkLotIndex++){
-                if (arrVehicles.get(viewModel.getReferenceNum()).getAuthParkingLot().get(iParkLotIndex).equals(viewModel.getParkingLot().getValue()))
+            ArrayList<String> lstAuthParkingLots = arrVehicles.get(iRowCheck).getAuthParkingLot();
+            for (int iParkLotIndex = 0; iParkLotIndex < arrVehicles.get(iRowCheck).getAuthParkingLot().size() && !isInRightLot; iParkLotIndex++){
+                if (arrVehicles.get(iRowCheck).getAuthParkingLot().get(iParkLotIndex).equals(viewModel.getParkingLot().getValue()))
                     isInRightLot = true;
             }
 
@@ -110,8 +113,9 @@ public class ResultsFragment extends Fragment {
             }
         //No vehicle found banner
         } else{
-            //Reset reference
-            viewModel.setReferenceNum(null);
+            //Reset reference and vehicle values
+            viewModel.setVehicleModel(null);
+            viewModel.setVehicleColor(null);
             //No vehicle was found in database print out response
             binding.ResultTextView.setText("No Record of Vehicle");
             binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));

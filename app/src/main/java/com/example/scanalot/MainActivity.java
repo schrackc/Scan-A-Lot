@@ -367,8 +367,8 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                         "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
                         "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
                         "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
-                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel() + "\n" +
-                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()
+                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleModel() + "\n" +
+                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleColor()
                 );
             } catch (Exception e) {
                 printerConnectionFailed();
