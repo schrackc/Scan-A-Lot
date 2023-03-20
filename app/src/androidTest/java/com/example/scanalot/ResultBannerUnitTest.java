@@ -95,16 +95,6 @@ public class ResultBannerUnitTest {
     }
     @Test
     public void noParkingLot() throws InterruptedException {
-        //Go to parkinglot change lot location
-        onView(withId(R.id.select_lot_fragment)).perform(click());
-        // Click spinner to focus
-        onView(withId(R.id.selectLotSpinner)).perform(click());
-        // select lot from spinner
-        onData(allOf(is(instanceOf(String.class)), is("Lot A")))
-                .inRoot(isPlatformPopup())
-                .perform(click());
-        //Go back to Scan screen
-        onView(withId(R.id.scan_fragment)).perform((click()));
         // Launch the ManualSearch by clicking on its menu item
         onView(withId(R.id.outlinedButton)).perform(click());
         // type valid license plate

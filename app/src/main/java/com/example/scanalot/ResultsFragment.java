@@ -120,10 +120,10 @@ public class ResultsFragment extends Fragment {
             binding.ResultTextView.setText("No Record of Vehicle");
             binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));
         }
-        //
+        //No Parking Lot Selected Response
         if(viewModel.getParkingLot().getValue() == null){
             //No vehicle was found in database print out response
-            binding.ResultTextView.setText("No Parking Lot Recorded");
+            binding.ResultTextView.setText("No Parking Lot Selected");
             binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));
         }
 
