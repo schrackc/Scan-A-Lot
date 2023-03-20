@@ -55,7 +55,8 @@ import java.util.Map;
  * @Contributors Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
  * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
  * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
- * @Contributors Nick Downey - 3/13/2023 - Formatted Printer printed text with values from citation screen. 
+ * @Contributors Nick Downey - 3/13/2023 - Formatted Printer printed text with values from citation screen.
+ * @Contributors Nick Downey - 3/19/2023 - Added data pulling from firebase for parking lots.
  */
 public class MainActivity extends AppCompatActivity implements SelectLotFragment.OnSpinnerSelectedListener {
     // CameraX code
@@ -108,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     //A list of all the vehicles in the database
     private ArrayList <VehicleCategories> arrVehicles = new ArrayList<>();
 
+    // List of Parking lots in firebase
+    private ArrayList<ParkingLots> arrParkingLots = new ArrayList<>();
+
     //View Model for passing data between fragments/parent Activities
     private TicketDataViewModel viewModel;
     BluetoothConnection bluetoothConnection = null;
@@ -155,6 +159,29 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         //Ask for camera and printer permissions
         askForPermissions();
 
+        // Documentation for the following Document pulling.
+        // https://firebase.google.com/docs/firestore/query-data/get-data?hl=en&authuser=2#java
+        db.collection("ParkingLots")
+                .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()){
+                                    int iParkingLotRowValue = 0;
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        arrParkingLots.add(new ParkingLots());
+                                        arrParkingLots.get(iParkingLotRowValue).setStrLotName(document.getString("LotName"));
+                                        Log.d("ParkingLots", document.getId() + " => " + document.getData());
+                                        iParkingLotRowValue++;
+                                    }
+                                } else {
+                                    Log.d("ParkingLots", "Error getting parking documents: ", task.getException());
+                                }
+                            }
+                        });
+
+        //set parking lot array viewModel to the array of data retrieved from the firebase
+        viewModel.setArrParkingLots((arrParkingLots));
 
         // Gets firebase Vehicles collection and adds all the records to the dbVehicles variable
         db.collection("Vehicles")

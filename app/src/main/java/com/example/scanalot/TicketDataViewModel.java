@@ -16,6 +16,7 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<String> strVehicleModel = new MutableLiveData<String>();
     private final MutableLiveData<String> strVehicleColor = new MutableLiveData<String>();
     private final MutableLiveData<ArrayList<VehicleCategories>> arrVehicles = new MutableLiveData<ArrayList<VehicleCategories>>();
+    private final MutableLiveData<ArrayList<ParkingLots>> arrParkingLots = new MutableLiveData<ArrayList<ParkingLots>>();
 
     /*Public */
 
@@ -87,9 +88,6 @@ public class TicketDataViewModel extends ViewModel {
         return strParkingLot;
     }
 
-
-
-
     /*Vehicle Model Setter/Getter*/
     public void setVehicleModel(String p_VehicleModel)
     {
@@ -108,6 +106,13 @@ public class TicketDataViewModel extends ViewModel {
     public LiveData<String> getVehicleColor()
     {
         return strVehicleColor;
+    }
+
+    /*Array Parking Lots Getters/Setters*/
+    public void setArrParkingLots( ArrayList<ParkingLots> arr) {arrParkingLots.setValue(arr);}
+    public LiveData<ArrayList<ParkingLots>> getArrParkingLotList()
+    {
+        return  arrParkingLots;
     }
 
 }
