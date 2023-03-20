@@ -13,10 +13,9 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<String> strParkingLot = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseNumber = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseState = new MutableLiveData<String>();
-    private final MutableLiveData<String> strLicenseVehicleModel = new MutableLiveData<String>();
-    private final MutableLiveData<String> strLicenseVehicleColor = new MutableLiveData<String>();
+    private final MutableLiveData<String> strVehicleModel = new MutableLiveData<String>();
+    private final MutableLiveData<String> strVehicleColor = new MutableLiveData<String>();
     private final MutableLiveData<ArrayList<VehicleCategories>> arrVehicles = new MutableLiveData<ArrayList<VehicleCategories>>();
-    private  final MutableLiveData<Integer> iRowReference = new MutableLiveData<>();
 
     /*Public */
 
@@ -92,33 +91,23 @@ public class TicketDataViewModel extends ViewModel {
 
 
     /*Vehicle Model Setter/Getter*/
-    public void setLicenseVehicleModel(String p_VehicleModel)
+    public void setVehicleModel(String p_VehicleModel)
     {
-        strLicenseVehicleModel.setValue(p_VehicleModel);
+        strVehicleModel.setValue(p_VehicleModel);
     }
-    public LiveData<String> getLicenseVehicleModel()
+    public LiveData<String> getVehicleModel()
     {
-        return strLicenseVehicleModel;
+        return strVehicleModel;
     }
 
     /*Vehicle Color Setter/Getter*/
-    public void setStrLicenseVehicleColor(String p_VehicleColor)
+    public void setVehicleColor(String p_VehicleColor)
     {
-        strLicenseVehicleColor.setValue(p_VehicleColor);
+        strVehicleColor.setValue(p_VehicleColor);
     }
-    public LiveData<String> getLicenseVehicleColor()
+    public LiveData<String> getVehicleColor()
     {
-        return strLicenseVehicleColor;
-    }
-
-    /* Reference Number Getters/Setters */
-    public void setReferenceNum(Integer ref)
-    {
-        iRowReference.setValue(ref);
+        return strVehicleColor;
     }
 
-    public int getReferenceNum()
-    {
-        return iRowReference.getValue().intValue();
-    }
 }

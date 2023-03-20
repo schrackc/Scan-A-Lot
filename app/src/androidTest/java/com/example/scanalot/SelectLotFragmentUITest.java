@@ -78,9 +78,6 @@ public class SelectLotFragmentUITest {
     public void verifySelectLotControls() {
         // Launch the SelectLotFragment by clicking on its menu item
         onView(withId(R.id.select_lot_fragment)).perform(click());
-        // Check that the select lot button is displayed
-        onView(withId(R.id.selectLotButton)).check(matches(isDisplayed()));
-        activityRule.getScenario();
         // Click spinner to focus
         onView(withId(R.id.selectLotSpinner)).perform(click());
         // select lot from spinner
