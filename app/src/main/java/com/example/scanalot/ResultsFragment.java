@@ -46,7 +46,9 @@ public class ResultsFragment extends Fragment {
     String strLicenseState;
     ArrayList<VehicleCategories> arrVehicles;
 
-
+    //Test values
+    Boolean isLicenseFound = false;
+    Boolean isInRightLot = false;
     /**
      * Method in which executes after the view has been created. The fill citation button is given a click event listener to switch to the
      * fill citation fragment.
@@ -66,7 +68,6 @@ public class ResultsFragment extends Fragment {
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE STATE: " + strLicenseState);
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE VEHICLES: " + arrVehicles.toString());
         //Check for if license info is in the database
-        boolean isLicenseFound = false;
         int iRowCheck = 0;
         for (; iRowCheck < arrVehicles.size(); iRowCheck++) {
             if (arrVehicles.get(iRowCheck).getLicNum().equals(strLicenseNumber) && arrVehicles.get(iRowCheck).getLicState().equals(strLicenseState)){
@@ -93,7 +94,6 @@ public class ResultsFragment extends Fragment {
         //Different banner results depending on if car is found in the database
         if (isLicenseFound){
             //Check if in the right parking lot
-            boolean isInRightLot = false;
             ArrayList<String> lstAuthParkingLots = arrVehicles.get(iRowCheck).getAuthParkingLot();
             for (int iParkLotIndex = 0; iParkLotIndex < arrVehicles.get(iRowCheck).getAuthParkingLot().size() && !isInRightLot; iParkLotIndex++){
                 if (arrVehicles.get(iRowCheck).getAuthParkingLot().get(iParkLotIndex).equals(viewModel.getParkingLot().getValue()))
@@ -118,6 +118,12 @@ public class ResultsFragment extends Fragment {
             viewModel.setVehicleColor(null);
             //No vehicle was found in database print out response
             binding.ResultTextView.setText("No Record of Vehicle");
+            binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));
+        }
+        //
+        if(viewModel.getParkingLot().getValue() == null){
+            //No vehicle was found in database print out response
+            binding.ResultTextView.setText("No Parking Lot Recorded");
             binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));
         }
 
