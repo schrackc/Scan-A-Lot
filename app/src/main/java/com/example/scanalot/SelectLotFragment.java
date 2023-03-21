@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
+import org.checkerframework.checker.units.qual.A;
+
 /**
  * This class is used for the SelectLotFragment. It creates the fragment and uses the fragment_select_layout layout. This will be used for
  * when the user wants to select the parking lot they want to scan. This allows for the app to know which cars belong and dont belong in the
@@ -64,7 +66,7 @@ public class SelectLotFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //get the view model which contains the live,changeable data that was made in main activity
-        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
+      //  viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
 
     }
 
@@ -80,12 +82,18 @@ public class SelectLotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_lot, container, false);
+        
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
 
         selectLotSpinner = view.findViewById(R.id.selectLotSpinner);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.parkingLots, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.parkingLots, android.R.layout.simple_spinner_item);*/
+
+
+        ArrayAdapter adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
+
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectLotSpinner.setAdapter(adapter);
         selectLotSpinner.setSelection(0, false);
         // Handles selecting from the lot spinner. Passed to main so that the TextView can be updated.

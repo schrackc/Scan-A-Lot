@@ -42,6 +42,7 @@ import java.util.ArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         permissionsList.addAll(Arrays.asList(permissionsStr));
         //Ask for camera and printer permissions
         askForPermissions();
+        ArrayList<String> parkingLots = new ArrayList<String>();
 
         // Documentation for the following Document pulling.
         // https://firebase.google.com/docs/firestore/query-data/get-data?hl=en&authuser=2#java
@@ -167,13 +169,16 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()){
-                                    int iParkingLotRowValue = 0;
+
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        arrParkingLots.add(new ParkingLots());
-                                        arrParkingLots.get(iParkingLotRowValue).setStrLotName(document.getString("LotName"));
-                                        Log.d("ParkingLots", document.getId() + " => " + document.getData());
-                                        iParkingLotRowValue++;
+                                        //Log.i("PARKING LOT IN MAIN", document.get("LotName").toString());
+                                        //add to the array list
+                                        parkingLots.add(document.get("LotName").toString());
+
                                     }
+                                    //set the parking lot arraylist
+                                    viewModel.setArrParkingLots(parkingLots);
+
                                 } else {
                                     Log.d("ParkingLots", "Error getting parking documents: ", task.getException());
                                 }
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                         });
 
         //set parking lot array viewModel to the array of data retrieved from the firebase
-        viewModel.setArrParkingLots((arrParkingLots));
+      //  viewModel.setArrParkingLots((arrParkingLots));
 
         // Gets firebase Vehicles collection and adds all the records to the dbVehicles variable
         db.collection("Vehicles")
