@@ -44,6 +44,8 @@ public class PrintPreviewFragment extends Fragment {
 
             binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
 
+            binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ viewModel.getOfficerID().getValue());
+
             binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $100.00");
 
             binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());

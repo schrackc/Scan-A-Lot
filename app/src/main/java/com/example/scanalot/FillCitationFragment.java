@@ -8,24 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
-import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
-import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
-import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.example.scanalot.databinding.FragmentFillCitationBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -46,10 +49,16 @@ public class FillCitationFragment extends Fragment {
     TextView textView;
     Button btnCancel;
     Button btnSavePrint;
+
+    EditText editText_OfficerID;
     TicketDataViewModel viewModel;
     Spinner chooseStateSpinner;
     Spinner chooseLotSpinner;
-
+    FirebaseAuth fAuth;
+    FirebaseUser currentUser;
+    FirebaseFirestore db;
+    String strOfficerID = "";
+    CollectionReference officerCollection;
 
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
@@ -63,8 +72,42 @@ public class FillCitationFragment extends Fragment {
         textView = binding.fillAddCitations;
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
+        editText_OfficerID = binding.fillOfficerID;
         MainActivity mainActivity = (MainActivity)getActivity();
         mainActivity.connectToPrinter();
+        //get the instances for firebase
+        fAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        //get the officer collection
+      //  officerCollection = db.collection("Officers");
+        //get the currently logged in user and update Live variable
+        currentUser = fAuth.getCurrentUser();
+
+        //query db for username associated with the current User's email.
+        db.collection("Officers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //get email of document
+                        String strSnapEmail = (String) document.get("Email");
+                       //if the email matches the current user email we got a match
+                        if(strSnapEmail.equals(currentUser.getEmail().toString()))
+                        {
+                            strOfficerID =(String)document.get("Username");
+                            viewModel.setOfficerID(strOfficerID);
+                            editText_OfficerID.setText(strOfficerID);
+                        }
+                    }
+                }
+            }
+        });
+        Log.i("Current User ID",currentUser.getEmail());
+        Log.i("Current User ID",currentUser.getUid());
+
+        //show the value in OfficerId editText
+
 
         chooseStateSpinner = binding.fillChooseTheStateSpinner;
         chooseLotSpinner = binding.fillChooseLotSpinner;
