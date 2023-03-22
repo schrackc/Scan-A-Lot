@@ -174,11 +174,10 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                                         //Log.i("PARKING LOT IN MAIN", document.get("LotName").toString());
                                         //add to the array list
                                         parkingLots.add(document.get("LotName").toString());
-
+                                        Log.d("ParkingLots", document.getId() + " => " + document.getData());
                                     }
                                     //set the parking lot arraylist
                                     viewModel.setArrParkingLots(parkingLots);
-
                                 } else {
                                     Log.d("ParkingLots", "Error getting parking documents: ", task.getException());
                                 }

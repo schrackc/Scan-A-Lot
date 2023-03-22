@@ -172,8 +172,9 @@ public class FillCitationFragment extends Fragment {
         ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
         chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
         //set the value of the chooseLotSpinner
-        ArrayAdapter chooseLotAdapter = (ArrayAdapter) chooseLotSpinner.getAdapter();
-        chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
+        ArrayAdapter chooseLotAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
+        //ArrayAdapter chooseLotAdapter = (ArrayAdapter) chooseLotSpinner.getAdapter();
+        chooseLotSpinner.setAdapter(chooseLotAdapter);
         //set the value fillVehicleModel box
         binding.fillVehicleModel.setText(viewModel.getVehicleModel().getValue());
         //set the value fillVehicleModel box
