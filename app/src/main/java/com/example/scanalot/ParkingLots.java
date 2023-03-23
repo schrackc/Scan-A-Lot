@@ -1,7 +1,5 @@
 package com.example.scanalot;
 
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import java.util.ArrayList;
 
 /**
@@ -33,14 +31,12 @@ public class ParkingLots {
    ArrayList<String> getArrParkingLot(){return arrParkingLot;}
    void setArrParkingLot(ArrayList<String> arrParkingLotList){
        arrParkingLot = arrParkingLotList;
-       return;
    }
 
    // strLotName field getter and setter
     String getStrLotName(){return strLotName;}
     void setStrLotName(String lotName){
        strLotName = lotName;
-       return;
     }
 
 

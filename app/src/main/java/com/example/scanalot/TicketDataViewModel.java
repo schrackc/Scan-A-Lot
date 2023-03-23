@@ -18,6 +18,7 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<VehicleCategories>> arrVehicles = new MutableLiveData<ArrayList<VehicleCategories>>();
     private final MutableLiveData<ArrayList<String>> arrParkingLots = new MutableLiveData<ArrayList<String>>();
 
+    private final MutableLiveData<ArrayList<String>> arrOffenses = new MutableLiveData<ArrayList<String>>();
     /*Public */
 
     /* License Plate Number Getters/Setters */
@@ -114,5 +115,10 @@ public class TicketDataViewModel extends ViewModel {
     {
         return arrParkingLots;
     }
+
+    /*Array Offenses Getters/Setters*/
+    public void setArrOffenses(ArrayList<String> arr) {arrOffenses.setValue(arr);}
+    public LiveData<ArrayList<String>> getArrOffenses(){return arrOffenses;}
+
 
 }
