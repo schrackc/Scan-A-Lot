@@ -70,6 +70,8 @@ public class FillCitationFragment extends Fragment {
         chooseLotSpinner = binding.fillChooseLotSpinner;
         autoFillCitationData();
 
+        viewModel.getParkingLot().getValue();
+
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,6 +177,7 @@ public class FillCitationFragment extends Fragment {
         ArrayAdapter chooseLotAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
         //ArrayAdapter chooseLotAdapter = (ArrayAdapter) chooseLotSpinner.getAdapter();
         chooseLotSpinner.setAdapter(chooseLotAdapter);
+        chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
         //set the value fillVehicleModel box
         binding.fillVehicleModel.setText(viewModel.getVehicleModel().getValue());
         //set the value fillVehicleModel box

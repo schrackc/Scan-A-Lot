@@ -18,6 +18,8 @@ import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.util.List;
+
 /**
  * This class is used for the SelectLotFragment. It creates the fragment and uses the fragment_select_layout layout. This will be used for
  * when the user wants to select the parking lot they want to scan. This allows for the app to know which cars belong and don't belong in the
@@ -67,7 +69,6 @@ public class SelectLotFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //get the view model which contains the live,changeable data that was made in main activity
       //  viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
-
     }
 
     @Override
@@ -78,6 +79,11 @@ public class SelectLotFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
 
         selectLotSpinner = view.findViewById(R.id.selectLotSpinner);
+        List<String> parkingLotList = viewModel.getArrParkingLotList().getValue();
+        // Add the hardcoded value "Select lot..." at position 0 of the list if it doesn't already exist
+        if (!parkingLotList.contains("Select lot...")) {
+            parkingLotList.add(0, "Select lot...");
+        }
 
         ArrayAdapter adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
 
@@ -108,6 +114,11 @@ public class SelectLotFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // Remove the first entry if it is "Select lot..."
+        List<String> parkingLotList = viewModel.getArrParkingLotList().getValue();
+        if (parkingLotList.size() > 0 && parkingLotList.get(0).equals("Select lot...")) {
+            parkingLotList.remove(0);
+        }
         binding = null;
     }
 }
