@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.example.scanalot.databinding.FragmentResultsBinding;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ public class ResultsFragment extends Fragment {
             public void onClick(View view) {
                 navAction = ResultsFragmentDirections.actionResultsFragmentToFillCitationFragment2();
                 Navigation.findNavController(view).navigate(navAction);
+                createTicketID();
             }
         });
 
@@ -129,7 +131,13 @@ public class ResultsFragment extends Fragment {
 
     }
 
-
+private void createTicketID()
+{
+   FirebaseFirestore db = FirebaseFirestore.getInstance();
+   DocumentReference reference = db.collection("Tickets").document();
+   //set live data ticket id variable for creating a ticket on save and print in fill citation frag
+    viewModel.setTicketID(reference.getId());
+}
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
      */

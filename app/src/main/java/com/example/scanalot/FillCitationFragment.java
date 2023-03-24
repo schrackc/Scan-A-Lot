@@ -182,6 +182,8 @@ public class FillCitationFragment extends Fragment {
         binding.fillVehicleModel.setText(viewModel.getVehicleModel().getValue());
         //set the value fillVehicleModel box
         binding.fillVehicleColor.setText(viewModel.getVehicleColor().getValue());
+        //set the value for ticket ID
+        binding.fillTicketNumber.setText(viewModel.getTicketID().getValue());
     }
 
     @Override
