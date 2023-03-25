@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -46,6 +47,7 @@ public class ResultsFragment extends Fragment {
     String strLicenseNumber;
     String strLicenseState;
     ArrayList<VehicleCategories> arrVehicles;
+    TextView DetectedTextBanner;
 
     //Test values
     Boolean isLicenseFound = false;
@@ -129,6 +131,9 @@ public class ResultsFragment extends Fragment {
             binding.ResultTextView.setBackgroundColor(getResources().getColor(R.color.fail));
         }
 
+        // Set banner text to detected text.
+        DetectedTextBanner = binding.DetectedPlateTextView;
+        DetectedTextBanner.setText(viewModel.getLicenseNumber().getValue());
     }
 
 private void createTicketID()

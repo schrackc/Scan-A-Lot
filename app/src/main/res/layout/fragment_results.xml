@@ -7,13 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".ResultsFragment">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="263dp"
-        android:layout_height="116dp"
-        android:layout_marginBottom="108dp"
-        android:src="@drawable/stocklicenseplateimage"
-        android:contentDescription="@string/plateNumber"
+    <TextView
+        android:id="@+id/DetectedPlateTextView"
+        android:layout_width="233dp"
+        android:layout_height="73dp"
+        android:layout_marginBottom="80dp"
+        android:text="@string/DetectedPlateTextView"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/ResultTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.365" />
 
     <Button
         android:id="@+id/fillSavePrintButton"
