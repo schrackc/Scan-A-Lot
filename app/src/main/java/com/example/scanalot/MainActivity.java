@@ -160,6 +160,30 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         //Ask for camera and printer permissions
         askForPermissions();
         ArrayList<String> parkingLots = new ArrayList<String>();
+        ArrayList<String> offenses = new ArrayList<String>();
+
+        // Documentation for the following Document pulling.
+        // https://firebase.google.com/docs/firestore/query-data/get-data?hl=en&authuser=2#java
+        db.collection("Offenses")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //add to the array list
+                                offenses.add(document.get("OffenseType").toString());
+                                Log.d("Offenses", document.getId() + " => " + document.getData());
+                            }
+                            //set the offenses arraylist
+                            viewModel.setArrOffenses(offenses);
+                        } else {
+                            Log.d("Offenses", "Error getting offense documents: ", task.getException());
+                        }
+                    }
+                });
+
 
         // Documentation for the following Document pulling.
         // https://firebase.google.com/docs/firestore/query-data/get-data?hl=en&authuser=2#java

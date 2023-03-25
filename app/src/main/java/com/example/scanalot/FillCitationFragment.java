@@ -40,7 +40,6 @@ import java.util.ArrayList;
  */
 
 public class FillCitationFragment extends Fragment {
-
     FragmentFillCitationBinding binding;
     NavDirections navAction;
     TextView textView;
@@ -49,6 +48,7 @@ public class FillCitationFragment extends Fragment {
     TicketDataViewModel viewModel;
     Spinner chooseStateSpinner;
     Spinner chooseLotSpinner;
+    ArrayList<String> offensesArray;
 
 
     /**
@@ -105,16 +105,21 @@ public class FillCitationFragment extends Fragment {
                 builder.setTitle("Select Violations");
                 // set dialog non cancelable
                 builder.setCancelable(false);
+                offensesArray = viewModel.getArrOffenses().getValue();
+                // use size() to get array size.
+                String[] violations = offensesArray.toArray(new String[offensesArray.size()]);
+                //String[] violations = new String[]{viewModel.getArrOffenses().getValue().toString()};
                 //creates the violation array
-                String[] citations = new String[]{"Violation A", "Violation B", "Violation C"};
+                //String[] citations = new String[]{"Violation A", "Violation B", "Violation C"};
                 //creates the checkboxes
-                boolean[] checkBoxes = new boolean[citations.length];
+                //boolean[] checkBoxes = new boolean[citations.length];
+                boolean[] checkBoxes = new boolean[violations.length];
 
                 //The array to add choices to
                 ArrayList<Integer> langList = new ArrayList<>();
 
                 //sets the items in the box and allows the user to check and umcheck the violations
-                builder.setMultiChoiceItems(citations, checkBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(violations, checkBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int iIndex, boolean isClicked) {
                         if (isClicked) {
@@ -135,7 +140,7 @@ public class FillCitationFragment extends Fragment {
                         int iJValue = 0;
                         for (int j = iJValue; j < langList.size(); j++) {
                             // concat array value
-                            stringBuilder.append(citations[langList.get(j)]);
+                            stringBuilder.append(violations[langList.get(j)]);
 
                             // check condition
                             if (j != langList.size() - 1) {

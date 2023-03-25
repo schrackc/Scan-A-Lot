@@ -50,7 +50,7 @@ public class FillCitationFragmentUITest {
     private String strVehicleColorCorrect = "Green";
     private String strVehicleColorFail = "1234";
 
-    private String strFillAddCitationCorrect = "Citation A";
+    private String strFillAddCitationCorrect = "Wrong Lot";
 
     private String strFillAddCitationCancel = "Cancel";
     private String strDialogTitle = "Select Violations";
@@ -87,7 +87,7 @@ public class FillCitationFragmentUITest {
         //click button on main activity scan page
         onView(withId(R.id.ResultsScanButton)).perform(click());
         //check to see if fragment has changed to the result fragment
-        onView(withText("Pass Expired - Wrong Lot")).check(matches(isDisplayed()));
+        onView(withText("No Parking Lot Selected")).check(matches(isDisplayed()));
         //Click the button tha will take you to fill Citation page
         onView(withId(R.id.fillSavePrintButton)).perform(click());
     }
