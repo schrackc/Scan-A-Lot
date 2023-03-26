@@ -35,7 +35,7 @@ public class PrintPreviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String strMonth = LocalDateTime.now().getMonth().toString() + "/";
             int iDay = LocalDateTime.now().getDayOfMonth();
             int iYear = LocalDateTime.now().getYear();
@@ -50,10 +50,10 @@ public class PrintPreviewFragment extends Fragment {
 
             binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());
 
-            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor().toString());
+            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleColor().getValue());
 
-            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel().toString());
-      //  }
+            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleModel().getValue());
+        }
     }
 
     /**

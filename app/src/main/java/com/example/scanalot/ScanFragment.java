@@ -29,6 +29,7 @@ import com.example.scanalot.databinding.FragmentScanBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.AsyncFunction;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +43,7 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This class is used for the ScanFragment. It creates the fragment and uses the fragment_scan layout. This is used as the main page when the user
@@ -87,10 +89,11 @@ public class ScanFragment extends Fragment {
         previewView = binding.previewView;
         cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
         overlayText = binding.overlayTextView;
-        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
+
         //get the list of vehicle data which was from firebase
         // vehicleList = viewModel.getLicenseVehicleList().getValue();
         db = FirebaseFirestore.getInstance();
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
         //get the collection
         vehiclesCollection = db.collection("Vehicles");
         //now set up a query to get the particular vehicles that belong with the lot
@@ -195,6 +198,16 @@ public class ScanFragment extends Fragment {
                                                 //Covers:  GA, MI, MS, NY, NC, OH, PA, TN, TX, VA, WA, and WI (ABC-1234)
                                                 if (text.matches("^[A-Za-z]{3}[-\\s]\\d{4}$")) {
                                                     sb.append(text).append("\n");
+                                                    //store license plate number
+                                                    String strLicensePlateNum = text;
+                                                    Log.i("License PLate", strLicensePlateNum);
+                                                    //set license number live data var
+                                                    viewModel.setLicenseNumber(strLicensePlateNum);
+                                                    //find corresponding states that are associated with plate number and apply
+                                                    setLicensePlateStates(strLicensePlateNum);
+                                                    //once the state is loaded into the variable navigate
+                                                    navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                                                    Navigation.findNavController(binding.getRoot()).navigate(navAction);
                                                 }
                                             }
                                         }
@@ -202,16 +215,6 @@ public class ScanFragment extends Fragment {
                                         // set the filtered text to the overlayText TextView
                                         overlayText.post(() -> overlayText.setText(sb.toString()));
 
-                                      boolean isCorrectLot =  compareLicensePlates(overlayText.getText());
-
-                                        if(isCorrectLot)
-                                        {
-                                            Log.i("IS CORRECT LOT","GOOD VEHICLE YAHHHH!!!!");
-                                        }
-                                        else
-                                        {
-                                            Log.i("IS CORRECT LOT","BAD VEHICLE NAHHHH !!!!");
-                                        }
                                     }
                                 })
                                 .addOnCompleteListener(new OnCompleteListener<Text>() {
@@ -240,22 +243,36 @@ public class ScanFragment extends Fragment {
     }
 
 
-    private boolean compareLicensePlates(CharSequence p_licensePlate) {
-       boolean isCorrectLot = false;
-        Log.i("VEHICLE PLATE ",p_licensePlate.toString());
-        for(int vehicleCount = 0; vehicleCount < vehicleList.size();vehicleCount++ )
-        {
-            String vehicleListPlate = vehicleList.get(vehicleCount).get(4).toString();
-            Log.i("VEHICLE LIST PLATE ", vehicleListPlate);
-            if(vehicleListPlate.contains(p_licensePlate.toString()))
-            {
-                isCorrectLot = true;
-            }
-        }
+    private void setLicensePlateStates(String p_licensePlateNum)
+    {
+         vehiclesCollection.get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+               if(task.isSuccessful())
+                {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                       // get the states of the license plates
+                        String licenseNum = document.getString("LicenseNum");
+                       Log.i("Document licenseNum", document.getString("LicenseNum"));
+                        if (Objects.equals(licenseNum, p_licensePlateNum)) {
 
-        return isCorrectLot;
+                            //now set it to the live data variable when the data has been loaded
+                            String licenseState  = document.getString("LicenseState");
+                            Log.i("LicenseState", "LICENSE STATE being sent to live is: " + licenseState);
+                            //set the live data variables
+                            viewModel.setLicenseState(licenseState);
+                        }
+                    }
+
+                }
+
+            }
+        });
+
 
     }
+
 
 
     /**
