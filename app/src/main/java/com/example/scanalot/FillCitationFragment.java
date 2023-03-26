@@ -40,6 +40,7 @@ import java.util.ArrayList;
  * @author Andrew Hoffer
  * @Created 1/30/23
  * @Contributors Andrew Hoffer - 1/30/23 - Created the fragment. Added view event listeners.
+ * @Contributors Nick Downey - Added violations and changed officerID pulling to be an int.
  */
 
 public class FillCitationFragment extends Fragment {
@@ -96,7 +97,7 @@ public class FillCitationFragment extends Fragment {
                        //if the email matches the current user email we got a match
                         if(strSnapEmail.equals(currentUser.getEmail().toString()))
                         {
-                            strOfficerID =(String)document.get("Username");
+                            strOfficerID = document.get("OfficerID").toString();
                             viewModel.setOfficerID(strOfficerID);
                             editText_OfficerID.setText(strOfficerID);
                         }
