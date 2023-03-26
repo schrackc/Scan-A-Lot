@@ -184,6 +184,8 @@ public class ScanFragment extends Fragment {
                         //This block of code uses the TextRecognition object to process the InputImage and extract text.
                         // It then filters the extracted text using a regular expression pattern and sets it to the overlayText TextView.
                         // Finally, it logs the extracted text- for debug purposes - and closes the ImageProxy object.
+                        // ------------
+
                         textRecognizer.process(image)
                                 .addOnSuccessListener(new OnSuccessListener<Text>() {
                                     @Override
@@ -193,6 +195,7 @@ public class ScanFragment extends Fragment {
                                         for (Text.TextBlock block : visionText.getTextBlocks()) {
                                             for (Text.Line line : block.getLines()) {
                                                 String text = line.getText().trim();
+                                                //Covers:  GA, MI, MS, NY, NC, OH, PA, TN, TX, VA, WA, and WI (ABC-1234)
                                                 if (text.matches("^[A-Za-z]{3}[-\\s]\\d{4}$")) {
                                                     sb.append(text).append("\n");
                                                     //store license plate number

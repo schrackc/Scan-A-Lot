@@ -3,6 +3,7 @@ package com.example.scanalot;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import java.util.ArrayList;
@@ -56,6 +59,8 @@ import java.util.Map;
  * @Contributors Nick Downey - 1/30/23 - Added CameraX code for permissions and added a button
  * @Contributors Nick Downey - 2/23/23 - Added updating of location banner from SelectLotFragment spinner.
  * @Contributors Curtis Schrack - 3/8/23 - Add dynamic variables for license number and license plate and connect firestore
+ * @Contributors Nick Downey - 3/13/2023 - Formatted Printer printed text with values from citation screen.
+ * @Contributors Nick Downey - 3/18/2023 - Refactor Printer printed text with more values from citation screen.
  * @Contributors Nick Downey - 3/13/2023 - Formatted Printer printed text with values from citation screen.
  * @Contributors Nick Downey - 3/19/2023 - Added data pulling from firebase for parking lots.
  */
@@ -412,18 +417,26 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
     /**
      *Command the thermal printer to print the given text for the ticket.
      */
+    LocalDate currentDate = LocalDate.now();
+    String date = String.format("%02d/%02d/%04d", currentDate.getMonthValue(), currentDate.getDayOfMonth(), currentDate.getYear());
     public void printText()  {
         if(printer!=null) {
             try {
                 printer.printFormattedText(
-                        "[C]---TICKET---" + "\n" +
-                        "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
-                        "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
-                        "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
+                        // Change the fine amount and violations to accept correct values.
+                        // Currently cannot get violations because there is no live data.
+                        "[C]---VEHICLE INFORMATION---" + "\n" +
                         "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
                         "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
                         "[L]Car Model:\n" + "[R]" + viewModel.getVehicleModel() + "\n" +
-                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleColor()
+                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleColor() +
+                        "[C]---TICKET INFORMATION---" + "\n" +
+                        "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
+                        "[L]Violation Date:\n" +"[R]" + date + "\n" +
+                        "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
+                        "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
+                        "[L]Violation:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
+                        "[L]Fine Amount:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n"
                 );
             } catch (Exception e) {
                 printerConnectionFailed();

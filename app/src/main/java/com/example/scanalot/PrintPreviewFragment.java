@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
  * @author Andrew Hoffer
  * @Created 2/4/23
  * @Contributors Andrew Hoffer - 2/4/23 - Created the fragment
- * @Contributors Curtis Schrack - 3/18/23 - Add Auto fill for Vehicle information
  */
 
 public class PrintPreviewFragment extends Fragment {
@@ -44,6 +43,8 @@ public class PrintPreviewFragment extends Fragment {
             binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
 
             binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
+
+            binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ viewModel.getOfficerID().getValue());
 
             binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $100.00");
 
