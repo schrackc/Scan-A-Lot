@@ -13,10 +13,14 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<String> strParkingLot = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseNumber = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseState = new MutableLiveData<String>();
-    private final MutableLiveData<String> strLicenseVehicleModel = new MutableLiveData<String>();
-    private final MutableLiveData<String> strLicenseVehicleColor = new MutableLiveData<String>();
+    private final MutableLiveData<String> strVehicleModel = new MutableLiveData<String>();
+    private final MutableLiveData<String> strVehicleColor = new MutableLiveData<String>();
     private final MutableLiveData<ArrayList<VehicleCategories>> arrVehicles = new MutableLiveData<ArrayList<VehicleCategories>>();
-    private  final MutableLiveData<Integer> iRowReference = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<String>> arrParkingLots = new MutableLiveData<ArrayList<String>>();
+
+    private final MutableLiveData<ArrayList<String>> arrOffenses = new MutableLiveData<ArrayList<String>>();
+
+
 
     /*Public */
 
@@ -88,37 +92,36 @@ public class TicketDataViewModel extends ViewModel {
         return strParkingLot;
     }
 
-
-
-
     /*Vehicle Model Setter/Getter*/
-    public void setLicenseVehicleModel(String p_VehicleModel)
+    public void setVehicleModel(String p_VehicleModel)
     {
-        strLicenseVehicleModel.setValue(p_VehicleModel);
+        strVehicleModel.setValue(p_VehicleModel);
     }
-    public LiveData<String> getLicenseVehicleModel()
+    public LiveData<String> getVehicleModel()
     {
-        return strLicenseVehicleModel;
+        return strVehicleModel;
     }
 
     /*Vehicle Color Setter/Getter*/
-    public void setStrLicenseVehicleColor(String p_VehicleColor)
+    public void setVehicleColor(String p_VehicleColor)
     {
-        strLicenseVehicleColor.setValue(p_VehicleColor);
+        strVehicleColor.setValue(p_VehicleColor);
     }
-    public LiveData<String> getLicenseVehicleColor()
+    public LiveData<String> getVehicleColor()
     {
-        return strLicenseVehicleColor;
-    }
-
-    /* Reference Number Getters/Setters */
-    public void setReferenceNum(Integer ref)
-    {
-        iRowReference.setValue(ref);
+        return strVehicleColor;
     }
 
-    public int getReferenceNum()
+    /*Array Parking Lots Getters/Setters*/
+    public void setArrParkingLots(ArrayList<String> arr) {arrParkingLots.setValue(arr);}
+    public LiveData<ArrayList<String>> getArrParkingLotList()
     {
-        return iRowReference.getValue().intValue();
+        return arrParkingLots;
     }
+
+    /*Array Offenses Getters/Setters*/
+    public void setArrOffenses(ArrayList<String> arr) {arrOffenses.setValue(arr);}
+    public LiveData<ArrayList<String>> getArrOffenses(){return arrOffenses;}
+
+
 }

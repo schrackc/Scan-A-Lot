@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
  * @Contributors Andrew Hoffer - 2/17/23 - Made Test
  */
 @RunWith(AndroidJUnit4.class)
-public class FillCitationFragmentUITEst {
+public class FillCitationFragmentUITest {
     private String strTicketNumberCorrect = "12348484";
     private String strTicketNumberFail = ".";
     private String strOfficerIDCorrect = "12348484";
@@ -50,7 +50,7 @@ public class FillCitationFragmentUITEst {
     private String strVehicleColorCorrect = "Green";
     private String strVehicleColorFail = "1234";
 
-    private String strFillAddCitationCorrect = "Citation A";
+    private String strFillAddCitationCorrect = "Wrong Lot";
 
     private String strFillAddCitationCancel = "Cancel";
     private String strDialogTitle = "Select Violations";
@@ -87,7 +87,7 @@ public class FillCitationFragmentUITEst {
         //click button on main activity scan page
         onView(withId(R.id.ResultsScanButton)).perform(click());
         //check to see if fragment has changed to the result fragment
-        onView(withText("Pass Expired - Wrong Lot")).check(matches(isDisplayed()));
+        onView(withText("No Parking Lot Selected")).check(matches(isDisplayed()));
         //Click the button tha will take you to fill Citation page
         onView(withId(R.id.fillSavePrintButton)).perform(click());
     }

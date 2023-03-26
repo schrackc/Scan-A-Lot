@@ -40,7 +40,6 @@ import java.util.ArrayList;
  */
 
 public class FillCitationFragment extends Fragment {
-
     FragmentFillCitationBinding binding;
     NavDirections navAction;
     TextView textView;
@@ -49,6 +48,7 @@ public class FillCitationFragment extends Fragment {
     TicketDataViewModel viewModel;
     Spinner chooseStateSpinner;
     Spinner chooseLotSpinner;
+    ArrayList<String> offensesArray;
 
 
     /**
@@ -69,6 +69,8 @@ public class FillCitationFragment extends Fragment {
         chooseStateSpinner = binding.fillChooseTheStateSpinner;
         chooseLotSpinner = binding.fillChooseLotSpinner;
         autoFillCitationData();
+
+        viewModel.getParkingLot().getValue();
 
         btnSavePrint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,16 +105,21 @@ public class FillCitationFragment extends Fragment {
                 builder.setTitle("Select Violations");
                 // set dialog non cancelable
                 builder.setCancelable(false);
+                offensesArray = viewModel.getArrOffenses().getValue();
+                // use size() to get array size.
+                String[] violations = offensesArray.toArray(new String[offensesArray.size()]);
+                //String[] violations = new String[]{viewModel.getArrOffenses().getValue().toString()};
                 //creates the violation array
-                String[] citations = new String[]{"Violation A", "Violation B", "Violation C"};
+                //String[] citations = new String[]{"Violation A", "Violation B", "Violation C"};
                 //creates the checkboxes
-                boolean[] checkBoxes = new boolean[citations.length];
+                //boolean[] checkBoxes = new boolean[citations.length];
+                boolean[] checkBoxes = new boolean[violations.length];
 
                 //The array to add choices to
                 ArrayList<Integer> langList = new ArrayList<>();
 
                 //sets the items in the box and allows the user to check and umcheck the violations
-                builder.setMultiChoiceItems(citations, checkBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(violations, checkBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int iIndex, boolean isClicked) {
                         if (isClicked) {
@@ -133,7 +140,7 @@ public class FillCitationFragment extends Fragment {
                         int iJValue = 0;
                         for (int j = iJValue; j < langList.size(); j++) {
                             // concat array value
-                            stringBuilder.append(citations[langList.get(j)]);
+                            stringBuilder.append(violations[langList.get(j)]);
 
                             // check condition
                             if (j != langList.size() - 1) {
@@ -162,7 +169,7 @@ public class FillCitationFragment extends Fragment {
     /**
      * set Live Data values to view values within Fragment
      * */
-    private void autoFillCitationData(){
+    private void autoFillCitationData() {
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
 
@@ -172,16 +179,16 @@ public class FillCitationFragment extends Fragment {
         ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
         chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
         //set the value of the chooseLotSpinner
-        ArrayAdapter chooseLotAdapter = (ArrayAdapter)chooseLotSpinner.getAdapter();
+        ArrayAdapter chooseLotAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
+        //ArrayAdapter chooseLotAdapter = (ArrayAdapter) chooseLotSpinner.getAdapter();
+        chooseLotSpinner.setAdapter(chooseLotAdapter);
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
-
-        //If there is no reference value found means no license was found was found
-        try {
-            //set the value fillVehicleModel box
-            binding.fillVehicleModel.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getModel()).toString());
-            //set the value fillVehicleModel box
-            binding.fillVehicleColor.setText((viewModel.getVehicleList().getValue().get(viewModel.getReferenceNum()).getColor()).toString());
-        }catch (Exception e){}
+        //set the value fillVehicleModel box
+        binding.fillVehicleModel.setText(viewModel.getVehicleModel().getValue());
+        //set the value fillVehicleModel box
+        binding.fillVehicleColor.setText(viewModel.getVehicleColor().getValue());
+        //set the value for ticket ID
+        binding.fillTicketNumber.setText(viewModel.getTicketID().getValue());
     }
 
     @Override
