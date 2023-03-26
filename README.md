@@ -3,7 +3,7 @@
 
 ## Description
 
-Scan-A-Lot is a development by Saint Vincent College's CIS department Senior Project team "Scan-A-Lot", lead by Curtis Schrack. The team has already begun developing an application which will help parking authorities with lot enforcement by accelerating the ticketing process. 
+Scan-A-Lot is a development by Saint Vincent College's CIS department Senior Project team "Scan-A-Lot", led by Curtis Schrack. The team has already begun developing an application which will help parking authorities with lot enforcement by accelerating the ticketing process. 
 
 The project takes advantage of modern smartphone cameras to scan a license plate and automatically create the appropriate tickets based on information gathered through the scan, as well as through a connected database of parking pass holders. Finally, the app allows officers to print out a ticket with this information on it. This makes the process of creating citations much easier, as current workflows require manual entry of license plates and even manual writing of the infractions
 
