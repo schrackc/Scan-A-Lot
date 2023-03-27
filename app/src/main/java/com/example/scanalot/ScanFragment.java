@@ -191,7 +191,6 @@ public class ScanFragment extends Fragment {
                                     @Override
                                     public void onSuccess(Text visionText) {
                                         StringBuilder sb = new StringBuilder();
-
                                         for (Text.TextBlock block : visionText.getTextBlocks()) {
                                             for (Text.Line line : block.getLines()) {
                                                 String text = line.getText().trim();
@@ -209,12 +208,67 @@ public class ScanFragment extends Fragment {
                                                     navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
                                                     Navigation.findNavController(binding.getRoot()).navigate(navAction);
                                                 }
+                                                // Covers: CT, IL (AB12345)
+                                                else if (text.matches("^[A-Za-z]{2}[-\\s]\\d{5}$")) {
+                                                    sb.append(text).append("\n");
+                                                    //store license plate number
+                                                    String strLicensePlateNum = text;
+                                                    Log.i("License PLate", strLicensePlateNum);
+                                                    //set license number live data var
+                                                    viewModel.setLicenseNumber(strLicensePlateNum);
+                                                    //find corresponding states that are associated with plate number and apply
+                                                    setLicensePlateStates(strLicensePlateNum);
+                                                    //once the state is loaded into the variable navigate
+                                                    navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                                                    Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                }
+                                                // Covers: MD - Special Case (1AB2345)
+                                                else if (text.matches("^\\d[A-Za-z]{2}\\d{4}$")) {
+                                                    sb.append(text).append("\n");
+                                                    //store license plate number
+                                                    String strLicensePlateNum = text;
+                                                    Log.i("License PLate", strLicensePlateNum);
+                                                    //set license number live data var
+                                                    viewModel.setLicenseNumber(strLicensePlateNum);
+                                                    //find corresponding states that are associated with plate number and apply
+                                                    setLicensePlateStates(strLicensePlateNum);
+                                                    //once the state is loaded into the variable navigate
+                                                    navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                                                    Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                }
+                                                // Covers: CA - Special Case (1ABC234)
+                                                else if (text.matches("^\\d[A-Za-z]{3}\\d{3}$")) {
+                                                    sb.append(text).append("\n");
+                                                    //store license plate number
+                                                    String strLicensePlateNum = text;
+                                                    Log.i("License PLate", strLicensePlateNum);
+                                                    //set license number live data var
+                                                    viewModel.setLicenseNumber(strLicensePlateNum);
+                                                    //find corresponding states that are associated with plate number and apply
+                                                    setLicensePlateStates(strLicensePlateNum);
+                                                    //once the state is loaded into the variable navigate
+                                                    navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                                                    Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                }
+                                                // Covers: AK, HI, IN, IA, KS, LA, MN, NE, NM, ND, OK, OR, and SC - Special Case (ABC-123 OR 123-ABC)
+                                                else if (text.matches("^\\d{3}[-\\s][A-Za-z]{3}$|^[A-Za-z]{3}[-\\s]\\d{3}$")) {
+                                                    sb.append(text).append("\n");
+                                                    //store license plate number
+                                                    String strLicensePlateNum = text;
+                                                    Log.i("License PLate", strLicensePlateNum);
+                                                    //set license number live data var
+                                                    viewModel.setLicenseNumber(strLicensePlateNum);
+                                                    //find corresponding states that are associated with plate number and apply
+                                                    setLicensePlateStates(strLicensePlateNum);
+                                                    //once the state is loaded into the variable navigate
+                                                    navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                                                    Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                }
                                             }
                                         }
 
                                         // set the filtered text to the overlayText TextView
                                         overlayText.post(() -> overlayText.setText(sb.toString()));
-
                                     }
                                 })
                                 .addOnCompleteListener(new OnCompleteListener<Text>() {
