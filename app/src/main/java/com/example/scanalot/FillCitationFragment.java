@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,6 +40,8 @@ import com.google.type.TimeOfDay;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is used for the FillCitationFragment. It creates the fragment and uses the fragment_fill_citation layout. This will be used for
@@ -229,19 +233,50 @@ public class FillCitationFragment extends Fragment {
     {
 
         String officerID = viewModel.getOfficerID().getValue();
+        Log.i("Officer id", officerID);
         String carMake = viewModel.getVehicleModel().getValue();
         String carColor = viewModel.getVehicleColor().getValue();
         ArrayList<String> citations = viewModel.getArrOffenses().getValue();
         String carLicenseNumber = viewModel.getLicenseNumber().getValue();
         String citationTime = LocalDateTime.now().toString();
+        String carParkingLot = viewModel.getParkingLot().getValue();
+       // String carViolation = viewModel.getArrSelectedOffenses();
         final Observer<Integer> ticketNumObserver = new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable final Integer receivedTicketNum) {
                 // Update the UI, in this case, a TextView.
+
+
                 if(receivedTicketNum!=null)
                 {
                     Log.i("The New Ticket Num","The new ticket num is: " + receivedTicketNum);
-                    
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("CarMake",carMake);
+                    data.put("CarModel", "Model");
+                    data.put("FineAmount","$300");
+                    data.put("LicenseNum", carLicenseNumber);
+                    data.put("Offense","Some offense");
+                    data.put("Officer", officerID);
+                    data.put("ParkingLot",carParkingLot);
+                    data.put("TicketNum", receivedTicketNum);
+                    data.put("Time", citationTime);
+
+                    db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                            if(task.isSuccessful())
+                            {
+                                Toast.makeText(getContext(),"Ticket Sent Successfully",Toast.LENGTH_LONG).show();
+
+                            }else
+                            {
+                                Log.i("CONNECTION FAILED", task.getException().getMessage());
+                                DBConnectionFailed();
+                            }
+                        }
+                    });
+
                 }
             }
         };
@@ -250,13 +285,6 @@ public class FillCitationFragment extends Fragment {
         //get latest ticketnum to increment it for new ticket from ticket collection
         generateTicketNum();
 
-
-
-       // int ticketNum = ticketNumber.getValue();
-
-
-
-        //get model of car in vehicles
 
 
     }
@@ -275,6 +303,10 @@ public class FillCitationFragment extends Fragment {
                       ticketNumber.setValue(newTicketNum+1);
                   }
                 }
+                else
+                {
+                    DBConnectionFailed();
+                }
 
 
 
@@ -282,6 +314,12 @@ public class FillCitationFragment extends Fragment {
 
             }
         });
+    }
+
+    private void DBConnectionFailed()
+    {
+        Toast.makeText(getContext(),"Failed To Send Ticket To Database. Please Try Again", Toast.LENGTH_LONG).show();
+
     }
     /**
      * set Live Data values to view values within Fragment
