@@ -40,11 +40,13 @@ public class PrintPreviewFragment extends Fragment {
             int iDay = LocalDateTime.now().getDayOfMonth();
             int iYear = LocalDateTime.now().getYear();
 
+            binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
+
             binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
 
-            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
-
             binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ viewModel.getOfficerID().getValue());
+
+            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
 
             binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $100.00");
 

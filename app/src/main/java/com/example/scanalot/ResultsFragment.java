@@ -16,9 +16,13 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.scanalot.databinding.FragmentResultsBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -139,9 +143,35 @@ public class ResultsFragment extends Fragment {
 private void createTicketID()
 {
    FirebaseFirestore db = FirebaseFirestore.getInstance();
-   DocumentReference reference = db.collection("Tickets").document();
-   //set live data ticket id variable for creating a ticket on save and print in fill citation frag
-    viewModel.setTicketID(reference.getId());
+   ArrayList<String> ticketID = new ArrayList<String>();
+    // Documentation for the following Document pulling.
+    // https://firebase.google.com/docs/firestore/query-data/get-data?hl=en&authuser=2#java
+    db.collection("Tickets")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()){
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            ticketID.add(document.get("TicketNum").toString());
+                            Log.d("TicketID", document.getId() + " => " + document.getData());
+                        }
+                        if (!ticketID.isEmpty()) {
+                            // Get the last element of the ticketID list and increment it by 1
+                            int lastTicketID = Integer.parseInt(ticketID.get(ticketID.size()-1));
+                            viewModel.setTicketID(Integer.toString(lastTicketID + 1));
+                        } else {
+                            // Set the first ticket ID to 1 if the list is empty
+                            viewModel.setTicketID("1");
+                        }
+                    } else {
+                        Log.d("TicketID", "Error getting ticket documents: ", task.getException());
+                    }
+                }
+            });
+//   DocumentReference reference = db.collection("Tickets").document();
+//   //set live data ticket id variable for creating a ticket on save and print in fill citation frag
+//    viewModel.setTicketID(reference.getId());
 }
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
