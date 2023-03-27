@@ -69,6 +69,7 @@ public class FillCitationFragment extends Fragment {
     String strOfficerID = "";
     CollectionReference officerCollection;
     MutableLiveData<Integer> ticketNumber = new MutableLiveData<Integer>();
+
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
      * fragments based on a click. Lastly, there is a click event on a text view event listener. When it is clicked, an Alert Dialogue Box appears
@@ -209,6 +210,15 @@ public class FillCitationFragment extends Fragment {
                         }
                         // set text on textView
                         textView.setText(stringBuilder.toString());
+
+                        ArrayList<String> selectedOffenseArray = new ArrayList<>();
+                        for (int k = 0; k < checkBoxes.length; k++) {
+                            if (checkBoxes[k]) {
+                                selectedOffenseArray.add(violations[k]);
+                            }
+                        }
+                        viewModel.setArrSelectedOffenses(selectedOffenseArray);
+                        Log.d("SELECTED ARRAY", selectedOffenseArray.toString());
                     }
                 });
 
