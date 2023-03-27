@@ -185,6 +185,13 @@ public class ScanFragment extends Fragment {
                         // It then filters the extracted text using a regular expression pattern and sets it to the overlayText TextView.
                         // Finally, it logs the extracted text- for debug purposes - and closes the ImageProxy object.
                         // ------------
+                        // States not covered: AR, AL, AZ, CO, DE, FL, NJ, and WV.
+                        // Special plates within states are not covered.
+                        // For example: Indiana plates are randomly issued with combinations of
+                        // 3 numbers and either 1, 2, or 3 letters,
+                        // while all "In God We Trust" plates have 3 letters and 3 numbers.
+                        // ------------
+                        // States covered: AK, CA, CT, GA, HI, IA, IL, IN, KS, LA, MD, MI, MN, MS, NC, ND, NE, NM, NY, OH, OK, OR, PA, SC, TN, TX, VA, WA, and WI
 
                         textRecognizer.process(image)
                                 .addOnSuccessListener(new OnSuccessListener<Text>() {
@@ -197,16 +204,22 @@ public class ScanFragment extends Fragment {
                                                 //Covers:  GA, MI, MS, NY, NC, OH, PA, TN, TX, VA, WA, and WI (ABC-1234)
                                                 if (text.matches("^[A-Za-z]{3}[-\\s]\\d{4}$")) {
                                                     sb.append(text).append("\n");
-                                                    //store license plate number
-                                                    String strLicensePlateNum = text;
-                                                    Log.i("License PLate", strLicensePlateNum);
-                                                    //set license number live data var
-                                                    viewModel.setLicenseNumber(strLicensePlateNum);
-                                                    //find corresponding states that are associated with plate number and apply
-                                                    setLicensePlateStates(strLicensePlateNum);
-                                                    //once the state is loaded into the variable navigate
-                                                    navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                                                    Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                }
+                                                // Covers: CT, IL (AB12345)
+                                                else if (text.matches("^[A-Za-z]{2}[-\\s]\\d{5}$")) {
+                                                    sb.append(text).append("\n");
+                                                }
+                                                // Covers: MD - Special Case (1AB2345)
+                                                else if (text.matches("^\\d[A-Za-z]{2}\\d{4}$")) {
+                                                    sb.append(text).append("\n");
+                                                }
+                                                // Covers: CA - Special Case (1ABC234)
+                                                else if (text.matches("^\\d[A-Za-z]{3}\\d{3}$")) {
+                                                    sb.append(text).append("\n");
+                                                }
+                                                // Covers: AK, HI, IN, IA, KS, LA, MN, NE, NM, ND, OK, OR, and SC - Special Case (ABC-123 OR 123-ABC)
+                                                else if (text.matches("^\\d{3}[-\\s][A-Za-z]{3}$|^[A-Za-z]{3}[-\\s]\\d{3}$")) {
+                                                    sb.append(text).append("\n");
                                                 }
                                                 // Covers: CT, IL (AB12345)
                                                 else if (text.matches("^[A-Za-z]{2}[-\\s]\\d{5}$")) {
@@ -266,7 +279,6 @@ public class ScanFragment extends Fragment {
                                                 }
                                             }
                                         }
-
                                         // set the filtered text to the overlayText TextView
                                         overlayText.post(() -> overlayText.setText(sb.toString()));
                                     }

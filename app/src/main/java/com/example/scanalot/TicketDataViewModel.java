@@ -17,8 +17,8 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<String> strVehicleColor = new MutableLiveData<String>();
     private final MutableLiveData<ArrayList<VehicleCategories>> arrVehicles = new MutableLiveData<ArrayList<VehicleCategories>>();
     private final MutableLiveData<ArrayList<String>> arrParkingLots = new MutableLiveData<ArrayList<String>>();
-
     private final MutableLiveData<ArrayList<String>> arrOffenses = new MutableLiveData<ArrayList<String>>();
+    private final MutableLiveData<ArrayList<String>> arrSelectedOffenses = new MutableLiveData<ArrayList<String>>();
 
 
 
@@ -122,6 +122,10 @@ public class TicketDataViewModel extends ViewModel {
     /*Array Offenses Getters/Setters*/
     public void setArrOffenses(ArrayList<String> arr) {arrOffenses.setValue(arr);}
     public LiveData<ArrayList<String>> getArrOffenses(){return arrOffenses;}
+
+    /*Array Selected Offenses Getters/Setters*/
+    public void setArrSelectedOffenses(ArrayList<String> arr) {arrSelectedOffenses.setValue(arr);}
+    public LiveData<ArrayList<String>> getArrSelectedOffenses(){return arrSelectedOffenses;}
 
 
 }
