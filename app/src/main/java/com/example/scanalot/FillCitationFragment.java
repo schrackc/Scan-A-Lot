@@ -15,7 +15,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -27,9 +30,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.type.DateTime;
+import com.google.type.TimeOfDay;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -61,7 +68,7 @@ public class FillCitationFragment extends Fragment {
     FirebaseFirestore db;
     String strOfficerID = "";
     CollectionReference officerCollection;
-
+    MutableLiveData<Integer> ticketNumber = new MutableLiveData<Integer>();
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
      * fragments based on a click. Lastly, there is a click event on a text view event listener. When it is clicked, an Alert Dialogue Box appears
@@ -84,6 +91,10 @@ public class FillCitationFragment extends Fragment {
       //  officerCollection = db.collection("Officers");
         //get the currently logged in user and update Live variable
         currentUser = fAuth.getCurrentUser();
+
+
+
+
 
         //query db for username associated with the current User's email.
         db.collection("Officers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -123,6 +134,8 @@ public class FillCitationFragment extends Fragment {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     MainActivity mainActivity =(MainActivity)getActivity();
                         mainActivity.printText();
+                        createTicket();
+
                 }
 
                 navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
@@ -211,6 +224,65 @@ public class FillCitationFragment extends Fragment {
         });
     }
 
+
+    private void createTicket()
+    {
+
+        String officerID = viewModel.getOfficerID().getValue();
+        String carMake = viewModel.getVehicleModel().getValue();
+        String carColor = viewModel.getVehicleColor().getValue();
+        ArrayList<String> citations = viewModel.getArrOffenses().getValue();
+        String carLicenseNumber = viewModel.getLicenseNumber().getValue();
+        String citationTime = LocalDateTime.now().toString();
+        final Observer<Integer> ticketNumObserver = new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable final Integer receivedTicketNum) {
+                // Update the UI, in this case, a TextView.
+                if(receivedTicketNum!=null)
+                {
+                    Log.i("The New Ticket Num","The new ticket num is: " + receivedTicketNum);
+                    
+                }
+            }
+        };
+
+        ticketNumber.observe(getActivity(),ticketNumObserver);
+        //get latest ticketnum to increment it for new ticket from ticket collection
+        generateTicketNum();
+
+
+
+       // int ticketNum = ticketNumber.getValue();
+
+
+
+        //get model of car in vehicles
+
+
+    }
+
+    private void generateTicketNum()
+    {
+        db.collection("Tickets").orderBy("TicketNum", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if(task.isSuccessful())
+                {
+                  for(QueryDocumentSnapshot documentSnapshot: task.getResult())
+                  {
+                      Integer newTicketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
+                      ticketNumber.setValue(newTicketNum+1);
+                  }
+                }
+
+
+
+
+
+            }
+        });
+    }
     /**
      * set Live Data values to view values within Fragment
      * */
