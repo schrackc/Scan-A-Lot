@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class TicketDataViewModel extends ViewModel {
     /*private*/
-    private final MutableLiveData<Integer> iTicketID = new MutableLiveData<Integer>();
+    private final MutableLiveData<String> strTicketID = new MutableLiveData<String>();
     private final MutableLiveData<String> strOfficerID = new MutableLiveData<String>();
     private final MutableLiveData<String> strParkingLot = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseNumber = new MutableLiveData<String>();
@@ -58,14 +58,14 @@ public class TicketDataViewModel extends ViewModel {
     }
 
     /*Ticket ID Setter/Getter*/
-    public void setTicketID(Integer p_TicketID)
+    public void setTicketID(String p_TicketID)
     {
-        iTicketID.setValue(p_TicketID);
+        strTicketID.setValue(p_TicketID);
     }
 
-    public LiveData<Integer> getTicketID()
+    public LiveData<String> getTicketID()
     {
-        return iTicketID;
+        return strTicketID;
     }
 
 

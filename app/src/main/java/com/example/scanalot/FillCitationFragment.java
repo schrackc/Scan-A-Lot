@@ -271,7 +271,8 @@ public class FillCitationFragment extends Fragment {
                   for(QueryDocumentSnapshot documentSnapshot: task.getResult())
                   {
                       Integer newTicketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
-                     viewModel.setTicketID(newTicketNum+1);
+                     viewModel.setTicketID(String.valueOf(newTicketNum+1));
+                     Log.i("TicketID in FillCItaiton", viewModel.getTicketID().getValue().toString());
                       data.put("TicketNum", viewModel.getTicketID().getValue());
                       db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                           @Override
@@ -335,7 +336,7 @@ public class FillCitationFragment extends Fragment {
 
 
         //this is where the ERRROROROROROROROROROROROR is
-        binding.fillTicketNumber.setText(Integer.toString(viewModel.getTicketID().getValue()));
+        //binding.fillTicketNumber.setText(viewModel.getTicketID().getValue().toString());
     }
 
     @Override
