@@ -234,7 +234,7 @@ public class FillCitationFragment extends Fragment {
 
         String officerID = viewModel.getOfficerID().getValue();
         Log.i("Officer id", officerID);
-        String carMake = viewModel.getVehicleModel().getValue();
+        String carModel = viewModel.getVehicleModel().getValue();
         String carColor = viewModel.getVehicleColor().getValue();
         ArrayList<String> citations = viewModel.getArrOffenses().getValue();
         String carLicenseNumber = viewModel.getLicenseNumber().getValue();
@@ -245,14 +245,12 @@ public class FillCitationFragment extends Fragment {
             @Override
             public void onChanged(@Nullable final Integer receivedTicketNum) {
                 // Update the UI, in this case, a TextView.
-
-
                 if(receivedTicketNum!=null)
                 {
                     Log.i("The New Ticket Num","The new ticket num is: " + receivedTicketNum);
                     Map<String, Object> data = new HashMap<>();
-                    data.put("CarMake",carMake);
-                    data.put("CarModel", "Model");
+                    data.put("CarMake","carMake");
+                    data.put("CarModel", carModel);
                     data.put("FineAmount","$300");
                     data.put("LicenseNum", carLicenseNumber);
                     data.put("Offense","Some offense");
@@ -267,6 +265,7 @@ public class FillCitationFragment extends Fragment {
 
                             if(task.isSuccessful())
                             {
+
                                 Toast.makeText(getContext(),"Ticket Sent Successfully",Toast.LENGTH_LONG).show();
 
                             }else
@@ -276,7 +275,7 @@ public class FillCitationFragment extends Fragment {
                             }
                         }
                     });
-
+                    viewModel.setTicketID("" + receivedTicketNum);
                 }
             }
         };
