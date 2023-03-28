@@ -159,10 +159,10 @@ private void createTicketID()
                         if (!ticketID.isEmpty()) {
                             // Get the last element of the ticketID list and increment it by 1
                             int lastTicketID = Integer.parseInt(ticketID.get(ticketID.size()-1));
-                            viewModel.setTicketID(Integer.toString(lastTicketID + 1));
+                            viewModel.setTicketID(lastTicketID + 1);
                         } else {
                             // Set the first ticket ID to 1 if the list is empty
-                            viewModel.setTicketID("1");
+                            viewModel.setTicketID(1);
                         }
                     } else {
                         Log.d("TicketID", "Error getting ticket documents: ", task.getException());

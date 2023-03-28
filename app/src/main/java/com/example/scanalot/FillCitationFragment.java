@@ -72,7 +72,7 @@ public class FillCitationFragment extends Fragment {
     FirebaseFirestore db;
     String strOfficerID = "";
     CollectionReference officerCollection;
-    MutableLiveData<Integer> ticketNumber = new MutableLiveData<Integer>();
+    //MutableLiveData<Integer> ticketNumber = new MutableLiveData<Integer>();
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
      * fragments based on a click. Lastly, there is a click event on a text view event listener. When it is clicked, an Alert Dialogue Box appears
@@ -255,15 +255,8 @@ public class FillCitationFragment extends Fragment {
                     data.put("Officer", officerID);
                     data.put("ParkingLot",carParkingLot);
                     data.put("Time", citationTime);
-
                  //get latest ticketnum to increment it for new ticket from ticket collection
                  generateTicketNum(data);
-                   // viewModel.setTicketID("" + receivedTicketNum);
-
-
-
-
-
 
     }
 
@@ -278,8 +271,8 @@ public class FillCitationFragment extends Fragment {
                   for(QueryDocumentSnapshot documentSnapshot: task.getResult())
                   {
                       Integer newTicketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
-                      ticketNumber.setValue(newTicketNum+1);
-                      data.put("TicketNum", ticketNumber.getValue());
+                     viewModel.setTicketID(newTicketNum+1);
+                      data.put("TicketNum", viewModel.getTicketID().getValue());
                       db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                           @Override
                           public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -339,7 +332,10 @@ public class FillCitationFragment extends Fragment {
         //set the value fillVehicleModel box
         binding.fillVehicleColor.setText(viewModel.getVehicleColor().getValue());
         //set the value for ticket ID
-        binding.fillTicketNumber.setText(viewModel.getTicketID().getValue());
+
+
+        //this is where the ERRROROROROROROROROROROROR is
+        binding.fillTicketNumber.setText(Integer.toString(viewModel.getTicketID().getValue()));
     }
 
     @Override
