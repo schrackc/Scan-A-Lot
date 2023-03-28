@@ -9,6 +9,20 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <EditText
+        android:id="@+id/fillVehicleMake"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="36dp"
+        android:ems="10"
+        android:hint="@string/FillCitationVehicleMake"
+        android:inputType="textPersonName|text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fillVehicleModel"
+        app:layout_constraintTop_toBottomOf="@+id/fillVehicleColor" />
+
     <Button
         android:id="@+id/fillSavePrintButton"
         android:layout_width="wrap_content"
@@ -31,107 +45,85 @@
         style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
         android:entries="@array/parkingLots"
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/fillOfficerID"
-        app:layout_constraintTop_toBottomOf="@+id/fillTicketNumber" />
+        app:layout_constraintEnd_toStartOf="@+id/fillTextPlateNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fillOfficerID" />
 
     <EditText
         android:id="@+id/fillVehicleColor"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="36dp"
         android:ems="10"
         android:hint="@string/FillCitationVehicleColor"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/fillAddCitations"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fillVehicleModel"
-        app:layout_constraintTop_toBottomOf="@+id/fillChooseTheStateSpinner" />
+        app:layout_constraintStart_toEndOf="@+id/fillChooseTheStateSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/fillTextPlateNumber" />
 
     <EditText
         android:id="@+id/fillTextPlateNumber"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="36dp"
         android:ems="10"
         android:hint="@string/FillCitationPlateNumber"
         android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/fillChooseTheStateSpinner"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fillChooseLotSpinner"
         app:layout_constraintTop_toBottomOf="@+id/fillOfficerID" />
 
     <EditText
         android:id="@+id/fillOfficerID"
-        android:layout_width="160dp"
+        android:layout_width="200dp"
         android:layout_height="60dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="126dp"
         android:ems="10"
+        android:enabled="false"
         android:hint="@string/FillCitationOfficerID"
         android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/fillChooseLotSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fillTicketNumber" />
-
-    <EditText
-        android:id="@+id/fillTicketNumber"
-        android:layout_width="284dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="28dp"
-        android:ems="10"
-        android:hint="@string/editTicketID"
-        android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/fillChooseTheStateSpinner"
         style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="16dp"
         android:entries="@array/states"
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fillTextPlateNumber"
+        app:layout_constraintEnd_toStartOf="@+id/fillVehicleColor"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fillChooseLotSpinner" />
 
     <EditText
         android:id="@+id/fillVehicleModel"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/FillCitationVehicleModel"
         android:inputType="textPersonName|text"
-        app:layout_constraintBottom_toTopOf="@+id/fillAddCitations"
-        app:layout_constraintEnd_toStartOf="@+id/fillVehicleColor"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/fillVehicleMake"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fillTextPlateNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/fillChooseTheStateSpinner" />
 
     <TextView
         android:id="@+id/fillAddCitations"
@@ -139,7 +131,7 @@
         android:layout_height="67dp"
         android:layout_centerInParent="true"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="28dp"
         android:background="@android:drawable/editbox_background"
         android:drawablePadding="16dp"
@@ -149,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fillTicketNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/fillVehicleModel" />
 
     <Button
         android:id="@+id/fillCancelButton"
@@ -174,7 +166,7 @@
         android:layout_width="284dp"
         android:layout_height="67dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="164dp"
         android:ems="10"
@@ -185,6 +177,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fillAddCitations" />
+        app:layout_constraintTop_toBottomOf="@+id/fillAddCitations"
+        app:layout_constraintVertical_bias="0.533" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

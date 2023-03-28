@@ -62,6 +62,7 @@ public class FillCitationFragment extends Fragment {
     Button btnSavePrint;
 
     EditText editText_OfficerID;
+    EditText editText_OfficerNotes;
     TicketDataViewModel viewModel;
     Spinner chooseStateSpinner;
     Spinner chooseLotSpinner;
@@ -86,6 +87,7 @@ public class FillCitationFragment extends Fragment {
         btnCancel = binding.fillCancelButton;
         btnSavePrint = binding.fillSavePrintButton;
         editText_OfficerID = binding.fillOfficerID;
+        editText_OfficerNotes = binding.fillNotes;
         MainActivity mainActivity = (MainActivity)getActivity();
         mainActivity.connectToPrinter();
         //get the instances for firebase
@@ -137,6 +139,8 @@ public class FillCitationFragment extends Fragment {
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     MainActivity mainActivity =(MainActivity)getActivity();
+                        //set the notes live data variable,print,and send ticket to Firestore
+                       viewModel.setOfficerNotes(editText_OfficerNotes.getText().toString());
                         mainActivity.printText();
                         createTicket();
 
@@ -240,7 +244,9 @@ public class FillCitationFragment extends Fragment {
         String carLicenseNumber = viewModel.getLicenseNumber().getValue();
         String citationTime = LocalDateTime.now().toString();
         String carParkingLot = viewModel.getParkingLot().getValue();
-       // String carViolation = viewModel.getArrSelectedOffenses();
+        String carState = viewModel.getLicenseState().getValue();
+        String carMake = viewModel.getVehicleMake().getValue();
+        String officerNotes = viewModel.getOfficerNotes().getValue();
 
 
                 // Update the UI, in this case, a TextView.
@@ -255,6 +261,9 @@ public class FillCitationFragment extends Fragment {
                     data.put("Officer", officerID);
                     data.put("ParkingLot",carParkingLot);
                     data.put("Time", citationTime);
+                    data.put("LicenseState",carState);
+                    data.put("CarMake", carMake);
+                    data.put("OfficerNotes", officerNotes);
                  //get latest ticketnum to increment it for new ticket from ticket collection
                  generateTicketNum(data);
 
@@ -273,7 +282,7 @@ public class FillCitationFragment extends Fragment {
                       Integer newTicketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
                      viewModel.setTicketID(String.valueOf(newTicketNum+1));
                      Log.i("TicketID in FillCItaiton", viewModel.getTicketID().getValue().toString());
-                      data.put("TicketNum", viewModel.getTicketID().getValue());
+                      data.put("TicketNum", Integer.parseInt(viewModel.getTicketID().getValue()));
                       db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                           @Override
                           public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -332,7 +341,8 @@ public class FillCitationFragment extends Fragment {
         binding.fillVehicleModel.setText(viewModel.getVehicleModel().getValue());
         //set the value fillVehicleModel box
         binding.fillVehicleColor.setText(viewModel.getVehicleColor().getValue());
-        //set the value for ticket ID
+        //set balue for fillVehicleMake box
+        binding.fillVehicleMake.setText(viewModel.getVehicleMake().getValue());
 
 
         //this is where the ERRROROROROROROROROROROROR is

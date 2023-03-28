@@ -80,6 +80,7 @@ public class ResultsFragment extends Fragment {
             if (arrVehicles.get(iRowCheck).getLicNum().equals(strLicenseNumber) && arrVehicles.get(iRowCheck).getLicState().equals(strLicenseState)){
                 //set values for autofill
                 viewModel.setVehicleModel(arrVehicles.get(iRowCheck).getModel());
+                viewModel.setVehicleMake(arrVehicles.get(iRowCheck).getMake());
                 viewModel.setVehicleColor(arrVehicles.get(iRowCheck).getColor());
                 isLicenseFound = true;
                 break;

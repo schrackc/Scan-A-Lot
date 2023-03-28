@@ -55,6 +55,10 @@ public class PrintPreviewFragment extends Fragment {
             binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleColor().getValue());
 
             binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleModel().getValue());
+
+            binding.textViewVehicleMake.setText(binding.textViewVehicleMake.getText() + " " + viewModel.getVehicleMake().getValue());
+
+
         }
     }
 
