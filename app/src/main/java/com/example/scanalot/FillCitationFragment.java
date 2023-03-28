@@ -241,13 +241,11 @@ public class FillCitationFragment extends Fragment {
         String citationTime = LocalDateTime.now().toString();
         String carParkingLot = viewModel.getParkingLot().getValue();
        // String carViolation = viewModel.getArrSelectedOffenses();
-        final Observer<Integer> ticketNumObserver = new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable final Integer receivedTicketNum) {
+
+
                 // Update the UI, in this case, a TextView.
-                if(receivedTicketNum!=null)
-                {
-                    Log.i("The New Ticket Num","The new ticket num is: " + receivedTicketNum);
+
+                  //  Log.i("The New Ticket Num","The new ticket num is: " + receivedTicketNum);
                     Map<String, Object> data = new HashMap<>();
                     data.put("CarMake","carMake");
                     data.put("CarModel", carModel);
@@ -256,39 +254,20 @@ public class FillCitationFragment extends Fragment {
                     data.put("Offense","Some offense");
                     data.put("Officer", officerID);
                     data.put("ParkingLot",carParkingLot);
-                    data.put("TicketNum", receivedTicketNum);
                     data.put("Time", citationTime);
 
-                    db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                 //get latest ticketnum to increment it for new ticket from ticket collection
+                 generateTicketNum(data);
+                   // viewModel.setTicketID("" + receivedTicketNum);
 
-                            if(task.isSuccessful())
-                            {
 
-                                Toast.makeText(getContext(),"Ticket Sent Successfully",Toast.LENGTH_LONG).show();
 
-                            }else
-                            {
-                                Log.i("CONNECTION FAILED", task.getException().getMessage());
-                                DBConnectionFailed();
-                            }
-                        }
-                    });
-                    viewModel.setTicketID("" + receivedTicketNum);
-                }
-            }
-        };
-
-        ticketNumber.observe(getActivity(),ticketNumObserver);
-        //get latest ticketnum to increment it for new ticket from ticket collection
-        generateTicketNum();
 
 
 
     }
 
-    private void generateTicketNum()
+    private void generateTicketNum(Map<String, Object> data)
     {
         db.collection("Tickets").orderBy("TicketNum", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -300,6 +279,24 @@ public class FillCitationFragment extends Fragment {
                   {
                       Integer newTicketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
                       ticketNumber.setValue(newTicketNum+1);
+                      data.put("TicketNum", ticketNumber.getValue());
+                      db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                          @Override
+                          public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                              if(task.isSuccessful())
+                              {
+                                  Toast.makeText(getContext(),"Ticket Sent Successfully",Toast.LENGTH_LONG).show();
+
+                              }else
+                              {
+                                  Log.i("CONNECTION FAILED", task.getException().getMessage());
+                                  DBConnectionFailed();
+                              }
+                          }
+                      });
+
+
                   }
                 }
                 else

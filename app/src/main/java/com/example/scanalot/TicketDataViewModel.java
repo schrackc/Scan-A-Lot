@@ -126,6 +126,4 @@ public class TicketDataViewModel extends ViewModel {
     /*Array Selected Offenses Getters/Setters*/
     public void setArrSelectedOffenses(ArrayList<String> arr) {arrSelectedOffenses.setValue(arr);}
     public LiveData<ArrayList<String>> getArrSelectedOffenses(){return arrSelectedOffenses;}
-
-
 }
