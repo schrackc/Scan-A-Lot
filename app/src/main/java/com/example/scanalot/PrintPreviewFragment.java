@@ -14,6 +14,7 @@ import com.example.scanalot.databinding.FragmentPrintPreviewBinding;
 import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * This class is used for the printPreviewFragment. It creates the fragment and uses the fragment_print_preview layout. This will be used for
@@ -50,7 +51,7 @@ public class PrintPreviewFragment extends Fragment {
 
             binding.textViewViolationType.setText(binding.textViewViolationType.getText() + " " + viewModel.getArrSelectedOffenses().getValue());
 
-            binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $100.00");
+            binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $" + calculateTotalFine());
 
             binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());
 
@@ -68,6 +69,25 @@ public class PrintPreviewFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
         binding = FragmentPrintPreviewBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    /**
+     * Function to calculate the total fine amount for a ticket.
+     * It takes in an array from the arrFineAmount view model that contains a set of string fine amounts, corresponding to the selected fines on the FillCitationFragment.
+     * The function then iterates through the String array, while removing the first character ($,€,£).
+     * It then parses integers from the remaining string and adds them up in one variable that is returned.
+     * Note: The printed statement on the ticket will only have USD signs.
+     */
+    public String calculateTotalFine(){
+        ArrayList<String> fineAmountTotalArray;
+        fineAmountTotalArray = viewModel.getArrFineAmount().getValue();
+        int totalFineAmount = 0;
+        for (String fineTotal : fineAmountTotalArray) {
+            int totalAmount = Integer.parseInt(fineTotal.substring(1));
+            totalFineAmount += totalAmount;
+        }
+        String totalFineAmountString = Integer.toString(totalFineAmount);
+        return totalFineAmountString;
     }
 
     /**

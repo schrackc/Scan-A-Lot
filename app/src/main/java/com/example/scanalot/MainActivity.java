@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                                 //add to the array list
                                 offenses.add(document.get("OffenseType").toString());
                                 Log.d("Offenses", document.getId() + " => " + document.getData());
+                                Log.d("Offenses", offenses.toString());
                             }
                             //set the offenses arraylist
                             viewModel.setArrOffenses(offenses);
@@ -425,18 +426,18 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                 printer.printFormattedText(
                         // Change the fine amount and violations to accept correct values.
                         // Currently cannot get violations because there is no live data.
-                        "[C]---VEHICLE INFORMATION---" + "\n" +
-                        "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
-                        "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
-                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleModel() + "\n" +
-                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleColor() +
                         "[C]---TICKET INFORMATION---" + "\n" +
                         "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
                         "[L]Violation Date:\n" +"[R]" + date + "\n" +
                         "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
                         "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
-                        "[L]Violation:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
-                        "[L]Fine Amount:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n"
+                        "[L]Violation:\n" + "[R]" + viewModel.getArrSelectedOffenses().getValue() + "\n" +
+                        "[L]Fine Amount:\n" + "[R]" + " $" + calculateTotalFine() + "\n" +
+                        "[C]---VEHICLE INFORMATION---" + "\n" +
+                        "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
+                        "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
+                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleModel() + "\n" +
+                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleColor()
                 );
             } catch (Exception e) {
                 printerConnectionFailed();
@@ -446,6 +447,25 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         {
             connectToPrinter();
         }
+    }
+
+    /**
+     * Function to calculate the total fine amount for a ticket.
+     * It takes in an array from the arrFineAmount view model that contains a set of string fine amounts, corresponding to the selected fines on the FillCitationFragment.
+     * The function then iterates through the String array, while removing the first character ($,€,£).
+     * It then parses integers from the remaining string and adds them up in one variable that is returned.
+     * Note: The printed statement on the ticket will only have USD signs.
+     */
+    public String calculateTotalFine(){
+        ArrayList<String> fineAmountTotalArray;
+        fineAmountTotalArray = viewModel.getArrFineAmount().getValue();
+        int totalFineAmount = 0;
+        for (String fineTotal : fineAmountTotalArray) {
+            int totalAmount = Integer.parseInt(fineTotal.substring(1));
+            totalFineAmount += totalAmount;
+        }
+        String totalFineAmountString = Integer.toString(totalFineAmount);
+        return totalFineAmountString;
     }
 
 }

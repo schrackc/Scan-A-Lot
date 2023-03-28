@@ -219,6 +219,35 @@ public class FillCitationFragment extends Fragment {
                         }
                         viewModel.setArrSelectedOffenses(selectedOffenseArray);
                         Log.d("SELECTED ARRAY", selectedOffenseArray.toString());
+
+
+                        ArrayList<String> fineAmountArray = new ArrayList<>();
+                        // Query to get corresponding fine amounts from selected offenses.
+                        // Will be used to get total fine on Print Preview page.
+                        for (String offense : selectedOffenseArray) {
+                            CollectionReference offensesCollection = db.collection("Offenses");
+                            Query query = offensesCollection.whereEqualTo("OffenseType", offense);
+                            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            // Retrieve the corresponding FineAmount field value and store it in fineAmountArray
+                                            String fineAmount = document.get("FineAmount").toString();
+                                            fineAmountArray.add(fineAmount);
+                                            Log.d("FineAmount", fineAmountArray.toString());
+                                        }
+                                    } else {
+                                        Log.d("FineAmount", "Error getting documents: ", task.getException());
+                                    }
+                                    viewModel.setArrFineAmount(fineAmountArray);
+                                }
+                            });
+
+                        }// end of for loop for fines query.
+
+
+
                     }
                 });
 
