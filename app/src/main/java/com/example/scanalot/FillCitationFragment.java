@@ -69,6 +69,7 @@ public class FillCitationFragment extends Fragment {
     String strOfficerID = "";
     CollectionReference officerCollection;
     MutableLiveData<Integer> ticketNumber = new MutableLiveData<Integer>();
+    ArrayList<String> selectedOffenseArray = new ArrayList<String>();
 
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
@@ -92,10 +93,7 @@ public class FillCitationFragment extends Fragment {
       //  officerCollection = db.collection("Officers");
         //get the currently logged in user and update Live variable
         currentUser = fAuth.getCurrentUser();
-
-
-
-
+        //viewModel.setArrSelectedOffenses(selectedOffenseArray);
 
         //query db for username associated with the current User's email.
         db.collection("Officers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -211,20 +209,23 @@ public class FillCitationFragment extends Fragment {
                         // set text on textView
                         textView.setText(stringBuilder.toString());
 
-                        ArrayList<String> selectedOffenseArray = new ArrayList<>();
+
                         for (int k = 0; k < checkBoxes.length; k++) {
                             if (checkBoxes[k]) {
-                                selectedOffenseArray.add(violations[k]);
+                                if (!selectedOffenseArray.contains(violations[k])) {
+                                    selectedOffenseArray.add(violations[k]);
+                                }
                             }
                         }
                         viewModel.setArrSelectedOffenses(selectedOffenseArray);
                         Log.d("SELECTED ARRAY", selectedOffenseArray.toString());
+                        //selectedOffenseArray.clear();
 
 
                         ArrayList<String> fineAmountArray = new ArrayList<>();
                         // Query to get corresponding fine amounts from selected offenses.
                         // Will be used to get total fine on Print Preview page.
-                        for (String offense : selectedOffenseArray) {
+                        for (String offense : viewModel.getArrSelectedOffenses().getValue()) {
                             CollectionReference offensesCollection = db.collection("Offenses");
                             Query query = offensesCollection.whereEqualTo("OffenseType", offense);
                             query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -243,11 +244,7 @@ public class FillCitationFragment extends Fragment {
                                     viewModel.setArrFineAmount(fineAmountArray);
                                 }
                             });
-
                         }// end of for loop for fines query.
-
-
-
                     }
                 });
 
@@ -288,16 +285,8 @@ public class FillCitationFragment extends Fragment {
         ticketNumber.observe(getActivity(),ticketNumObserver);
         //get latest ticketnum to increment it for new ticket from ticket collection
         generateTicketNum();
-
-
-
        // int ticketNum = ticketNumber.getValue();
-
-
-
         //get model of car in vehicles
-
-
     }
 
     private void generateTicketNum()
@@ -314,11 +303,6 @@ public class FillCitationFragment extends Fragment {
                       ticketNumber.setValue(newTicketNum+1);
                   }
                 }
-
-
-
-
-
             }
         });
     }

@@ -79,14 +79,23 @@ public class PrintPreviewFragment extends Fragment {
      * Note: The printed statement on the ticket will only have USD signs.
      */
     public String calculateTotalFine(){
-        ArrayList<String> fineAmountTotalArray;
-        fineAmountTotalArray = viewModel.getArrFineAmount().getValue();
+        ArrayList<String> fineAmountTotalArray = new ArrayList<>();
+        ArrayList<String> emptyArray = new ArrayList<>();
+        emptyArray.add("");
+        if (viewModel.getArrFineAmount().getValue() == null){fineAmountTotalArray.add("$0");}
+        else {fineAmountTotalArray = viewModel.getArrFineAmount().getValue();}
         int totalFineAmount = 0;
         for (String fineTotal : fineAmountTotalArray) {
-            int totalAmount = Integer.parseInt(fineTotal.substring(1));
-            totalFineAmount += totalAmount;
+            if (fineTotal.length() == 0) {
+                totalFineAmount = 0;
+            }
+            else {
+                int totalAmount = Integer.parseInt(fineTotal.substring(1));
+                totalFineAmount += totalAmount;
+            }
         }
         String totalFineAmountString = Integer.toString(totalFineAmount);
+//        viewModel.setArrFineAmount(emptyArray);
         return totalFineAmountString;
     }
 
@@ -97,5 +106,6 @@ public class PrintPreviewFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
     }
 }

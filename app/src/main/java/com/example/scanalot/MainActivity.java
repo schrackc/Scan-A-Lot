@@ -457,8 +457,9 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
      * Note: The printed statement on the ticket will only have USD signs.
      */
     public String calculateTotalFine(){
-        ArrayList<String> fineAmountTotalArray;
-        fineAmountTotalArray = viewModel.getArrFineAmount().getValue();
+        ArrayList<String> fineAmountTotalArray = new ArrayList<>();
+        if (viewModel.getArrFineAmount().getValue() == null){fineAmountTotalArray.add("$0");}
+        else {fineAmountTotalArray = viewModel.getArrFineAmount().getValue();}
         int totalFineAmount = 0;
         for (String fineTotal : fineAmountTotalArray) {
             int totalAmount = Integer.parseInt(fineTotal.substring(1));
@@ -467,6 +468,7 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         String totalFineAmountString = Integer.toString(totalFineAmount);
         return totalFineAmountString;
     }
+
 
 }
 
