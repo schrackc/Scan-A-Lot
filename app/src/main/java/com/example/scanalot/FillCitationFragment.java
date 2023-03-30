@@ -74,6 +74,7 @@ public class FillCitationFragment extends Fragment {
     String strOfficerID = "";
     CollectionReference officerCollection;
     //MutableLiveData<Integer> ticketNumber = new MutableLiveData<Integer>();
+
     /**
      * Method in which executes after the view has been created. There are two event listeners on buttonSave and btnPrint which Navigate to other
      * fragments based on a click. Lastly, there is a click event on a text view event listener. When it is clicked, an Alert Dialogue Box appears
@@ -88,32 +89,27 @@ public class FillCitationFragment extends Fragment {
         btnSavePrint = binding.fillSavePrintButton;
         editText_OfficerID = binding.fillOfficerID;
         editText_OfficerNotes = binding.fillNotes;
-        MainActivity mainActivity = (MainActivity)getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.connectToPrinter();
         //get the instances for firebase
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         //get the officer collection
-      //  officerCollection = db.collection("Officers");
+        //  officerCollection = db.collection("Officers");
         //get the currently logged in user and update Live variable
         currentUser = fAuth.getCurrentUser();
-
-
-
 
 
         //query db for username associated with the current User's email.
         db.collection("Officers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         //get email of document
                         String strSnapEmail = (String) document.get("Email");
-                       //if the email matches the current user email we got a match
-                        if(strSnapEmail.equals(currentUser.getEmail().toString()))
-                        {
+                        //if the email matches the current user email we got a match
+                        if (strSnapEmail.equals(currentUser.getEmail().toString())) {
                             strOfficerID = document.get("OfficerID").toString();
                             viewModel.setOfficerID(strOfficerID);
                             editText_OfficerID.setText(strOfficerID);
@@ -122,8 +118,8 @@ public class FillCitationFragment extends Fragment {
                 }
             }
         });
-        Log.i("Current User ID",currentUser.getEmail());
-        Log.i("Current User ID",currentUser.getUid());
+        Log.i("Current User ID", currentUser.getEmail());
+        Log.i("Current User ID", currentUser.getUid());
 
         //show the value in OfficerId editText
 
@@ -138,17 +134,17 @@ public class FillCitationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    MainActivity mainActivity =(MainActivity)getActivity();
-                        //set the notes live data variable,print,and send ticket to Firestore
-                       viewModel.setOfficerNotes(editText_OfficerNotes.getText().toString());
-                        mainActivity.printText();
-                        createTicket();
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    //set the notes live data variable,print,and send ticket to Firestore
+                    viewModel.setOfficerNotes(editText_OfficerNotes.getText().toString());
+                    mainActivity.printText();
+                    createTicket();
 
                 }
 
                 navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
                 //get the nav controller and tell it to navigate
-               Navigation.findNavController(view).navigate(navAction);
+                Navigation.findNavController(view).navigate(navAction);
 
             }
         });
@@ -233,11 +229,8 @@ public class FillCitationFragment extends Fragment {
     }
 
 
-    private void createTicket()
-    {
-
+    private void createTicket() {
         String officerID = viewModel.getOfficerID().getValue();
-        Log.i("Officer id", officerID);
         String carModel = viewModel.getVehicleModel().getValue();
         String carColor = viewModel.getVehicleColor().getValue();
         ArrayList<String> citations = viewModel.getArrOffenses().getValue();
@@ -248,81 +241,65 @@ public class FillCitationFragment extends Fragment {
         String carMake = viewModel.getVehicleMake().getValue();
         String officerNotes = viewModel.getOfficerNotes().getValue();
 
-
-                // Update the UI, in this case, a TextView.
-
-                  //  Log.i("The New Ticket Num","The new ticket num is: " + receivedTicketNum);
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("CarMake","carMake");
-                    data.put("CarModel", carModel);
-                    data.put("FineAmount","$300");
-                    data.put("LicenseNum", carLicenseNumber);
-                    data.put("Offense","Some offense");
-                    data.put("Officer", officerID);
-                    data.put("ParkingLot",carParkingLot);
-                    data.put("Time", citationTime);
-                    data.put("LicenseState",carState);
-                    data.put("CarMake", carMake);
-                    data.put("OfficerNotes", officerNotes);
-                 //get latest ticketnum to increment it for new ticket from ticket collection
-                 generateTicketNum(data);
+        Map<String, Object> data = new HashMap<>();
+        data.put("CarModel", carModel);
+        data.put("FineAmount", "$300");
+        data.put("LicenseNum", carLicenseNumber);
+        data.put("Offense", "Some offense");
+        data.put("Officer", officerID);
+        data.put("ParkingLot", carParkingLot);
+        data.put("Time", citationTime);
+        data.put("LicenseState", carState);
+        data.put("CarMake", carMake);
+        data.put("OfficerNotes", officerNotes);
+        //get latest ticketnum to increment it for new ticket from ticket collection
+        generateTicketNum(data);
 
     }
 
-    private void generateTicketNum(Map<String, Object> data)
-    {
+    private void generateTicketNum(Map<String, Object> data) {
         db.collection("Tickets").orderBy("TicketNum", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                if(task.isSuccessful())
-                {
-                  for(QueryDocumentSnapshot documentSnapshot: task.getResult())
-                  {
-                      Integer newTicketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
-                     viewModel.setTicketID(String.valueOf(newTicketNum+1));
-                     Log.i("TicketID in FillCItaiton", viewModel.getTicketID().getValue().toString());
-                      data.put("TicketNum", Integer.parseInt(viewModel.getTicketID().getValue()));
-                      db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                          @Override
-                          public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        Integer ticketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
+                        Integer newTicketNum = ticketNum + 1;
+                        viewModel.setTicketID(String.valueOf(newTicketNum));
+                        Log.i("TicketID in FillCItaiton", viewModel.getTicketID().getValue());
+                        data.put("TicketNum", viewModel.getTicketID().getValue());
+                        db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
 
-                              if(task.isSuccessful())
-                              {
-                                  Toast.makeText(getContext(),"Ticket Sent Successfully",Toast.LENGTH_LONG).show();
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Ticket Sent Successfully", Toast.LENGTH_LONG).show();
 
-                              }else
-                              {
-                                  Log.i("CONNECTION FAILED", task.getException().getMessage());
-                                  DBConnectionFailed();
-                              }
-                          }
-                      });
-
-
-                  }
-                }
-                else
-                {
+                                } else {
+                                    Log.i("CONNECTION FAILED", task.getException().getMessage());
+                                    DBConnectionFailed();
+                                }
+                            }
+                        });
+                    }
+                } else {
                     DBConnectionFailed();
                 }
-
-
-
 
 
             }
         });
     }
 
-    private void DBConnectionFailed()
-    {
-        Toast.makeText(getContext(),"Failed To Send Ticket To Database. Please Try Again", Toast.LENGTH_LONG).show();
+    private void DBConnectionFailed() {
+        Toast.makeText(getContext(), "Failed To Send Ticket To Database. Please Try Again", Toast.LENGTH_LONG).show();
 
     }
+
     /**
      * set Live Data values to view values within Fragment
-     * */
+     */
     private void autoFillCitationData() {
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
         Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
@@ -333,7 +310,7 @@ public class FillCitationFragment extends Fragment {
         ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
         chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
         //set the value of the chooseLotSpinner
-        ArrayAdapter chooseLotAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
+        ArrayAdapter chooseLotAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, viewModel.getArrParkingLotList().getValue().toArray());
         //ArrayAdapter chooseLotAdapter = (ArrayAdapter) chooseLotSpinner.getAdapter();
         chooseLotSpinner.setAdapter(chooseLotAdapter);
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
