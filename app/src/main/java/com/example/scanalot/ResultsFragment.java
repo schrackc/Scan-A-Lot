@@ -70,6 +70,8 @@ public class ResultsFragment extends Fragment {
         strLicenseNumber = viewModel.getLicenseNumber().getValue();
         strLicenseState = viewModel.getLicenseState().getValue();
         arrVehicles = viewModel.getVehicleList().getValue();
+
+
         //Logging the results which were passed
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE NUM: " + strLicenseNumber);
         Log.i("LIVE DATA RESULTS FRAG", "LICENSE STATE: " + strLicenseState);
@@ -86,6 +88,8 @@ public class ResultsFragment extends Fragment {
             }
         }
 
+
+
         //getting the button
         btnFillCitation = binding.fillSavePrintButton;
 
@@ -93,6 +97,11 @@ public class ResultsFragment extends Fragment {
         btnFillCitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                 String resultsStateSpinner = binding.MultipleStateLicensePlateSpinner.getSelectedItem().toString();
+                 if (resultsStateSpinner!=null){
+                     viewModel.setLicenseState(resultsStateSpinner);
+                     Log.i("STATE SELECTED: ", viewModel.getLicenseState().getValue());
+                }
                 navAction = ResultsFragmentDirections.actionResultsFragmentToFillCitationFragment2();
                 Navigation.findNavController(view).navigate(navAction);
                 createTicketID();
