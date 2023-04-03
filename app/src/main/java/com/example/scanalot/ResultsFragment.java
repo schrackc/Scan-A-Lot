@@ -82,6 +82,7 @@ public class ResultsFragment extends Fragment {
             if (arrVehicles.get(iRowCheck).getLicNum().equals(strLicenseNumber) && arrVehicles.get(iRowCheck).getLicState().equals(strLicenseState)){
                 //set values for autofill
                 viewModel.setVehicleModel(arrVehicles.get(iRowCheck).getModel());
+                viewModel.setVehicleMake(arrVehicles.get(iRowCheck).getMake());
                 viewModel.setVehicleColor(arrVehicles.get(iRowCheck).getColor());
                 isLicenseFound = true;
                 break;
@@ -168,7 +169,7 @@ private void createTicketID()
                         if (!ticketID.isEmpty()) {
                             // Get the last element of the ticketID list and increment it by 1
                             int lastTicketID = Integer.parseInt(ticketID.get(ticketID.size()-1));
-                            viewModel.setTicketID(Integer.toString(lastTicketID + 1));
+                            viewModel.setTicketID("" + lastTicketID + 1);
                         } else {
                             // Set the first ticket ID to 1 if the list is empty
                             viewModel.setTicketID("1");

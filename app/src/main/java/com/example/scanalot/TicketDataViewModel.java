@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class TicketDataViewModel extends ViewModel {
     /*private*/
     private final MutableLiveData<String> strTicketID = new MutableLiveData<String>();
+    private final MutableLiveData<String> strOfficerNotes = new MutableLiveData<String>();
     private final MutableLiveData<String> strOfficerID = new MutableLiveData<String>();
     private final MutableLiveData<String> strParkingLot = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseNumber = new MutableLiveData<String>();
     private final MutableLiveData<String> strLicenseState = new MutableLiveData<String>();
     private final MutableLiveData<String> strVehicleModel = new MutableLiveData<String>();
+    private final MutableLiveData<String> strVehicleMake = new MutableLiveData<String>();
     private final MutableLiveData<String> strVehicleColor = new MutableLiveData<String>();
     private final MutableLiveData<ArrayList<VehicleCategories>> arrVehicles = new MutableLiveData<ArrayList<VehicleCategories>>();
     private final MutableLiveData<ArrayList<String>> arrParkingLots = new MutableLiveData<ArrayList<String>>();
@@ -81,6 +83,17 @@ public class TicketDataViewModel extends ViewModel {
         return strOfficerID;
     }
 
+    /*Officer Notes Setter/Getter*/
+    public void setOfficerNotes(String p_Notes)
+    {
+        strOfficerNotes.setValue(p_Notes);
+    }
+
+    public LiveData<String> getOfficerNotes()
+    {
+        return strOfficerNotes;
+    }
+
     /*Parking Lot Setter/Getter*/
     public void setParkingLot(String p_ParkingLot)
     {
@@ -100,6 +113,16 @@ public class TicketDataViewModel extends ViewModel {
     public LiveData<String> getVehicleModel()
     {
         return strVehicleModel;
+    }
+
+    /*Vehicle Make Setter/Getter*/
+    public void setVehicleMake(String p_VehicleMake)
+    {
+        strVehicleMake.setValue(p_VehicleMake);
+    }
+    public LiveData<String> getVehicleMake()
+    {
+        return strVehicleMake;
     }
 
     /*Vehicle Color Setter/Getter*/

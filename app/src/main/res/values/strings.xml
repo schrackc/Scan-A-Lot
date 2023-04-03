@@ -72,5 +72,7 @@
     <string name="scanDetectText">Detect Text</string>
     <!--Results Screen-->
     <string name="DetectedPlateTextView"> DetectedText</string>
+    <string name="FillCitationVehicleMake">Vehicle Make</string>
+    <string name="PrintPreviewVehicleMake">Vehicle Make:</string>
 
 </resources>
