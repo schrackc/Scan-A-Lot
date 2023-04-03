@@ -98,10 +98,10 @@ public class ResultsFragment extends Fragment {
         btnFillCitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 String resultsStateSpinner = binding.MultipleStateLicensePlateSpinner.getSelectedItem().toString();
-                 if (resultsStateSpinner!=null){
-                     viewModel.setLicenseState(resultsStateSpinner);
-                     Log.i("STATE SELECTED: ", viewModel.getLicenseState().getValue());
+                 String resultsLotSpinner = binding.MultipleStateLicensePlateSpinner.getSelectedItem().toString();
+                 if (resultsLotSpinner!=null){
+                     viewModel.setParkingLot(resultsLotSpinner);
+                     Log.i("LOT SELECTED: ", viewModel.getParkingLot().getValue());
                 }
                 navAction = ResultsFragmentDirections.actionResultsFragmentToFillCitationFragment2();
                 Navigation.findNavController(view).navigate(navAction);
