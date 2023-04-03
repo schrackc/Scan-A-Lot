@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".PrintPreviewFragment">
 
+    <TextView
+        android:id="@+id/textViewVehicleMake"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/PrintPreviewVehicleMake"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVehicleModel"
+        tools:text="@string/PrintPreviewVehicleMake" />
 
     <TextView
         android:id="@+id/textViewVehicleInfo"
@@ -52,18 +63,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewVehicleInfo" />
 
     <TextView
-        android:id="@+id/textViewVehicleOwner"
-        android:layout_width="260dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/PrintPreviewVehicleOwner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewLicensePlate"
-        tools:text="@string/PrintPreviewVehicleOwner" />
-
-    <TextView
         android:id="@+id/textViewVehicleModel"
         android:layout_width="260dp"
         android:layout_height="30dp"
@@ -72,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewVehicleOwner" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewLicensePlate" />
 
     <TextView
         android:id="@+id/textViewVehicleColor"
@@ -83,7 +82,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewVehicleModel"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVehicleMake"
         tools:text="@string/PrintPreviewVehicleColor" />
 
     <TextView

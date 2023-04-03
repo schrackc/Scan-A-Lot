@@ -16,9 +16,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.List;
+
 /**
  * This class is used for the SelectLotFragment. It creates the fragment and uses the fragment_select_layout layout. This will be used for
- * when the user wants to select the parking lot they want to scan. This allows for the app to know which cars belong and dont belong in the
+ * when the user wants to select the parking lot they want to scan. This allows for the app to know which cars belong and don't belong in the
  * selected lot.
  *
  * @author Andrew Hoffer
@@ -64,28 +68,25 @@ public class SelectLotFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //get the view model which contains the live,changeable data that was made in main activity
-        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
-
+      //  viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
     }
 
-    /**
-     * Method in which executes during the creation of the view. It is creating an instance of this fragment
-     */
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        binding = FragmentSelectLotBinding.inflate(inflater, container, false);
-//        return binding.getRoot();
-//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_lot, container, false);
+        
+        viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
 
         selectLotSpinner = view.findViewById(R.id.selectLotSpinner);
+        List<String> parkingLotList = viewModel.getArrParkingLotList().getValue();
+        // Add the hardcoded value "Select lot..." at position 0 of the list if it doesn't already exist
+        if (!parkingLotList.contains("Select lot...")) {
+            parkingLotList.add(0, "Select lot...");
+        }
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.parkingLots, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,viewModel.getArrParkingLotList().getValue().toArray());
+
         selectLotSpinner.setAdapter(adapter);
         selectLotSpinner.setSelection(0, false);
         // Handles selecting from the lot spinner. Passed to main so that the TextView can be updated.
@@ -97,7 +98,6 @@ public class SelectLotFragment extends Fragment {
                 //set the live data object so we can use this in other fragments
                 viewModel.setParkingLot(selectedItem);
                 listener.onSpinnerSelected(selectedItem);
-
             }
             // Handles nothing selected. Writes to log.
             @Override
@@ -108,48 +108,17 @@ public class SelectLotFragment extends Fragment {
         return view;
     }
 
-
-
-
     /**
      * Cleans up resources when view is destroyed
      */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // Remove the first entry if it is "Select lot..."
+        List<String> parkingLotList = viewModel.getArrParkingLotList().getValue();
+        if (parkingLotList.size() > 0 && parkingLotList.get(0).equals("Select lot...")) {
+            parkingLotList.remove(0);
+        }
         binding = null;
     }
-
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_select_lot, container, false);
-//
-//        selectLotSpinner = view.findViewById(R.id.selectLotSpinner);
-//
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-//                R.array.parkingLots, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        selectLotSpinner.setAdapter(adapter);
-//
-//        selectLotSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String selectedItem = parent.getItemAtPosition(position).toString();
-//                listener.onSpinnerSelected(selectedItem);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//
-//        return view;
-//    }
-
-
-
-
-    }
+}
