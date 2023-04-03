@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ResultTextView"
-        android:entries="@array/states"/>
+        android:entries="@array/parkingLots"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
