@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * @author Curtis Schrack
  * @Created 3/12/2023
  * @Contributor Curtis Schrack - Create Class Variables
+ * @Contributors Nick Downey - 03/25/23 - Added Violations from Firebase.
  */
 public class VehicleCategories {
     //Vehicle Firebase value Categories

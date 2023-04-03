@@ -14,6 +14,7 @@ import com.example.scanalot.databinding.FragmentPrintPreviewBinding;
 import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * This class is used for the printPreviewFragment. It creates the fragment and uses the fragment_print_preview layout. This will be used for
@@ -22,7 +23,6 @@ import java.time.LocalDateTime;
  * @author Andrew Hoffer
  * @Created 2/4/23
  * @Contributors Andrew Hoffer - 2/4/23 - Created the fragment
- * @Contributors Curtis Schrack - 3/18/23 - Add Auto fill for Vehicle information
  */
 
 public class PrintPreviewFragment extends Fragment {
@@ -41,11 +41,17 @@ public class PrintPreviewFragment extends Fragment {
             int iDay = LocalDateTime.now().getDayOfMonth();
             int iYear = LocalDateTime.now().getYear();
 
+            binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
+
             binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
+
+            binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ viewModel.getOfficerID().getValue());
 
             binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
 
-            binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $100.00");
+            binding.textViewViolationType.setText(binding.textViewViolationType.getText() + " " + viewModel.getArrSelectedOffenses().getValue());
+
+            binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $" + calculateTotalFine());
 
             binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());
 
@@ -66,11 +72,40 @@ public class PrintPreviewFragment extends Fragment {
     }
 
     /**
+     * Function to calculate the total fine amount for a ticket.
+     * It takes in an array from the arrFineAmount view model that contains a set of string fine amounts, corresponding to the selected fines on the FillCitationFragment.
+     * The function then iterates through the String array, while removing the first character ($,€,£).
+     * It then parses integers from the remaining string and adds them up in one variable that is returned.
+     * Note: The printed statement on the ticket will only have USD signs.
+     */
+    public String calculateTotalFine(){
+        ArrayList<String> fineAmountTotalArray = new ArrayList<>();
+        ArrayList<String> emptyArray = new ArrayList<>();
+        emptyArray.add("");
+        if (viewModel.getArrFineAmount().getValue() == null){fineAmountTotalArray.add("$0");}
+        else {fineAmountTotalArray = viewModel.getArrFineAmount().getValue();}
+        int totalFineAmount = 0;
+        for (String fineTotal : fineAmountTotalArray) {
+            if (fineTotal.length() == 0) {
+                totalFineAmount = 0;
+            }
+            else {
+                int totalAmount = Integer.parseInt(fineTotal.substring(1));
+                totalFineAmount += totalAmount;
+            }
+        }
+        String totalFineAmountString = Integer.toString(totalFineAmount);
+//        viewModel.setArrFineAmount(emptyArray);
+        return totalFineAmountString;
+    }
+
+    /**
      * Cleans up resources when view is destroyed
      */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
     }
 }
