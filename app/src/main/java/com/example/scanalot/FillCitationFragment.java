@@ -309,18 +309,19 @@ public class FillCitationFragment extends Fragment {
 
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                        Integer ticketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
+                        Integer ticketNum = Integer.parseInt(documentSnapshot.get("TicketNum").toString());
+                        Log.i("TicketNum", "Regular ticket num " + ticketNum);
                         Integer newTicketNum = ticketNum + 1;
-                        viewModel.setTicketID(String.valueOf(newTicketNum));
-                        Log.i("TicketID in FillCItaiton", viewModel.getTicketID().getValue());
-                        data.put("TicketNum", viewModel.getTicketID().getValue());
+                        //Log.i("new Ticket num", "new ticket num is" + newTicketNum);
+                       // Log.i("TicketID in FillCItaiton", "VIEW MODEL TICKET ID IS " + viewModel.getTicketID().getValue());
+                        data.put("TicketNum", newTicketNum);
+                        viewModel.setTicketID(newTicketNum);
                         db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
 
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getContext(), "Ticket Sent Successfully", Toast.LENGTH_LONG).show();
-
                                 } else {
                                     Log.i("CONNECTION FAILED", task.getException().getMessage());
                                     DBConnectionFailed();
@@ -328,6 +329,7 @@ public class FillCitationFragment extends Fragment {
                             }
                         });
                     }
+
                 } else {
                     DBConnectionFailed();
                 }
