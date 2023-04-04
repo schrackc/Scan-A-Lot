@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.scanalot.databinding.FragmentPrintPreviewBinding;
@@ -40,8 +41,15 @@ public class PrintPreviewFragment extends Fragment {
             String strMonth = LocalDateTime.now().getMonth().toString() + "/";
             int iDay = LocalDateTime.now().getDayOfMonth();
             int iYear = LocalDateTime.now().getYear();
+            //binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
 
-            binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
+            viewModel.getTicketID().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    binding.textViewTicketID.setText("Ticket ID: "+viewModel.getTicketID().getValue());
+                }
+            });
+
 
             binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
 
