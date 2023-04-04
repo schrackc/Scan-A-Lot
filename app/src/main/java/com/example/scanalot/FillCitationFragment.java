@@ -230,8 +230,6 @@ public class FillCitationFragment extends Fragment {
                         viewModel.setArrSelectedOffenses(selectedOffenseArray);
                         Log.d("SELECTED ARRAY", selectedOffenseArray.toString());
                         //selectedOffenseArray.clear();
-
-
                         ArrayList<String> fineAmountArray = new ArrayList<>();
                         // Query to get corresponding fine amounts from selected offenses.
                         // Will be used to get total fine on Print Preview page.
@@ -277,28 +275,31 @@ public class FillCitationFragment extends Fragment {
         String officerID = viewModel.getOfficerID().getValue();
         String carModel = viewModel.getVehicleModel().getValue();
         String carColor = viewModel.getVehicleColor().getValue();
-        ArrayList<String> citations = viewModel.getArrOffenses().getValue();
+        ArrayList<String> citations = viewModel.getArrSelectedOffenses().getValue();
         String carLicenseNumber = viewModel.getLicenseNumber().getValue();
         String citationTime = LocalDateTime.now().toString();
         String carParkingLot = viewModel.getParkingLot().getValue();
         String carState = viewModel.getLicenseState().getValue();
         String carMake = viewModel.getVehicleMake().getValue();
         String officerNotes = viewModel.getOfficerNotes().getValue();
+        String offense = viewModel.getArrSelectedOffenses().getValue().toString();
+        String totalFine = calculateTotalFine();
 
         Map<String, Object> data = new HashMap<>();
         data.put("CarModel", carModel);
-        data.put("FineAmount", "$300");
+        data.put("CarColor", carColor);
+        data.put("FineAmount", "$" + totalFine);
         data.put("LicenseNum", carLicenseNumber);
-        data.put("Offense", "Some offense");
+        data.put("Offense", offense);
         data.put("Officer", officerID);
         data.put("ParkingLot", carParkingLot);
         data.put("Time", citationTime);
         data.put("LicenseState", carState);
         data.put("CarMake", carMake);
         data.put("OfficerNotes", officerNotes);
+        data.put("ArrayOffenses", citations);
         //get latest ticketnum to increment it for new ticket from ticket collection
         generateTicketNum(data);
-
     }
 
     private void generateTicketNum(Map<String, Object> data) {
@@ -368,6 +369,27 @@ public class FillCitationFragment extends Fragment {
 
         //this is where the ERRROROROROROROROROROROROR is
         //binding.fillTicketNumber.setText(viewModel.getTicketID().getValue().toString());
+    }
+
+    public String calculateTotalFine(){
+        ArrayList<String> fineAmountTotalArray = new ArrayList<>();
+        ArrayList<String> emptyArray = new ArrayList<>();
+        emptyArray.add("");
+        if (viewModel.getArrFineAmount().getValue() == null){fineAmountTotalArray.add("$0");}
+        else {fineAmountTotalArray = viewModel.getArrFineAmount().getValue();}
+        int totalFineAmount = 0;
+        for (String fineTotal : fineAmountTotalArray) {
+            if (fineTotal.length() == 0) {
+                totalFineAmount = 0;
+            }
+            else {
+                int totalAmount = Integer.parseInt(fineTotal.substring(1));
+                totalFineAmount += totalAmount;
+            }
+        }
+        String totalFineAmountString = Integer.toString(totalFineAmount);
+//        viewModel.setArrFineAmount(emptyArray);
+        return totalFineAmountString;
     }
 
     @Override
