@@ -40,6 +40,7 @@ public class PrintPreviewFragment extends Fragment {
             String strMonth = LocalDateTime.now().getMonth().toString() + "/";
             int iDay = LocalDateTime.now().getDayOfMonth();
             int iYear = LocalDateTime.now().getYear();
+            //binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
 
             binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
 

@@ -5,9 +5,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressBack;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -18,9 +20,13 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 
+import android.widget.AdapterView;
+
+import androidx.lifecycle.ViewModelProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,10 +39,10 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 public class FillCitationFragmentUITest {
-    private String strTicketNumberCorrect = "12348484";
+    private String strTicketNumberCorrect = " ABC 1234";
     private String strTicketNumberFail = ".";
-    private String strOfficerIDCorrect = "12348484";
-    private String strOfficerIDFail = ".";
+    private String strVehicleMakeCorrect = "Chevrolet";
+    private String strVehicleMakeFail = ".";
 
     private String strPlateNumberCorrect = "123456";
     private String strPlateNumberFail = ".";
@@ -65,8 +71,7 @@ public class FillCitationFragmentUITest {
     @Test
     public void testEnterCorrectFillCitationInfo() {
         navigateToFillCitationPage();
-        testEditTicketNumberCorrect();
-        testEditOfficerIDNumberCorrect();
+        testEditVehicleMakeCorrect();
         testChooseLotSpinnerCorrect();
         testEditPlateNumberCorrect();
         testChooseStateSpinnerCorrect();
@@ -77,6 +82,72 @@ public class FillCitationFragmentUITest {
         testFillSavePrintButton();
     }
 
+    @Test
+    public void testAutoFillCitationInfoSuccess()
+    {
+        /*select lot*/
+        onView(withId(R.id.select_lot_fragment)).perform(click());
+        // Click spinner to focus
+        onView(withId(R.id.selectLotSpinner)).perform(click());
+        // select lot from spinner
+        onData(Matchers.allOf(Matchers.is(instanceOf(String.class)), Matchers.is("Lot A")))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+
+
+        onView(withId(R.id.scan_fragment)).perform(click());
+        onView(withId(R.id.scan_fragment)).check(matches(isDisplayed()));
+        /*Go to Manual Entry*/
+        onView(withId(R.id.outlinedButton)).check(matches(isDisplayed()));
+        // Click the manual search button on the scan fragment
+        onView(withId(R.id.outlinedButton)).perform(click());
+        // Check that the manual entry plateSearch field is displayed
+        onView(withId(R.id.plateSearch)).check(matches(isDisplayed()));
+        // Type text into the manual entry plateSearch field
+        onView(withId(R.id.plateSearch)).perform(typeText("ABC 1234"),closeSoftKeyboard());
+
+        // Click the search button
+        onView(withId(R.id.manualSearchButton)).perform(click());
+
+        //click button on main activity scan page
+        onView(withId(R.id.fillSavePrintButton)).perform(click());
+        onView(withId(R.id.fillSavePrintButton)).perform(click());
+
+    }
+
+
+    public void testAutoFillCitationInfoFail()
+    {
+        /*select lot*/
+        onView(withId(R.id.select_lot_fragment)).perform(click());
+        // Click spinner to focus
+        onView(withId(R.id.selectLotSpinner)).perform(click());
+        // select lot from spinner
+        onData(Matchers.allOf(Matchers.is(instanceOf(String.class)), Matchers.is("Lot A")))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        
+        onView(withId(R.id.scan_fragment)).perform(click());
+        onView(withId(R.id.scan_fragment)).check(matches(isDisplayed()));
+        /*Go to Manual Entry*/
+        onView(withId(R.id.outlinedButton)).check(matches(isDisplayed()));
+        // Click the manual search button on the scan fragment
+        onView(withId(R.id.outlinedButton)).perform(click());
+        // Check that the manual entry plateSearch field is displayed
+        onView(withId(R.id.plateSearch)).check(matches(isDisplayed()));
+        // Type text into the manual entry plateSearch field
+        onView(withId(R.id.plateSearch)).perform(typeText("ABC 123"),closeSoftKeyboard());
+
+        // Click the search button
+        onView(withId(R.id.manualSearchButton)).perform(click());
+
+
+
+        //click button on main activity scan page
+        onView(withId(R.id.fillSavePrintButton)).perform(click());
+        onView(withId(R.id.fillSavePrintButton)).perform(click());
+
+    }
 
     /**
      * Responsible For navigating to the Fill Citation Page.
@@ -95,8 +166,7 @@ public class FillCitationFragmentUITest {
     @Test
     public void testEnterIncorrectFillCitationInfo() {
         navigateToFillCitationPage();
-        testEditTicketNumberFail();
-        testEditEditOfficerIDNumberFail();
+        testEditVehicleMakeFail();
         testChooseLotSpinnerNoSelect();
         testEditPlateNumberFail();
         testChooseStateSpinnerNoSelect();
@@ -108,25 +178,16 @@ public class FillCitationFragmentUITest {
     }
 
     /*The rest of these functions deal with each View on the Page. One will be the correct input test while the other is not.*/
-    public void testEditTicketNumberCorrect() {
-        onView(withId(R.id.fillTicketNumber)).perform(typeText(strTicketNumberCorrect), closeSoftKeyboard());
-        onView(withId(R.id.fillTicketNumber)).check(matches(withText(containsString(strTicketNumberCorrect))));
-    }
-
-    public void testEditTicketNumberFail() {
-        onView(withId(R.id.fillTicketNumber)).perform(typeText(strTicketNumberFail), closeSoftKeyboard());
-        onView(withId(R.id.fillTicketNumber)).check(matches(withText(not(containsString(strTicketNumberFail)))));
+    public void testEditVehicleMakeCorrect() {
+        onView(withId(R.id.fillVehicleMake)).perform(typeText(strVehicleMakeCorrect), closeSoftKeyboard());
+        onView(withId(R.id.fillVehicleMake)).check(matches(withText(containsString(strVehicleMakeCorrect))));
     }
 
 
-    public void testEditOfficerIDNumberCorrect() {
-        onView(withId(R.id.fillOfficerID)).perform(typeText(strOfficerIDCorrect), closeSoftKeyboard());
-        onView(withId(R.id.fillOfficerID)).check(matches(withText(containsString(strOfficerIDCorrect))));
-    }
 
-    public void testEditEditOfficerIDNumberFail() {
-        onView(withId(R.id.fillOfficerID)).perform(typeText(strOfficerIDFail), closeSoftKeyboard());
-        onView(withId(R.id.fillOfficerID)).check(matches(withText(not(containsString(strOfficerIDFail)))));
+    public void testEditVehicleMakeFail() {
+        onView(withId(R.id.fillVehicleMake)).perform(typeText(strVehicleMakeFail), closeSoftKeyboard());
+        onView(withId(R.id.fillVehicleMake)).check(matches(withText(containsString(strVehicleMakeFail))));
     }
 
 

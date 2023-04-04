@@ -309,7 +309,9 @@ public class FillCitationFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                         Integer ticketNum = Integer.parseInt(String.valueOf(documentSnapshot.get("TicketNum")));
+                        Log.i("TicketNum", "Regular ticket num " + ticketNum);
                         Integer newTicketNum = ticketNum + 1;
+                        Log.i("new Ticket num", String.valueOf(newTicketNum));
                         viewModel.setTicketID(String.valueOf(newTicketNum));
                         Log.i("TicketID in FillCItaiton", viewModel.getTicketID().getValue());
                         data.put("TicketNum", viewModel.getTicketID().getValue());
