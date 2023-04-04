@@ -46,8 +46,7 @@ public class PrintPreviewFragment extends Fragment {
             viewModel.getTicketID().observe(getViewLifecycleOwner(), new Observer<Integer>() {
                 @Override
                 public void onChanged(Integer integer) {
-                    binding.textViewTicketID.setText("Ticket ID: ");
-                    binding.textViewTicketID.setText(binding.textViewTicketID.getText() + " "+viewModel.getTicketID().getValue());
+                    binding.textViewTicketID.setText("Ticket ID: "+viewModel.getTicketID().getValue());
                 }
             });
 
