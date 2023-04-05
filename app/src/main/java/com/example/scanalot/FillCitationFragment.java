@@ -279,6 +279,7 @@ public class FillCitationFragment extends Fragment {
         String carColor = binding.fillVehicleColor.getText().toString();
 
         String[] citationValues = binding.fillAddCitations.getText().toString().split(",");
+
         List<String> citations = Arrays.asList(citationValues);
         String carLicenseNumber = binding.fillTextPlateNumber.getText().toString();
         String citationTime = LocalDateTime.now().toString();
