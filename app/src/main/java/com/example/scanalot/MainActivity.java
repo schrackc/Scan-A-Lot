@@ -1,10 +1,9 @@
 package com.example.scanalot;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Preview;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -27,10 +25,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.dantsu.escposprinter.EscPosPrinter;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
-import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
 import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
-import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
-import com.dantsu.escposprinter.exceptions.EscPosParserException;
+import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
 import com.example.scanalot.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,12 +36,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -426,17 +419,19 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                 printer.printFormattedText(
                         // Change the fine amount and violations to accept correct values.
                         // Currently cannot get violations because there is no live data.
-                        "[C]---TICKET INFORMATION---" +
-                        "[L]TicketID:\n" + "[R]" + ticketIDPrinting() +
+                        "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer,this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.printed_logo, DisplayMetrics.DENSITY_XXXHIGH )) + "</img>\n" +
+                        "\n\n\n" +
+                        "[C]<font color='bg-black'>---TICKET INFORMATION---</font>" +"\n" +
+                        "[L]TicketID:\n" + "[R]" + ticketIDPrinting() +"\n" +
                         "[L]Violation Date:\n" +"[R]" + date + "\n" +
-                        "[L]Officer:\n" + "[R]" + reportingOfficerPrinting() +
-                        "[L]Parking Lot:\n" + "[R]" + citationLocationPrinting() +
-                        "[L]Violation:\n" + "[R]" + violationTypePrinting() +
-                        "[L]Fine Amount:\n" + "[R]" + " $" + calculateTotalFine() +
-                        "[C]---VEHICLE INFORMATION---" +
-                        "[L]License:\n" + "[R]" + licensePlatePrinting() +
-                        "[L]State:\n" + "[R]" + vehicleStatePrinting() +
-                        "[L]Car Model:\n" + "[R]" + vehicleModelPrinting() +
+                        "[L]Officer:\n" + "[R]" + reportingOfficerPrinting() +"\n" +
+                        "[L]Parking Lot:\n" + "[R]" + citationLocationPrinting() +"\n" +
+                        "[L]Violation:\n" + "[R]" + violationTypePrinting() +"\n" +
+                        "[L]Fine Amount:\n" + "[R]" + " $" + calculateTotalFine() +"\n" +
+                        "[C]<font color='bg-black'>---VEHICLE INFORMATION---</font>" +"\n" +
+                        "[L]License:\n" + "[R]" + licensePlatePrinting() +"\n" +
+                        "[L]State:\n" + "[R]" + vehicleStatePrinting() +"\n" +
+                        "[L]Car Model:\n" + "[R]" + vehicleModelPrinting() +"\n" +
                         "[L]Car Color:\n" + "[R]" + vehicleColorPrinting()
                 );
             } catch (Exception e) {
