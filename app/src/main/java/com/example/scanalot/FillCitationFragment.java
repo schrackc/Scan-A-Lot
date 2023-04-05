@@ -282,8 +282,15 @@ public class FillCitationFragment extends Fragment {
         String carState = viewModel.getLicenseState().getValue();
         String carMake = viewModel.getVehicleMake().getValue();
         String officerNotes = viewModel.getOfficerNotes().getValue();
-        String offense = viewModel.getArrSelectedOffenses().getValue().toString();
-        String totalFine = calculateTotalFine();
+        String offense ="";
+        String totalFine = "";
+
+        if(viewModel.getArrSelectedOffenses().getValue() != null)
+        {
+            offense = viewModel.getArrSelectedOffenses().getValue().toString();
+            totalFine =  calculateTotalFine();
+        }
+
 
         Map<String, Object> data = new HashMap<>();
         data.put("CarModel", carModel);
