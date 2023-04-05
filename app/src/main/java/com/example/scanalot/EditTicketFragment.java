@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.scanalot.databinding.FragmentEditTicketBinding;
 
@@ -22,6 +25,8 @@ import androidx.fragment.app.Fragment;
 
 public class EditTicketFragment extends Fragment {
     FragmentEditTicketBinding binding;
+   // Button btnSearchTicket = binding.editTicketSearchButton;
+   // EditText editTicketID = binding.editTicketSearchBox;
 
 
     /**
@@ -30,6 +35,21 @@ public class EditTicketFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+/*        btnSearchTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(editTicketID.getText().length()>0)
+                {
+
+
+                }else
+                {
+                    Toast.makeText(getContext(),"Please Enter Ticket ID", Toast.LENGTH_LONG);
+                }
+            }
+        });*/
 
     }
 
@@ -50,6 +70,4 @@ public class EditTicketFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
-
 }
