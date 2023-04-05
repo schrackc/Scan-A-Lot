@@ -46,28 +46,27 @@ public class PrintPreviewFragment extends Fragment {
             viewModel.getTicketID().observe(getViewLifecycleOwner(), new Observer<Integer>() {
                 @Override
                 public void onChanged(Integer integer) {
-                    binding.textViewTicketID.setText("Ticket ID: "+viewModel.getTicketID().getValue());
+                    binding.textViewTicketID.setText("Ticket ID: "+ticketIDPrinting());
                 }
             });
 
-
             binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
 
-            binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ viewModel.getOfficerID().getValue());
+            binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ reportingOfficerPrinting());
 
-            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ viewModel.getParkingLot().getValue());
+            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ citationLocationPrinting());
 
-            binding.textViewViolationType.setText(binding.textViewViolationType.getText() + " " + viewModel.getArrSelectedOffenses().getValue());
+            binding.textViewViolationType.setText(binding.textViewViolationType.getText() + " " + violationTypePrinting());
 
             binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $" + calculateTotalFine());
 
-            binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  viewModel.getLicenseNumber().getValue());
+            binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  licensePlatePrinting());
 
-            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + viewModel.getVehicleColor().getValue());
+            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + vehicleColorPrinting());
 
-            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + viewModel.getVehicleModel().getValue());
+            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + vehicleModelPrinting());
 
-            binding.textViewVehicleMake.setText(binding.textViewVehicleMake.getText() + " " + viewModel.getVehicleMake().getValue());
+            binding.textViewVehicleMake.setText(binding.textViewVehicleMake.getText() + " " + vehicleMakePrinting());
 
         }
     }
@@ -110,6 +109,97 @@ public class PrintPreviewFragment extends Fragment {
         return totalFineAmountString;
     }
 
+    /**********************
+        The following are a series of functions that read their respective view models and print
+        a meaningful message to the user if they are detected as null or not.
+     **********************/
+    public String ticketIDPrinting()
+    {
+        if (viewModel.getTicketID().getValue() == null)
+        {
+            return "ID Not Found";
+        }
+        else {
+            return viewModel.getTicketID().getValue().toString();
+        }
+    }
+
+    public String reportingOfficerPrinting()
+    {
+        if (viewModel.getOfficerID().getValue() == null)
+        {
+            return "ID Not Found";
+        }
+        else {
+            return viewModel.getOfficerID().getValue();
+        }
+    }
+
+    public String citationLocationPrinting()
+    {
+        if (viewModel.getParkingLot().getValue() == null)
+        {
+            return "Lot Not Found";
+        }
+        else {
+            return viewModel.getParkingLot().getValue();
+        }
+    }
+
+    public String violationTypePrinting()
+    {
+        if (viewModel.getArrSelectedOffenses().getValue() == null)
+        {
+            return "Offenses Not Found";
+        }
+        else {
+            return viewModel.getArrSelectedOffenses().getValue().toString();
+        }
+    }
+
+    public String licensePlatePrinting()
+    {
+        if (viewModel.getLicenseNumber().getValue() == null)
+        {
+            return "Plate Number Not Found";
+        }
+        else {
+            return viewModel.getLicenseNumber().getValue();
+        }
+    }
+
+    public String vehicleColorPrinting()
+    {
+        if (viewModel.getVehicleColor().getValue() == null)
+        {
+            return "Color Not Found";
+        }
+        else {
+            return viewModel.getVehicleColor().getValue();
+        }
+    }
+
+    public String vehicleModelPrinting()
+    {
+        if (viewModel.getVehicleModel().getValue() == null)
+        {
+            return "Model Not Found";
+        }
+        else {
+            return viewModel.getVehicleModel().getValue();
+        }
+    }
+
+    public String vehicleMakePrinting()
+    {
+        if (viewModel.getVehicleMake().getValue() == null)
+        {
+            return "Make Not Found";
+        }
+        else {
+            return viewModel.getVehicleMake().getValue();
+        }
+    }
     /**
      * Cleans up resources when view is destroyed
      */

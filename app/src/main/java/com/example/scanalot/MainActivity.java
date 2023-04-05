@@ -426,18 +426,18 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
                 printer.printFormattedText(
                         // Change the fine amount and violations to accept correct values.
                         // Currently cannot get violations because there is no live data.
-                        "[C]---TICKET INFORMATION---" + "\n" +
-                        "[L]TicketID:\n" + "[R]" + viewModel.getTicketID().getValue() + "\n" +
+                        "[C]---TICKET INFORMATION---" +
+                        "[L]TicketID:\n" + "[R]" + ticketIDPrinting() +
                         "[L]Violation Date:\n" +"[R]" + date + "\n" +
-                        "[L]Officer:\n" + "[R]" + viewModel.getOfficerID().getValue() + "\n" +
-                        "[L]Parking Lot:\n" + "[R]" + viewModel.getParkingLot().getValue() + "\n" +
-                        "[L]Violation:\n" + "[R]" + viewModel.getArrSelectedOffenses().getValue() + "\n" +
-                        "[L]Fine Amount:\n" + "[R]" + " $" + calculateTotalFine() + "\n" +
-                        "[C]---VEHICLE INFORMATION---" + "\n" +
-                        "[L]License:\n" + "[R]" + viewModel.getLicenseNumber().getValue()+ "\n" +
-                        "[L]State:\n" + "[R]" + viewModel.getLicenseState().getValue() + "\n" +
-                        "[L]Car Model:\n" + "[R]" + viewModel.getVehicleModel().getValue() + "\n" +
-                        "[L]Car Color:\n" + "[R]" + viewModel.getVehicleColor().getValue()
+                        "[L]Officer:\n" + "[R]" + reportingOfficerPrinting() +
+                        "[L]Parking Lot:\n" + "[R]" + citationLocationPrinting() +
+                        "[L]Violation:\n" + "[R]" + violationTypePrinting() +
+                        "[L]Fine Amount:\n" + "[R]" + " $" + calculateTotalFine() +
+                        "[C]---VEHICLE INFORMATION---" +
+                        "[L]License:\n" + "[R]" + licensePlatePrinting() +
+                        "[L]State:\n" + "[R]" + vehicleStatePrinting() +
+                        "[L]Car Model:\n" + "[R]" + vehicleModelPrinting() +
+                        "[L]Car Color:\n" + "[R]" + vehicleColorPrinting()
                 );
             } catch (Exception e) {
                 printerConnectionFailed();
@@ -469,6 +469,108 @@ public class MainActivity extends AppCompatActivity implements SelectLotFragment
         return totalFineAmountString;
     }
 
+    /**********************
+     The following are a series of functions that read their respective view models and print
+     a meaningful message to the user if they are detected as null or not.
+     **********************/
+    public String ticketIDPrinting()
+    {
+        if (viewModel.getTicketID().getValue() == null)
+        {
+            return "ID Not Found";
+        }
+        else {
+            return viewModel.getTicketID().getValue().toString();
+        }
+    }
+
+    public String reportingOfficerPrinting()
+    {
+        if (viewModel.getOfficerID().getValue() == null)
+        {
+            return "ID Not Found";
+        }
+        else {
+            return viewModel.getOfficerID().getValue();
+        }
+    }
+
+    public String citationLocationPrinting()
+    {
+        if (viewModel.getParkingLot().getValue() == null)
+        {
+            return "Lot Not Found";
+        }
+        else {
+            return viewModel.getParkingLot().getValue();
+        }
+    }
+
+    public String violationTypePrinting()
+    {
+        if (viewModel.getArrSelectedOffenses().getValue() == null)
+        {
+            return "Offenses Not Found";
+        }
+        else {
+            return viewModel.getArrSelectedOffenses().getValue().toString();
+        }
+    }
+
+    public String licensePlatePrinting()
+    {
+        if (viewModel.getLicenseNumber().getValue() == null)
+        {
+            return "Plate Number Not Found";
+        }
+        else {
+            return viewModel.getLicenseNumber().getValue();
+        }
+    }
+
+    public String vehicleColorPrinting()
+    {
+        if (viewModel.getVehicleColor().getValue() == null)
+        {
+            return "Color Not Found";
+        }
+        else {
+            return viewModel.getVehicleColor().getValue();
+        }
+    }
+
+    public String vehicleModelPrinting()
+    {
+        if (viewModel.getVehicleModel().getValue() == null)
+        {
+            return "Model Not Found";
+        }
+        else {
+            return viewModel.getVehicleModel().getValue();
+        }
+    }
+
+    public String vehicleMakePrinting()
+    {
+        if (viewModel.getVehicleMake().getValue() == null)
+        {
+            return "Make Not Found";
+        }
+        else {
+            return viewModel.getVehicleMake().getValue();
+        }
+    }
+
+    public String vehicleStatePrinting()
+    {
+        if (viewModel.getLicenseState().getValue() == null)
+        {
+            return "State Not Found";
+        }
+        else {
+            return viewModel.getLicenseState().getValue();
+        }
+    }
 
 
 }
