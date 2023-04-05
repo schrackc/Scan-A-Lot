@@ -69,7 +69,6 @@ public class PrintPreviewFragment extends Fragment {
 
             binding.textViewVehicleMake.setText(binding.textViewVehicleMake.getText() + " " + viewModel.getVehicleMake().getValue());
 
-
         }
     }
 

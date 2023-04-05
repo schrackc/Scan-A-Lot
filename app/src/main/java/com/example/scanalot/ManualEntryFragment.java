@@ -47,6 +47,9 @@ public class ManualEntryFragment extends Fragment {
         // If search button clicked gives license number and license state value field values to dynamic values in MainActivity the navigates to results page
         btn_manualSearch = binding.manualSearchButton;
         btn_manualSearch.setEnabled(true);
+
+
+
         btn_manualSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

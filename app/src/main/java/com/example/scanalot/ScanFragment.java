@@ -84,6 +84,12 @@ public class ScanFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+
+
+
+
         // super.onViewCreated(view, savedInstanceState);
         binding = FragmentScanBinding.inflate(inflater, container, false);
         previewView = binding.previewView;
@@ -94,6 +100,10 @@ public class ScanFragment extends Fragment {
         // vehicleList = viewModel.getLicenseVehicleList().getValue();
         db = FirebaseFirestore.getInstance();
         viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
+
+
+
+
         //get the collection
         vehiclesCollection = db.collection("Vehicles");
         //now set up a query to get the particular vehicles that belong with the lot
@@ -344,6 +354,9 @@ public class ScanFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //clear the viewModel for next ticket scan
+
+     clearViewModel();
 
         btnManualEntry = binding.outlinedButton;
         btnResultScan = binding.ResultsScanButton;
@@ -367,6 +380,17 @@ public class ScanFragment extends Fragment {
             }
         });
 
+    }
+
+
+    public void clearViewModel()
+    {
+        viewModel.setLicenseNumber(null);
+        viewModel.setVehicleColor(null);
+        viewModel.setVehicleModel(null);
+        viewModel.setVehicleMake(null);
+        viewModel.setArrSelectedOffenses(null);
+        viewModel.setArrFineAmount(null);
     }
 
 
