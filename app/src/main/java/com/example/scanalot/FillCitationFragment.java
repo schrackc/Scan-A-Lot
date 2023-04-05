@@ -38,9 +38,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.type.DateTime;
 import com.google.type.TimeOfDay;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -271,26 +274,39 @@ public class FillCitationFragment extends Fragment {
 
     private void createTicket()
     {
+        String officerID = editText_OfficerID.getText().toString();
+        String carModel = binding.fillVehicleModel.getText().toString();
+        String carColor = binding.fillVehicleColor.getText().toString();
 
-        String officerID = viewModel.getOfficerID().getValue();
-        String carModel = viewModel.getVehicleModel().getValue();
-        String carColor = viewModel.getVehicleColor().getValue();
-        ArrayList<String> citations = viewModel.getArrSelectedOffenses().getValue();
-        String carLicenseNumber = viewModel.getLicenseNumber().getValue();
+        String[] citationValues = binding.fillAddCitations.getText().toString().split(",");
+        List<String> citations = Arrays.asList(citationValues);
+        String carLicenseNumber = binding.fillTextPlateNumber.getText().toString();
         String citationTime = LocalDateTime.now().toString();
-        String carParkingLot = viewModel.getParkingLot().getValue();
-        String carState = viewModel.getLicenseState().getValue();
-        String carMake = viewModel.getVehicleMake().getValue();
-        String officerNotes = viewModel.getOfficerNotes().getValue();
+        String carParkingLot = binding.fillChooseLotSpinner.getSelectedItem().toString();
+        String carState = binding.fillChooseTheStateSpinner.getSelectedItem().toString();
+        String carMake = binding.fillVehicleMake.getText().toString();
+        String officerNotes = binding.fillNotes.getText().toString();
+
+
+
         String offense ="";
         String totalFine = "";
 
-        if(viewModel.getArrSelectedOffenses().getValue() != null)
+        if(citations.size()>0)
         {
-            offense = viewModel.getArrSelectedOffenses().getValue().toString();
+            offense = citations.toString();
+
             totalFine =  calculateTotalFine();
         }
-
+        viewModel.setOfficerID(officerID);
+        viewModel.setVehicleModel(carModel);
+        viewModel.setVehicleColor(carColor);
+        viewModel.setArrSelectedOffenses(new ArrayList<String>(citations));
+        viewModel.setLicenseNumber(carLicenseNumber);
+        viewModel.setParkingLot(carParkingLot);
+        viewModel.setLicenseState(carState);
+        viewModel.setVehicleMake(carMake);
+        viewModel.setOfficerNotes(officerNotes);
 
         Map<String, Object> data = new HashMap<>();
         data.put("CarModel", carModel);
