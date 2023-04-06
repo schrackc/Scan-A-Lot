@@ -86,13 +86,12 @@ public class EditTicketCitationFragment extends Fragment {
         //get the instances for firebase
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        //get the officer collection
-        //  officerCollection = db.collection("Officers");
-        //get the currently logged in user and update Live variable
         currentUser = fAuth.getCurrentUser();
-        //viewModel.setArrSelectedOffenses(selectedOffenseArray);
+
 
         //query db for username associated with the current User's email.
+
+       /*Get officer id*/
         db.collection("Officers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -136,9 +135,9 @@ public class EditTicketCitationFragment extends Fragment {
 
                 }
 
-                navAction = EditTicketFragmentDirections.actionEditTicketFragmentToEditTicketCitationFragment();
+               // navAction = EditTicketFragmentDirections.actionEditTicketFragmentToEditTicketCitationFragment();
                 //get the nav controller and tell it to navigate
-                Navigation.findNavController(view).navigate(navAction);
+              //  Navigation.findNavController(view).navigate(navAction);
 
             }
         });
@@ -147,7 +146,7 @@ public class EditTicketCitationFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navAction = EditTicketFragmentDirections.actionEditTicketFragmentToEditTicketCitationFragment();
+                navAction = EditTicketCitationFragmentDirections.actionEditTicketCitationFragmentToScanFragment();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
@@ -164,11 +163,6 @@ public class EditTicketCitationFragment extends Fragment {
                 offensesArray = viewModel.getArrOffenses().getValue();
                 // use size() to get array size.
                 String[] violations = offensesArray.toArray(new String[offensesArray.size()]);
-                //String[] violations = new String[]{viewModel.getArrOffenses().getValue().toString()};
-                //creates the violation array
-                //String[] citations = new String[]{"Violation A", "Violation B", "Violation C"};
-                //creates the checkboxes
-                //boolean[] checkBoxes = new boolean[citations.length];
                 boolean[] checkBoxes = new boolean[violations.length];
 
                 //The array to add choices to
@@ -290,7 +284,7 @@ public class EditTicketCitationFragment extends Fragment {
         viewModel.setVehicleColor(carColor);
         viewModel.setArrSelectedOffenses(new ArrayList<String>(citations));
         viewModel.setLicenseNumber(carLicenseNumber);
-        viewModel.setParkingLot(carParkingLot);
+        viewModel.setEditTicketParkingLot(carParkingLot);
         viewModel.setLicenseState(carState);
         viewModel.setVehicleMake(carMake);
         viewModel.setOfficerNotes(officerNotes);
@@ -308,46 +302,27 @@ public class EditTicketCitationFragment extends Fragment {
         data.put("CarMake", carMake);
         data.put("OfficerNotes", officerNotes);
         data.put("ArrayOffenses", citations);
-        //get latest ticketnum to increment it for new ticket from ticket collection
-        generateTicketNum(data);
-    }
-
-    private void generateTicketNum(Map<String, Object> data) {
-        db.collection("Tickets").orderBy("TicketNum", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                        Integer ticketNum = Integer.parseInt(documentSnapshot.get("TicketNum").toString());
-                        Log.i("TicketNum", "Regular ticket num " + ticketNum);
-                        Integer newTicketNum = ticketNum + 1;
-                        //Log.i("new Ticket num", "new ticket num is" + newTicketNum);
-                        // Log.i("TicketID in editCItaiton", "VIEW MODEL TICKET ID IS " + viewModel.getTicketID().getValue());
-                        data.put("TicketNum", newTicketNum);
-                        viewModel.setTicketID(newTicketNum);
-                        db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getContext(), "Ticket Sent Successfully", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Log.i("CONNECTION FAILED", task.getException().getMessage());
-                                    DBConnectionFailed();
-                                }
-                            }
-                        });
+        data.put("TicketNum", viewModel.getTicketID().getValue());
+        //Update document with certain ID
+        db.collection("Tickets").document(viewModel.getEditTicketDocumentID().getValue()).update(data)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            navAction = EditTicketCitationFragmentDirections.actionEditTicketCitationFragmentToPrintPreviewFragment();
+                            //get the nav controller and tell it to navigate
+                            Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main).navigate(navAction);
+                        }
+                        else
+                        {
+                            Toast.makeText(getContext(),"Ticket Failed To Update", Toast.LENGTH_LONG);
+                        }
                     }
-
-                } else {
-                    DBConnectionFailed();
-                }
-
-
-            }
-        });
+                });
     }
+
+
 
     private void DBConnectionFailed() {
         Toast.makeText(getContext(), "Failed To Send Ticket To Database. Please Try Again", Toast.LENGTH_LONG).show();
@@ -377,10 +352,15 @@ public class EditTicketCitationFragment extends Fragment {
         binding.editVehicleColor.setText(viewModel.getVehicleColor().getValue());
         //set balue for editVehicleMake box
         binding.editVehicleMake.setText(viewModel.getVehicleMake().getValue());
+        //set citation text
+        String strViolationText = "";
+        for (String strViolation:viewModel.getArrSelectedOffenses().getValue()) {
+            strViolationText+=(strViolation + ",");
+        }
+        binding.editAddCitations.setText(strViolationText);
+        //set officer notes
+        editText_OfficerNotes.setText(viewModel.getOfficerNotes().getValue());
 
-
-        //this is where the ERRROROROROROROROROROROROR is
-        //binding.editTicketNumber.setText(viewModel.getTicketID().getValue().toString());
     }
 
     public String calculateTotalFine(){

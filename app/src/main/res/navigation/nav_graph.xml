@@ -49,6 +49,7 @@
         tools:layout="@layout/fragment_edit_ticket" >
         <action
             android:id="@+id/action_edit_ticket_fragment_to_editTicketCitationFragment"
+            app:popUpTo="@id/editTicketCitationFragment"
             app:destination="@id/editTicketCitationFragment" />
     </fragment>
     <fragment
@@ -107,5 +108,14 @@
         android:id="@+id/editTicketCitationFragment"
         android:name="com.example.scanalot.EditTicketCitationFragment"
         android:label="fragment_edit_ticket_citation"
-        tools:layout="@layout/fragment_edit_ticket_citation" />
+        tools:layout="@layout/fragment_edit_ticket_citation" >
+        <action
+            android:id="@+id/action_editTicketCitationFragment_to_printPreviewFragment"
+            app:popUpTo="@id/printPreviewFragment"
+            app:destination="@id/printPreviewFragment" />
+        <action
+            android:id="@+id/action_editTicketCitationFragment_to_scan_fragment"
+            app:popUpTo="@id/scan_fragment"
+            app:destination="@id/scan_fragment" />
+    </fragment>
 </navigation>

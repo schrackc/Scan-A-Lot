@@ -20,6 +20,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class EditTicketFragment extends Fragment {
     EditText editTicketID;
     TicketDataViewModel viewModel;
     FirebaseFirestore db;
+    NavDirections navAction;
 
 
     /**
@@ -94,6 +97,10 @@ public class EditTicketFragment extends Fragment {
                                         Log.i("Edit Ticket OfficerNotes" ,viewModel.getOfficerNotes().getValue().toString());
                                         Log.i("Edit TicketNum" ,viewModel.getTicketID().getValue().toString());
                                         Log.i("Edit Ticket Parking Lot" ,viewModel.getEditTicketParkingLot().getValue().toString());
+
+                                        navAction = EditTicketFragmentDirections.actionEditTicketFragmentToEditTicketCitationFragment();
+                                        Navigation.findNavController(view).navigate(navAction);
+
                                     }
                                 }
                             }
