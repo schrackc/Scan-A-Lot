@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -310,7 +311,7 @@ public class EditTicketCitationFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful())
                         {
-                            navAction = EditTicketCitationFragmentDirections.actionEditTicketCitationFragmentToPrintPreviewFragment();
+                            navAction = EditTicketCitationFragmentDirections.actionEditTicketCitationFragmentToEditPrintPreviewFragment();
                             //get the nav controller and tell it to navigate
                             Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main).navigate(navAction);
                         }
@@ -354,8 +355,10 @@ public class EditTicketCitationFragment extends Fragment {
         binding.editVehicleMake.setText(viewModel.getVehicleMake().getValue());
         //set citation text
         String strViolationText = "";
-        for (String strViolation:viewModel.getArrSelectedOffenses().getValue()) {
-            strViolationText+=(strViolation + ",");
+        if (viewModel.getArrSelectedOffenses().getValue() != null) {
+            for (String strViolation : viewModel.getArrSelectedOffenses().getValue()) {
+                strViolationText += (strViolation + ",");
+            }
         }
         binding.editAddCitations.setText(strViolationText);
         //set officer notes
@@ -390,4 +393,14 @@ public class EditTicketCitationFragment extends Fragment {
         binding = FragmentEditTicketCitationBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
+    /**
+     * Cleans up resources when view is destroyed
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 }
