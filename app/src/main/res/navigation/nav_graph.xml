@@ -46,7 +46,11 @@
         android:id="@+id/edit_ticket_fragment"
         android:name="com.example.scanalot.EditTicketFragment"
         android:label="fragment_edit_ticket_fragment"
-        tools:layout="@layout/fragment_edit_ticket" />
+        tools:layout="@layout/fragment_edit_ticket" >
+        <action
+            android:id="@+id/action_edit_ticket_fragment_to_editTicketCitationFragment"
+            app:destination="@id/editTicketCitationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/log_out_fragment"
         android:name="com.example.scanalot.LogOutFragment"
@@ -99,4 +103,9 @@
         android:name="com.example.scanalot.PrintPreviewFragment"
         android:label="fragment_print_preview"
         tools:layout="@layout/fragment_print_preview" />
+    <fragment
+        android:id="@+id/editTicketCitationFragment"
+        android:name="com.example.scanalot.EditTicketCitationFragment"
+        android:label="fragment_edit_ticket_citation"
+        tools:layout="@layout/fragment_edit_ticket_citation" />
 </navigation>
