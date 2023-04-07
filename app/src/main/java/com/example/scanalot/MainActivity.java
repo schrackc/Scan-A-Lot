@@ -8,11 +8,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Preview;
 import androidx.core.content.ContextCompat;
@@ -37,7 +38,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.Map;
 

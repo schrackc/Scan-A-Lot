@@ -8,7 +8,7 @@
     <string name="previous">Previous</string>
     <string name="helloFirstFragment">Hello first fragment</string>
     <string name="helloSecondFragment">Hello second fragment. Arg: %1$s</string>
-    <string name="titleActivityLogin">LoginActivity</string>
+    <string name="titleActivityLogin">ScanALot</string>
     <string name="promptEmail">Email</string>
     <string name="promptPassword">Password</string>
     <string name="actionSignIn">LOG IN</string>

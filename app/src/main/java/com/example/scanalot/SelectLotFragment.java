@@ -16,8 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.List;
 
 /**

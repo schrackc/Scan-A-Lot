@@ -2,22 +2,25 @@ package com.example.scanalot;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.scanalot.databinding.FragmentEditPrintPreviewBinding;
-import com.example.scanalot.databinding.FragmentPrintPreviewBinding;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * This class is used for the EditPrintPreviewFragment. It creates the fragment and uses the fragment_edit_print_preview layout. This will be used for
+ * when the user taps the "save and print" button which will direct them to this to see a preview of the edited ticket they are printing out.
+ *
+ */
 public class EditPrintPreviewFragment extends Fragment {
 
     FragmentEditPrintPreviewBinding binding;

@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.scanalot.databinding.FragmentPrintPreviewBinding;
-import com.example.scanalot.databinding.FragmentSelectLotBinding;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
