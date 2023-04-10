@@ -1,6 +1,5 @@
 package com.example.scanalot;
 
-import java.security.acl.Owner;
 import java.util.ArrayList;
 
 /**

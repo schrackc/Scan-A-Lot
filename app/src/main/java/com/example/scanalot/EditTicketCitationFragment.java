@@ -22,13 +22,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.example.scanalot.databinding.FragmentFillCitationBinding;
+import com.example.scanalot.databinding.FragmentEditTicketCitationBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,18 +41,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class is used for the FillCitationFragment. It creates the fragment and uses the fragment_fill_citation layout. This will be used for
- * further handling of the data when the camera has scanned a license plate and the officer has clicked a fill citation button which brings
- * them to this fragment.
+ * This class is used for the EditTicketCitationFragment. It creates the fragment and uses the fragment_edit_ticket_citation layout. This will be used for
+ * further handling of the data when the edit ticket page is used to search for a valid ID.
  *
- * @author Andrew Hoffer
- * @Created 1/30/23
- * @Contributors Andrew Hoffer - 1/30/23 - Created the fragment. Added view event listeners.
- * @Contributors Nick Downey - Added violations and changed officerID pulling to be an int.
  */
 
-public class FillCitationFragment extends Fragment {
-    FragmentFillCitationBinding binding;
+public class EditTicketCitationFragment extends Fragment {
+    FragmentEditTicketCitationBinding binding;
     NavDirections navAction;
     TextView textView;
     Button btnCancel;
@@ -85,23 +79,22 @@ public class FillCitationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
-        textView = binding.fillAddCitations;
-        btnCancel = binding.fillCancelButton;
-        btnSavePrint = binding.fillSavePrintButton;
-        editText_OfficerID = binding.fillOfficerID;
-        editText_OfficerNotes = binding.fillNotes;
+        textView = binding.editAddCitations;
+        btnCancel = binding.editCancelButton;
+        btnSavePrint = binding.editSavePrintButton;
+        editText_OfficerID = binding.editOfficerID;
+        editText_OfficerNotes = binding.editNotes;
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.connectToPrinter();
         //get the instances for firebase
         fAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        //get the officer collection
-        //  officerCollection = db.collection("Officers");
-        //get the currently logged in user and update Live variable
         currentUser = fAuth.getCurrentUser();
-        //viewModel.setArrSelectedOffenses(selectedOffenseArray);
+
 
         //query db for username associated with the current User's email.
+
+       /*Get officer id*/
         db.collection("Officers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -110,7 +103,7 @@ public class FillCitationFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         //get email of document
                         String strSnapEmail = (String) document.get("Email");
-                       //if the email matches the current user email we got a match
+                        //if the email matches the current user email we got a match
                         if(strSnapEmail.equals(currentUser.getEmail().toString()))
                         {
                             strOfficerID = document.get("OfficerID").toString();
@@ -127,9 +120,9 @@ public class FillCitationFragment extends Fragment {
         //show the value in OfficerId editText
 
 
-        chooseStateSpinner = binding.fillChooseTheStateSpinner;
-        chooseLotSpinner = binding.fillChooseLotSpinner;
-        autoFillCitationData();
+        chooseStateSpinner = binding.editChooseTheStateSpinner;
+        chooseLotSpinner = binding.editChooseLotSpinner;
+        autoEditTicketCitationData();
 
         viewModel.getParkingLot().getValue();
 
@@ -137,17 +130,17 @@ public class FillCitationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    //MainActivity mainActivity = (MainActivity) getActivity();
+                    MainActivity mainActivity = (MainActivity) getActivity();
                     //set the notes live data variable,print,and send ticket to Firestore
                     viewModel.setOfficerNotes(editText_OfficerNotes.getText().toString());
-                   // mainActivity.printText();
+                    mainActivity.printText();
                     createTicket();
 
                 }
 
-                navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToPrintPreviewFragment();
+               // navAction = EditTicketFragmentDirections.actionEditTicketFragmentToEditTicketCitationFragment();
                 //get the nav controller and tell it to navigate
-                Navigation.findNavController(view).navigate(navAction);
+              //  Navigation.findNavController(view).navigate(navAction);
 
             }
         });
@@ -156,7 +149,7 @@ public class FillCitationFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navAction = FillCitationFragmentDirections.actionFillCitationFragment2ToScanFragment();
+                navAction = EditTicketCitationFragmentDirections.actionEditTicketCitationFragmentToScanFragment();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
@@ -173,11 +166,6 @@ public class FillCitationFragment extends Fragment {
                 offensesArray = viewModel.getArrOffenses().getValue();
                 // use size() to get array size.
                 String[] violations = offensesArray.toArray(new String[offensesArray.size()]);
-                //String[] violations = new String[]{viewModel.getArrOffenses().getValue().toString()};
-                //creates the violation array
-                //String[] citations = new String[]{"Violation A", "Violation B", "Violation C"};
-                //creates the checkboxes
-                //boolean[] checkBoxes = new boolean[citations.length];
                 boolean[] checkBoxes = new boolean[violations.length];
 
                 //The array to add choices to
@@ -270,18 +258,18 @@ public class FillCitationFragment extends Fragment {
     private void createTicket()
     {
         String officerID = editText_OfficerID.getText().toString();
-        String carModel = binding.fillVehicleModel.getText().toString();
-        String carColor = binding.fillVehicleColor.getText().toString();
+        String carModel = binding.editVehicleModel.getText().toString();
+        String carColor = binding.editVehicleColor.getText().toString();
 
-        String[] citationValues = binding.fillAddCitations.getText().toString().split(",");
+        String[] citationValues = binding.editAddCitations.getText().toString().split(",");
 
         List<String> citations = Arrays.asList(citationValues);
-        String carLicenseNumber = binding.fillTextPlateNumber.getText().toString();
+        String carLicenseNumber = binding.editTextPlateNumber.getText().toString();
         String citationTime = LocalDateTime.now().toString();
-        String carParkingLot = binding.fillChooseLotSpinner.getSelectedItem().toString();
-        String carState = binding.fillChooseTheStateSpinner.getSelectedItem().toString();
-        String carMake = binding.fillVehicleMake.getText().toString();
-        String officerNotes = binding.fillNotes.getText().toString();
+        String carParkingLot = binding.editChooseLotSpinner.getSelectedItem().toString();
+        String carState = binding.editChooseTheStateSpinner.getSelectedItem().toString();
+        String carMake = binding.editVehicleMake.getText().toString();
+        String officerNotes = binding.editNotes.getText().toString();
 
 
 
@@ -299,7 +287,7 @@ public class FillCitationFragment extends Fragment {
         viewModel.setVehicleColor(carColor);
         viewModel.setArrSelectedOffenses(new ArrayList<String>(citations));
         viewModel.setLicenseNumber(carLicenseNumber);
-        viewModel.setParkingLot(carParkingLot);
+        viewModel.setEditTicketParkingLot(carParkingLot);
         viewModel.setLicenseState(carState);
         viewModel.setVehicleMake(carMake);
         viewModel.setOfficerNotes(officerNotes);
@@ -317,48 +305,27 @@ public class FillCitationFragment extends Fragment {
         data.put("CarMake", carMake);
         data.put("OfficerNotes", officerNotes);
         data.put("ArrayOffenses", citations);
-        //get latest ticketnum to increment it for new ticket from ticket collection
-        generateTicketNum(data);
-    }
-
-    private void generateTicketNum(Map<String, Object> data) {
-        db.collection("Tickets").orderBy("TicketNum", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                        Integer ticketNum = Integer.parseInt(documentSnapshot.get("TicketNum").toString());
-                        Log.i("TicketNum", "Regular ticket num " + ticketNum);
-                        Integer newTicketNum = ticketNum + 1;
-                        //Log.i("new Ticket num", "new ticket num is" + newTicketNum);
-                        // Log.i("TicketID in FillCItaiton", "VIEW MODEL TICKET ID IS " + viewModel.getTicketID().getValue());
-                        data.put("TicketNum", newTicketNum);
-                        viewModel.setTicketID(newTicketNum);
-                        db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getContext(), "Ticket Sent Successfully", Toast.LENGTH_LONG).show();
-                                    MainActivity mainActivity = (MainActivity) getActivity();
-                                    mainActivity.printText();
-                                } else {
-                                    Log.i("CONNECTION FAILED", task.getException().getMessage());
-                                    DBConnectionFailed();
-                                }
-                            }
-                        });
+        data.put("TicketNum", viewModel.getTicketID().getValue());
+        //Update document with certain ID
+        db.collection("Tickets").document(viewModel.getEditTicketDocumentID().getValue()).update(data)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            navAction = EditTicketCitationFragmentDirections.actionEditTicketCitationFragmentToEditPrintPreviewFragment();
+                            //get the nav controller and tell it to navigate
+                            Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main).navigate(navAction);
+                        }
+                        else
+                        {
+                            Toast.makeText(getContext(),"Ticket Failed To Update", Toast.LENGTH_LONG);
+                        }
                     }
-
-                } else {
-                    DBConnectionFailed();
-                }
-
-
-            }
-        });
+                });
     }
+
+
 
     private void DBConnectionFailed() {
         Toast.makeText(getContext(), "Failed To Send Ticket To Database. Please Try Again", Toast.LENGTH_LONG).show();
@@ -368,12 +335,12 @@ public class FillCitationFragment extends Fragment {
     /**
      * set Live Data values to view values within Fragment
      */
-    private void autoFillCitationData() {
-        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
-        Log.i("LIVE DATA FILL CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
+    private void autoEditTicketCitationData() {
+        Log.i("LIVE DATA edit CITATION FRAG", "LICENSE NUM: " + viewModel.getLicenseNumber().getValue());
+        Log.i("LIVE DATA edit CITATION FRAG", "LICENSE STATE: " + viewModel.getLicenseState().getValue());
 
-        //set the value fillTextPlateNumber box
-        binding.fillTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
+        //set the value editTextPlateNumber box
+        binding.editTextPlateNumber.setText(viewModel.getLicenseNumber().getValue());
         //set the value of the chooseStateSpinner
         ArrayAdapter chooseStateAdapter = (ArrayAdapter) chooseStateSpinner.getAdapter();
         chooseStateSpinner.setSelection(chooseStateAdapter.getPosition(viewModel.getLicenseState().getValue()));
@@ -382,16 +349,23 @@ public class FillCitationFragment extends Fragment {
         //ArrayAdapter chooseLotAdapter = (ArrayAdapter) chooseLotSpinner.getAdapter();
         chooseLotSpinner.setAdapter(chooseLotAdapter);
         chooseLotSpinner.setSelection(chooseLotAdapter.getPosition(viewModel.getParkingLot().getValue()));
-        //set the value fillVehicleModel box
-        binding.fillVehicleModel.setText(viewModel.getVehicleModel().getValue());
-        //set the value fillVehicleModel box
-        binding.fillVehicleColor.setText(viewModel.getVehicleColor().getValue());
-        //set balue for fillVehicleMake box
-        binding.fillVehicleMake.setText(viewModel.getVehicleMake().getValue());
+        //set the value editVehicleModel box
+        binding.editVehicleModel.setText(viewModel.getVehicleModel().getValue());
+        //set the value editVehicleModel box
+        binding.editVehicleColor.setText(viewModel.getVehicleColor().getValue());
+        //set balue for editVehicleMake box
+        binding.editVehicleMake.setText(viewModel.getVehicleMake().getValue());
+        //set citation text
+        String strViolationText = "";
+        if (viewModel.getArrSelectedOffenses().getValue() != null) {
+            for (String strViolation : viewModel.getArrSelectedOffenses().getValue()) {
+                strViolationText += (strViolation + ",");
+            }
+        }
+        binding.editAddCitations.setText(strViolationText);
+        //set officer notes
+        editText_OfficerNotes.setText(viewModel.getOfficerNotes().getValue());
 
-
-        //this is where the ERRROROROROROROROROROROROR is
-        //binding.fillTicketNumber.setText(viewModel.getTicketID().getValue().toString());
     }
 
     public String calculateTotalFine(){
@@ -418,7 +392,17 @@ public class FillCitationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentFillCitationBinding.inflate(inflater, container, false);
+        binding = FragmentEditTicketCitationBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
+    /**
+     * Cleans up resources when view is destroyed
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 }
