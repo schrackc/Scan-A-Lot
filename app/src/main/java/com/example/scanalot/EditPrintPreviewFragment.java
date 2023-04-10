@@ -11,23 +11,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.scanalot.databinding.FragmentPrintPreviewBinding;
+import com.example.scanalot.databinding.FragmentEditPrintPreviewBinding;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- * This class is used for the printPreviewFragment. It creates the fragment and uses the fragment_print_preview layout. This will be used for
- * when the user taps the "save and print" button which will direct them to this to see a preview of the ticket they are printing out.
+ * This class is used for the EditPrintPreviewFragment. It creates the fragment and uses the fragment_edit_print_preview layout. This will be used for
+ * when the user taps the "save and print" button which will direct them to this to see a preview of the edited ticket they are printing out.
  *
- * @author Andrew Hoffer
- * @Created 2/4/23
- * @Contributors Andrew Hoffer - 2/4/23 - Created the fragment
  */
+public class EditPrintPreviewFragment extends Fragment {
 
-public class PrintPreviewFragment extends Fragment {
-
-    FragmentPrintPreviewBinding binding;
+    FragmentEditPrintPreviewBinding binding;
     MainActivity mainActivity;
     TicketDataViewModel viewModel;
     /**
@@ -45,27 +41,27 @@ public class PrintPreviewFragment extends Fragment {
             viewModel.getTicketID().observe(getViewLifecycleOwner(), new Observer<Integer>() {
                 @Override
                 public void onChanged(Integer integer) {
-                    binding.textViewTicketID.setText("Ticket ID: "+ticketIDPrinting());
+                    binding.editTextViewTicketID.setText("Ticket ID: "+ticketIDPrinting());
                 }
             });
 
-            binding.textViewViolationTime.setText(binding.textViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
+            binding.editTextViewViolationTime.setText(binding.editTextViewViolationTime.getText() +" "+ strMonth + iDay + "/" + iYear);
 
-            binding.TextViewReportingOfficer.setText(binding.TextViewReportingOfficer.getText() +" "+ reportingOfficerPrinting());
+            binding.editTextViewReportingOfficer.setText(binding.editTextViewReportingOfficer.getText() +" "+ reportingOfficerPrinting());
 
-            binding.textViewCitationLocation.setText(binding.textViewCitationLocation.getText() +" "+ citationLocationPrinting());
+            binding.editTextViewCitationLocation.setText(binding.editTextViewCitationLocation.getText() +" "+ citationLocationPrinting());
 
-            binding.textViewViolationType.setText(binding.textViewViolationType.getText() + " " + violationTypePrinting());
+            binding.editTextViewViolationType.setText(binding.editTextViewViolationType.getText() + " " + violationTypePrinting());
 
-            binding.textViewFineAmount.setText(binding.textViewFineAmount.getText() + " $" + calculateTotalFine());
+            binding.editTextViewFineAmount.setText(binding.editTextViewFineAmount.getText() + " $" + calculateTotalFine());
 
-            binding.textViewLicensePlate.setText(binding.textViewLicensePlate.getText() +" " +  licensePlatePrinting());
+            binding.editTextViewLicensePlate.setText(binding.editTextViewLicensePlate.getText() +" " +  licensePlatePrinting());
 
-            binding.textViewVehicleColor.setText(binding.textViewVehicleColor.getText() + " " + vehicleColorPrinting());
+            binding.editTextViewVehicleColor.setText(binding.editTextViewVehicleColor.getText() + " " + vehicleColorPrinting());
 
-            binding.textViewVehicleModel.setText(binding.textViewVehicleModel.getText() + " " + vehicleModelPrinting());
+            binding.editTextViewVehicleModel.setText(binding.editTextViewVehicleModel.getText() + " " + vehicleModelPrinting());
 
-            binding.textViewVehicleMake.setText(binding.textViewVehicleMake.getText() + " " + vehicleMakePrinting());
+            binding.editTextViewVehicleMake.setText(binding.editTextViewVehicleMake.getText() + " " + vehicleMakePrinting());
 
         }
     }
@@ -76,7 +72,7 @@ public class PrintPreviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
-        binding = FragmentPrintPreviewBinding.inflate(inflater, container, false);
+        binding = FragmentEditPrintPreviewBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -109,8 +105,8 @@ public class PrintPreviewFragment extends Fragment {
     }
 
     /**********************
-        The following are a series of functions that read their respective view models and print
-        a meaningful message to the user if they are detected as null or not.
+     The following are a series of functions that read their respective view models and print
+     a meaningful message to the user if they are detected as null or not.
      **********************/
     public String ticketIDPrinting()
     {

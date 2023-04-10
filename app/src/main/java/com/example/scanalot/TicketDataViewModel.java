@@ -23,6 +23,8 @@ public class TicketDataViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<String>> arrSelectedOffenses = new MutableLiveData<ArrayList<String>>();
     private final MutableLiveData<ArrayList<String>> arrFineAmount = new MutableLiveData<ArrayList<String>>();
 
+    private final MutableLiveData<String> strEditTicketDocumentID= new MutableLiveData<String>();
+    private final MutableLiveData<String> strEditTicketParkingLot= new MutableLiveData<String>();
 
     /*Public */
 
@@ -153,4 +155,24 @@ public class TicketDataViewModel extends ViewModel {
     /*Array Fine Amount Getters/Setters*/
     public void setArrFineAmount(ArrayList<String> arr){arrFineAmount.setValue(arr);}
     public LiveData<ArrayList<String>> getArrFineAmount(){return arrFineAmount;}
+
+    /*Edit Ticket Document ID Getters/Setters*/
+    public void setEditTicketDocumentID(String p_DocumentID)
+    {
+        strEditTicketDocumentID.setValue(p_DocumentID);
+    }
+    public LiveData<String> getEditTicketDocumentID()
+    {
+        return strEditTicketDocumentID;
+    }
+
+    public void setEditTicketParkingLot(String p_ParkingLot)
+    {
+        strEditTicketParkingLot.setValue(p_ParkingLot);
+    }
+    public LiveData<String> getEditTicketParkingLot()
+    {
+        return strEditTicketParkingLot;
+    }
+
 }
