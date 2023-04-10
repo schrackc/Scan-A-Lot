@@ -50,7 +50,7 @@
         <action
             android:id="@+id/action_edit_ticket_fragment_to_editTicketCitationFragment"
             app:destination="@id/editTicketCitationFragment"
-            app:popUpTo="@id/editTicketCitationFragment"
+            app:popUpTo="@id/edit_ticket_fragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
