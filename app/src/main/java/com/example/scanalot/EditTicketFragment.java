@@ -68,7 +68,7 @@ public class EditTicketFragment extends Fragment {
                                 for (QueryDocumentSnapshot document : task.getResult())
                                 {
                                     Integer ticketNum =  Integer.parseInt(String.valueOf(document.get("TicketNum")));
-                                    if(ticketNum == searchedTicketNum)
+                                    if(ticketNum.equals(searchedTicketNum))
                                     {
                                         String strOffense = document.getString("Offense");
                                         String[] arrCitations = strOffense.substring(1, strOffense.length()-1).split(",");
