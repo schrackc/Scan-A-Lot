@@ -67,7 +67,6 @@ public class ScanFragment extends Fragment {
     FragmentScanBinding binding;
     NavDirections navAction;
     Button btnManualEntry;
-    Button btnResultScan;
     TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
     ProcessCameraProvider cameraProvider;
@@ -99,8 +98,6 @@ public class ScanFragment extends Fragment {
         // vehicleList = viewModel.getLicenseVehicleList().getValue();
         db = FirebaseFirestore.getInstance();
         viewModel = new ViewModelProvider(requireActivity()).get(TicketDataViewModel.class);
-
-
 
 
         //get the collection
@@ -366,7 +363,6 @@ public class ScanFragment extends Fragment {
      clearViewModel();
 
         btnManualEntry = binding.outlinedButton;
-        btnResultScan = binding.ResultsScanButton;
         Log.i("onCreate", "scan fragment created");
 
         //event listener on the manual entry button. Navigate to manual entry fragment
@@ -375,14 +371,6 @@ public class ScanFragment extends Fragment {
             public void onClick(View view) {
                 Log.i("Button Click", "manual button clicked !!!!");
                 navAction = ScanFragmentDirections.actionScanFragmentToManualEntryFragment();
-                Navigation.findNavController(view).navigate(navAction);
-            }
-        });
-        //event listener on the result scan button. Navigate to result fragment.
-        btnResultScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
                 Navigation.findNavController(view).navigate(navAction);
             }
         });
