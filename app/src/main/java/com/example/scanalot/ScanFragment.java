@@ -213,9 +213,9 @@ public class ScanFragment extends Fragment {
                                                    if (text.matches("^[A-Za-z]{3}[-\\s]\\d{4}$")) {
                                                        sb.append(text).append("\n");
                                                        //store license plate number
-                                                       String strLicensePlateNum = text;
-                                                       Log.i("License PLate", strLicensePlateNum);
-                                                       //set license number live data var
+                                                       String strLicensePlateNum = text.replaceAll("[\\s-]", "");
+                                                       Log.i("License Plate", strLicensePlateNum);
+                                                       // remove dashes and spaces before setting license number live data var
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
@@ -223,12 +223,13 @@ public class ScanFragment extends Fragment {
                                                        navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
                                                        Navigation.findNavController(binding.getRoot()).navigate(navAction);
                                                        isNotTextSet = false;
+
                                                    }
                                                    // Covers: CT, IL (AB12345)
                                                    else if (text.matches("^[A-Za-z]{2}[-\\s]\\d{5}$")) {
                                                        sb.append(text).append("\n");
                                                        //store license plate number
-                                                       String strLicensePlateNum = text;
+                                                       String strLicensePlateNum = text.replaceAll("[\\s-]", "");
                                                        Log.i("License PLate", strLicensePlateNum);
                                                        //set license number live data var
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
@@ -243,7 +244,7 @@ public class ScanFragment extends Fragment {
                                                    else if (text.matches("^\\d[A-Za-z]{2}\\d{4}$")) {
                                                        sb.append(text).append("\n");
                                                        //store license plate number
-                                                       String strLicensePlateNum = text;
+                                                       String strLicensePlateNum = text.replaceAll("[\\s-]", "");
                                                        Log.i("License PLate", strLicensePlateNum);
                                                        //set license number live data var
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
@@ -258,7 +259,7 @@ public class ScanFragment extends Fragment {
                                                    else if (text.matches("^\\d[A-Za-z]{3}\\d{3}$")) {
                                                        sb.append(text).append("\n");
                                                        //store license plate number
-                                                       String strLicensePlateNum = text;
+                                                       String strLicensePlateNum = text.replaceAll("[\\s-]", "");
                                                        Log.i("License PLate", strLicensePlateNum);
                                                        //set license number live data var
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
@@ -273,7 +274,7 @@ public class ScanFragment extends Fragment {
                                                    else if (text.matches("^\\d{3}[-\\s][A-Za-z]{3}$|^[A-Za-z]{3}[-\\s]\\d{3}$")) {
                                                        sb.append(text).append("\n");
                                                        //store license plate number
-                                                       String strLicensePlateNum = text;
+                                                       String strLicensePlateNum = text.replaceAll("[\\s-]", "");
                                                        Log.i("License PLate", strLicensePlateNum);
                                                        //set license number live data var
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
