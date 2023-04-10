@@ -49,8 +49,9 @@
         tools:layout="@layout/fragment_edit_ticket" >
         <action
             android:id="@+id/action_edit_ticket_fragment_to_editTicketCitationFragment"
+            app:destination="@id/editTicketCitationFragment"
             app:popUpTo="@id/editTicketCitationFragment"
-            app:destination="@id/editTicketCitationFragment" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/log_out_fragment"

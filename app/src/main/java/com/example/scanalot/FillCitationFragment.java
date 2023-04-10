@@ -137,10 +137,10 @@ public class FillCitationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    MainActivity mainActivity = (MainActivity) getActivity();
+                    //MainActivity mainActivity = (MainActivity) getActivity();
                     //set the notes live data variable,print,and send ticket to Firestore
                     viewModel.setOfficerNotes(editText_OfficerNotes.getText().toString());
-                    mainActivity.printText();
+                   // mainActivity.printText();
                     createTicket();
 
                 }
@@ -332,7 +332,7 @@ public class FillCitationFragment extends Fragment {
                         Log.i("TicketNum", "Regular ticket num " + ticketNum);
                         Integer newTicketNum = ticketNum + 1;
                         //Log.i("new Ticket num", "new ticket num is" + newTicketNum);
-                       // Log.i("TicketID in FillCItaiton", "VIEW MODEL TICKET ID IS " + viewModel.getTicketID().getValue());
+                        // Log.i("TicketID in FillCItaiton", "VIEW MODEL TICKET ID IS " + viewModel.getTicketID().getValue());
                         data.put("TicketNum", newTicketNum);
                         viewModel.setTicketID(newTicketNum);
                         db.collection("Tickets").add(data).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -341,6 +341,8 @@ public class FillCitationFragment extends Fragment {
 
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getContext(), "Ticket Sent Successfully", Toast.LENGTH_LONG).show();
+                                    MainActivity mainActivity = (MainActivity) getActivity();
+                                    mainActivity.printText();
                                 } else {
                                     Log.i("CONNECTION FAILED", task.getException().getMessage());
                                     DBConnectionFailed();
