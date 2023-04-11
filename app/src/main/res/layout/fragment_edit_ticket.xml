@@ -32,7 +32,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginBottom="100dp"
         android:hint="@string/editTicketID"
-        android:inputType="text"
+        android:inputType="number"
         android:selectAllOnFocus="true"
         app:layout_constraintBottom_toTopOf="@+id/editTicketSearchButton"
         app:layout_constraintStart_toStartOf="parent" />
