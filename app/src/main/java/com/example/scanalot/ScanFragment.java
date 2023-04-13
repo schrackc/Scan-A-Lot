@@ -77,6 +77,7 @@ public class ScanFragment extends Fragment {
     FirebaseFirestore db;
 
     CollectionReference vehiclesCollection;
+    boolean isNotTextSet = true;
     /**
      * Method in which executes during the creation of the view. It is creating an instance of this fragment
      */
@@ -204,7 +205,7 @@ public class ScanFragment extends Fragment {
                                     @Override
                                     public void onSuccess(Text visionText) {
                                         StringBuilder sb = new StringBuilder();
-                                        boolean isNotTextSet = true;
+//                                        boolean isNotTextSet = true;
                                         for (Text.TextBlock block : visionText.getTextBlocks()) {
                                             for (Text.Line line : block.getLines()) {
                                                 String text = line.getText().trim();
@@ -220,9 +221,10 @@ public class ScanFragment extends Fragment {
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
                                                        //once the state is loaded into the variable navigate
-                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
-                                                       isNotTextSet = false;
+//                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+//                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                       //isNotTextSet = false;
+
 
                                                    }
                                                    // Covers: CT, IL (AB12345)
@@ -236,9 +238,9 @@ public class ScanFragment extends Fragment {
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
                                                        //once the state is loaded into the variable navigate
-                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
-                                                       isNotTextSet = false;
+//                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+//                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                       //isNotTextSet = false;
                                                    }
                                                    // Covers: MD - Special Case (1AB2345)
                                                    else if (text.matches("^\\d[A-Za-z]{2}\\d{4}$")) {
@@ -251,9 +253,9 @@ public class ScanFragment extends Fragment {
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
                                                        //once the state is loaded into the variable navigate
-                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
-                                                       isNotTextSet = false;
+//                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+//                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                       //isNotTextSet = false;
                                                    }
                                                    // Covers: CA - Special Case (1ABC234)
                                                    else if (text.matches("^\\d[A-Za-z]{3}\\d{3}$")) {
@@ -266,9 +268,9 @@ public class ScanFragment extends Fragment {
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
                                                        //once the state is loaded into the variable navigate
-                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
-                                                       isNotTextSet = false;
+//                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+//                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                       //isNotTextSet = false;
                                                    }
                                                    // Covers: AK, HI, IN, IA, KS, LA, MN, NE, NM, ND, OK, OR, and SC - Special Case (ABC-123 OR 123-ABC)
                                                    else if (text.matches("^\\d{3}[-\\s][A-Za-z]{3}$|^[A-Za-z]{3}[-\\s]\\d{3}$")) {
@@ -281,15 +283,15 @@ public class ScanFragment extends Fragment {
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
                                                        //once the state is loaded into the variable navigate
-                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
-                                                       isNotTextSet = false;
+//                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+//                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                                                      // isNotTextSet = false;
                                                    }
                                                }
                                             }
                                         }
                                         // set the filtered text to the overlayText TextView
-                                        overlayText.post(() -> overlayText.setText(sb.toString()));
+                                       // overlayText.post(() -> overlayText.setText(sb.toString()));
                                     }
                                 })
                                 .addOnCompleteListener(new OnCompleteListener<Text>() {
@@ -337,6 +339,9 @@ public class ScanFragment extends Fragment {
                             Log.i("LicenseState", "LICENSE STATE being sent to live is: " + licenseState);
                             //set the live data variables
                             viewModel.setLicenseState(licenseState);
+                            isNotTextSet = false;
+                            navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                            Navigation.findNavController(binding.getRoot()).navigate(navAction);
                         }
                     }
 
@@ -360,8 +365,9 @@ public class ScanFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //clear the viewModel for next ticket scan
+        clearViewModel();
 
-     clearViewModel();
+        isNotTextSet = true;
 
         btnManualEntry = binding.outlinedButton;
         Log.i("onCreate", "scan fragment created");
@@ -371,8 +377,8 @@ public class ScanFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Button Click", "manual button clicked !!!!");
-                navAction = ScanFragmentDirections.actionScanFragmentToManualEntryFragment();
-                Navigation.findNavController(view).navigate(navAction);
+                navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                Navigation.findNavController(getActivity(),R.id.contentmainId).navigate(navAction);
             }
         });
 
