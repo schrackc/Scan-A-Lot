@@ -22,6 +22,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -220,6 +222,7 @@ public class ScanFragment extends Fragment {
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
+
                                                        //once the state is loaded into the variable navigate
 //                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
 //                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
@@ -267,6 +270,7 @@ public class ScanFragment extends Fragment {
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
+
                                                        //once the state is loaded into the variable navigate
 //                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
 //                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
@@ -282,6 +286,7 @@ public class ScanFragment extends Fragment {
                                                        viewModel.setLicenseNumber(strLicensePlateNum);
                                                        //find corresponding states that are associated with plate number and apply
                                                        setLicensePlateStates(strLicensePlateNum);
+
                                                        //once the state is loaded into the variable navigate
 //                                                       navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
 //                                                       Navigation.findNavController(binding.getRoot()).navigate(navAction);
@@ -333,15 +338,20 @@ public class ScanFragment extends Fragment {
                         String licenseNum = document.getString("LicenseNum");
                        Log.i("Document licenseNum", document.getString("LicenseNum"));
                         if (Objects.equals(licenseNum, p_licensePlateNum)) {
-
                             //now set it to the live data variable when the data has been loaded
                             String licenseState  = document.getString("LicenseState");
                             Log.i("LicenseState", "LICENSE STATE being sent to live is: " + licenseState);
                             //set the live data variables
                             viewModel.setLicenseState(licenseState);
                             isNotTextSet = false;
-                            navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                            Navigation.findNavController(binding.getRoot()).navigate(navAction);
+                            // get the NavController and check if the current destination is the ScanFragment
+                            NavController navController = Navigation.findNavController(binding.getRoot());
+                            NavDestination currentDestination = navController.getCurrentDestination();
+                            if (currentDestination != null && currentDestination.getId() == R.id.scan_fragment) {
+                                // navigate to the ResultsFragment
+                                NavDirections navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+                                navController.navigate(navAction);
+                            }
                         }
                     }
 
@@ -377,8 +387,10 @@ public class ScanFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("Button Click", "manual button clicked !!!!");
-                navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
-                Navigation.findNavController(getActivity(),R.id.contentmainId).navigate(navAction);
+                navAction = ScanFragmentDirections.actionScanFragmentToManualEntryFragment();
+                Navigation.findNavController(view).navigate(navAction);
+//                navAction = ScanFragmentDirections.actionScanFragmentToResultsFragment();
+//                Navigation.findNavController(getActivity(),R.id.contentmainId).navigate(navAction);
             }
         });
 
